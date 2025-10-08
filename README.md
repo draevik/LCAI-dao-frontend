@@ -1,25 +1,26 @@
-# LCAI DAO - Governor-Style Governance Interface
+# LCAI DAO - Governance Interface
 
-A modern, Snapshot-inspired DAO interface built with Next.js, shadcn/ui, and OpenZeppelin governance contracts. This application provides a complete governance experience similar to Snapshot.org with on-chain voting capabilities.
+A modern DAO governance interface built with Next.js and OpenZeppelin governance contracts, specifically designed for the LCAI ecosystem. Features proposal creation, voting, and contract execution capabilities.
 
 ## Features
 
-- **Proposal Management**: Create, view, and vote on governance proposals
-- **Token-based Voting**: Voting power based on LCAI token holding with delegation support
-- **Modern UI**: Beautiful, responsive interface built with shadcn/ui components
-- **Web3 Integration**: Seamless wallet connection with Reown AppKit (WalletConnect v2)
-- **Mobile Responsive**: Optimized for desktop and mobile devices
-- **Real-time Updates**: Live proposal status and voting results
-- **Secure Voting**: Integration with OpenZeppelin Governor contracts
-- **Multi-Chain**: Support for Ethereum, Arbitrum, Polygon, and more
+- **Proposal Management**: Create, view, and vote on governance proposals with contract actions
+- **Voting System**: Vote For/Against/Abstain with real-time results and voting power display
+- **Contract Actions**: Add multiple contract calls to proposals with simulation
+- **Web3 Integration**: Seamless wallet connection with Reown AppKit
+- **LCAI Testnet**: Native support for LCAI Testnet (Chain ID: 504)
+- **Modern UI**: Responsive interface built with shadcn/ui and Tailwind CSS
+- **Real-time Data**: Live proposal status and blockchain event monitoring
+- **Markdown Support**: Rich text descriptions with markdown rendering
 
 ## Tech Stack
 
 - **Frontend**: Next.js 15, React 19, TypeScript
-- **Styling**: Tailwind CSS, shadcn/ui components  
-- **Web3**: Reown AppKit, Viem, Wagmi v2, TanStack Query
-- **Smart Contracts**: OpenZeppelin Governor, ERC20Votes, TimelockController
+- **Styling**: Tailwind CSS v4, shadcn/ui components
+- **Web3**: Reown AppKit, Viem v2, Wagmi v2, TanStack Query
+- **Smart Contracts**: OpenZeppelin Governor, Custom Presale Voting Power, TimelockController
 - **Icons**: Lucide React
+- **Forms**: React Hook Form with Zod validation
 
 ## Quick Start
 
@@ -27,83 +28,78 @@ A modern, Snapshot-inspired DAO interface built with Next.js, shadcn/ui, and Ope
 
 - Node.js 18+ and npm
 - Web3 wallet (MetaMask, WalletConnect, etc.)
-- Deployed OpenZeppelin governance contracts
+- Access to LCAI Testnet or deployed contracts
 
 ### Installation
 
 1. **Clone and install dependencies:**
+
 ```bash
 git clone <repository-url>
 cd lcai-dao
 npm install
 ```
 
-2. **Install required Web3 packages:**
-```bash
-npm install @reown/appkit @reown/appkit-adapter-wagmi wagmi viem @tanstack/react-query
-```
+2. **Set up environment variables:**
 
-3. **Set up Reown Project:**
-- Go to [https://cloud.reown.com](https://cloud.reown.com)
-- Create a new project and get your Project ID
-
-4. **Configure your contracts:**
-
-Edit `lib/contracts.ts` with your deployed contract addresses:
-```typescript
-export const CONTRACTS = {
-  GOVERNOR: "0x...", // Your Governor contract address
-  TOKEN: "0x...",    // Your LCAI ERC20Votes token address
-  TIMELOCK: "0x...", // Your Timelock contract (optional)
-} as const;
-```
-
-5. **Set up environment variables:**
 ```bash
 # Copy the example file
 cp env.example .env.local
 
-# Edit .env.local with your values:
+# Edit .env.local with your Reown Project ID:
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_reown_project_id
-NEXT_PUBLIC_ALCHEMY_API_KEY=your_alchemy_api_key
-NEXT_PUBLIC_GOVERNOR_CONTRACT=0x...
-NEXT_PUBLIC_TOKEN_CONTRACT=0x...
-NEXT_PUBLIC_TIMELOCK_CONTRACT=0x...
 ```
 
-5. **Run the development server:**
+3. **Run the development server:**
+
+```bash
 npm run dev
+```
 
 Visit [http://localhost:3000](http://localhost:3000) to see your DAO interface!
 
-## Smart Contract Requirements
+### Network Configuration
 
-This interface works with OpenZeppelin governance contracts. You'll need:
+The app is pre-configured for LCAI Testnet:
+- **Chain ID**: 504
+- **RPC**: https://light-testnet-rpc.lightchain.ai
+- **Explorer**: https://testnet.lightscan.app
+- **Currency**: LCAI
 
-### Required Contracts
-1. **ERC20Votes Token** - Governance token with voting capabilities
-2. **Governor Contract** - Main governance contract with OpenZeppelin Governor
-3. **Timelock Controller** (optional) - For delayed execution
+## Smart Contract Architecture
 
-### Contract Interface Requirements
-Your contracts should implement the standard OpenZeppelin interfaces:
-- `IGovernor` - For proposal creation and voting
-- `IVotes` - For voting power and delegation
-- `IERC20` - For token balance queries
+The interface integrates with deployed contracts on LCAI Testnet:
 
-The interface expects these standard functions to be available:
-- `propose()`, `castVote()`, `castVoteWithReason()`
-- `getVotes()`, `delegate()`, `balanceOf()`
-- `proposalThreshold()`, `votingDelay()`, `votingPeriod()`
+### Deployed Contracts
+
+- **Governor**: `0xD61EEAD276De743393de11bBc9997Aa7Cc95ca31`
+- **Presale Voting Power**: `0xaea6e8C8149b9aA996e3151C5aaB6855F6Fa8Daa`
+- **Timelock**: `0x2925fcaaAcC7b2c41BDc68383899f78Cd26b3B21`
+
+### Contract Features
+
+- **OpenZeppelin Governor**: Standard governance with proposal creation and voting
+- **Custom Voting Power**: Presale-based voting power calculation
+- **Timelock Controller**: Delayed execution for security
+- **Multi-call Support**: Execute multiple contract calls per proposal
+
+### Governance Parameters
+
+- **Proposal Threshold**: 0 LCAI (for testing)
+- **Quorum**: 4% of total voting power
+- **Proposal Delay**: 1 hour
+- **Voting Period**: 2 days
+- **Timelock Delay**: 2 days
 
 ## Usage Guide
 
-### For Token Holders
-{{ ... }}
-2. **Delegate Voting Power**: Delegate tokens to yourself or others to participate
-3. **Browse Proposals**: View all active and past governance proposals
-4. **Cast Votes**: Vote For, Against, or Abstain on active proposals
-5. **Create Proposals**: Submit new proposals (requires minimum token threshold)
+### For Users
+
+1. **Connect Wallet**: Connect your Web3 wallet to LCAI Testnet
+2. **View Proposals**: Browse all governance proposals with status and voting results
+3. **Cast Votes**: Vote For/Against/Abstain on active proposals
+4. **Create Proposals**: Submit new proposals with contract actions
+5. **Add Actions**: Include contract calls, token transfers, and other executable actions
 
 ### For Developers
 
@@ -111,60 +107,81 @@ Key hooks and utilities:
 
 ```typescript
 // Main governance hook
-const { 
-  votingPower, 
-  createProposal, 
-  castVote, 
-  canCreateProposal 
-} = useGovernance();
+const { createProposal, castVote, simulateActions } = useGovernance();
+
+// Contract interactions
+const { governorContract, presaleVotingPowerContract } = useContracts();
+
+// Web3 clients
+const { publicClient } = useWeb3Clients();
 
 // Wallet connection
 const { address, isConnected } = useAccount();
-const { connect, connectors } = useConnect();
 ```
 
 ## Project Structure
 
 ```
 lcai-dao/
-├── app/                     # Next.js app router
-│   ├── create/             # Proposal creation page
-│   ├── proposal/[id]/      # Dynamic proposal detail pages
-│   ├── layout.tsx          # Root layout with navigation
-│   └── page.tsx            # Home page (proposal list)
-├── components/             # React components
-│   ├── ui/                # shadcn/ui components
-│   ├── navigation.tsx     # Main navigation bar
-│   └── providers.tsx      # Web3 providers
-├── hooks/                 # Custom React hooks
-│   └── useGovernance.ts   # Governance contract interactions
-├── lib/                   # Utilities and configuration
-│   ├── contracts.ts       # Contract ABIs and addresses
-│   ├── web3.ts           # Reown AppKit configuration
-│   └── utils.ts          # Helper functions
-└── public/               # Static assets
+├── app/                           # Next.js app router
+│   ├── proposal/
+│   │   ├── [id]/page.tsx         # Proposal detail page
+│   │   └── create/page.tsx       # Proposal creation page
+│   ├── layout.tsx                # Root layout with providers
+│   └── page.tsx                  # Home page (proposal list)
+├── components/
+│   ├── ui/                       # shadcn/ui components
+│   ├── contract-action-dialog.tsx # Contract action modal
+│   ├── loading-block.tsx         # Loading states
+│   └── providers.tsx             # Web3 and theme providers
+├── config/
+│   ├── index.ts                  # Chain and contract configuration
+│   └── wagmi.ts                  # Wagmi adapter setup
+├── hooks/
+│   ├── useGovernance.ts          # Main governance logic
+│   ├── useContracts.ts           # Contract instances
+│   ├── useWeb3Clients.ts         # Viem clients
+│   └── useCurrentChain.ts        # Chain utilities
+├── lib/
+│   ├── contracts.ts              # Contract ABIs
+│   ├── constents.ts              # Constants and enums
+│   ├── utils.ts                  # Utility functions
+│   └── validations/              # Form validation schemas
+└── types/                        # TypeScript type definitions
 ```
 
 ## Configuration
 
-### Supported networks
+### Network Configuration
 
-Configure networks in `lib/web3.ts`:
+Networks are configured in `config/index.ts`:
 
 ```typescript
-export const config = createConfig({
-  chains: [mainnet, sepolia, polygon, arbitrum],
-  connectors: [injected(), metaMask(), walletConnect()],
-  transports: {
-    [mainnet.id]: http(`https://eth-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`),
-    [sepolia.id]: http(`https://eth-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`),
-  },
-});
+export const lcaiTestnet: Chain = {
+  id: 504,
+  name: "LCAI Testnet",
+  nativeCurrency: { name: "LCAI Testnet", symbol: "LCAI", decimals: 18 },
+  rpcUrls: { default: { http: ["https://light-testnet-rpc.lightchain.ai"] } },
+  blockExplorers: {
+    default: { name: "LCAI Testnet Explorer", url: "https://testnet.lightscan.app" }
+  }
+};
+
+const config = {
+  chains: [lcaiTestnet],
+  daoSystem: {
+    proposalThreshold: 0,
+    quorumNeeded: 4,
+    proposalDelay: 60 * 60,
+    votingPeriod: 60 * 60 * 24 * 2
+  }
+};
 ```
 
 ### Proposal States
 
 The interface handles all OpenZeppelin Governor states:
+
 - **Pending**: Proposal created, voting hasn't started
 - **Active**: Voting is open
 - **Canceled**: Proposal was canceled
@@ -174,15 +191,25 @@ The interface handles all OpenZeppelin Governor states:
 - **Expired**: Proposal expired before execution
 - **Executed**: Proposal successfully executed
 
-## UI Components
+## Key Features
 
-Built with shadcn/ui components:
-- **Cards**: Proposal display and voting interfaces
-- **Forms**: Proposal creation with rich text editor
-- **Navigation**: Responsive navigation with wallet connection
-- **Badges**: Status indicators and voting power display
-- **Progress**: Visual voting results
-- **Tabs**: Organized content sections
+### Proposal Management
+- **Create Proposals**: Rich form with title, description, and discussion links
+- **Contract Actions**: Add multiple contract calls with parameter inputs
+- **Simulation**: Test proposal execution before submission
+- **Status Tracking**: Real-time proposal state monitoring
+
+### Voting Interface
+- **Vote Casting**: For/Against/Abstain with voting power display
+- **Results Visualization**: Progress bars and vote breakdowns
+- **Voter History**: Track individual votes and timestamps
+- **Timeline**: Proposal lifecycle visualization
+
+### UI Components
+- **Modern Design**: Clean, responsive interface with dark/light themes
+- **Form Validation**: Zod schemas with React Hook Form
+- **Loading States**: Skeleton loaders and async state management
+- **Error Handling**: User-friendly error messages and recovery
 
 ## Security Considerations
 
@@ -197,16 +224,19 @@ Built with shadcn/ui components:
 ### 🚧 TODO List
 
 #### High Priority
+
 - [ ] **Rich Text Editor**: Replace normal textarea with a rich text editor for proposal descriptions (markdown support with preview)
 - [ ] **Governor Lifecycle Management**: Handle all proposal states including cancellation, queueing, and execution
 - [ ] **Smart Contract ABI Integration**: Automatically fetch and implement ABI from verified smart contracts
 - [ ] **Complete Proposal State Handling**: Implement UI and logic for all governor states (Pending, Active, Canceled, Defeated, Succeeded, Queued, Expired, Executed)
 
-#### Medium Priority  
+#### Medium Priority
+
 - [ ] **Send Token Functionality**: Add token transfer capabilities similar to contract calls in proposal creation
 - [ ] **Subgraph Integration**: Replace direct blockchain event querying with subgraph queries for better performance
 
 ### ✅ Completed Features
+
 - [x] Basic proposal creation and voting interface
 - [x] Web3 wallet integration with Reown AppKit
 - [x] OpenZeppelin Governor contract integration
