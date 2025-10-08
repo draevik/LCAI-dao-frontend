@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import Image from "next/image";
 import Link from "next/link";
@@ -70,7 +71,10 @@ const Footer = () => {
               <div className="w-full sm:w-full md:w-1/2 lg:w-1/3">
                 <p className="copyright-text mb-0">
                   Copyright © {new Date().getFullYear()}
-                  <Link href={"https://lightchain.ai/"} className="btn-read-more ps-2">
+                  <Link
+                    href={"https://lightchain.ai/"}
+                    className="btn-read-more ps-2"
+                  >
                     <span>Lightchain Protocol</span>
                   </Link>
                 </p>
