@@ -1,0 +1,115 @@
+"use client";
+
+import { useAccount } from "wagmi";
+import { decodeEventLog, encodeFunctionData, parseEther } from "viem";
+import useContracts from "./useContracts";
+import useWeb3Clients from "./useWeb3Clients";
+import { ContractAction } from "@/types";
+import useCurrentChain from "./useCurrentChain";
+import config from "@/config";
+
+export interface Proposal {
+  id: string;
+  title: string;
+  description: string;
+  proposer: string;
+  state: number;
+  startBlock: bigint;
+  endBlock: bigint;
+  forVotes: bigint;
+  againstVotes: bigint;
+  abstainVotes: bigint;
+  eta: bigint;
+}
+
+export function useGovernance() {
+  const chain = useCurrentChain();
+  const { address } = useAccount();
+  const { governorContract } = useContracts();
+  const { publicClient, walletClient } = useWeb3Clients();
+
+  const simulateActions = async (contractActions: ContractAction[]) => {
+    return Promise.all(
+      contractActions.map((action) => {
+        return publicClient.simulateContract({
+          address: action.target,
+          abi: action.abi || [],
+          functionName: action.method || "",
+          args: Object.values(action.args || {}),
+          account: config.timeLock[chain.id],
+        });
+      })
+    );
+  };
+
+  const createProposal = async (
+    contractActions: ContractAction[],
+    description: string
+  ) => {
+    if (!address || !walletClient) throw new Error("Wallet not connected");
+
+    const targets = contractActions.map((action) => action.target);
+    const values = contractActions.map((action) =>
+      action.value ? parseEther(action.value) : 0n
+    );
+    const calldatas = contractActions.map((action) =>
+      encodeFunctionData({
+        abi: action.abi || [],
+        functionName: action.method,
+        args: Object.values(action.args || {}),
+      })
+    );
+
+    const { request } = await governorContract.simulate.propose([
+      targets,
+      values,
+      calldatas,
+      description,
+    ]);
+
+    const hash = await walletClient.writeContract(request);
+
+    const receipt = await publicClient.waitForTransactionReceipt({
+      hash,
+    });
+
+    console.log("Receipt", receipt);
+
+    const eventLog = decodeEventLog({
+      abi: governorContract.abi,
+      eventName: "ProposalCreated",
+      topics: receipt.logs[0].topics,
+      data: receipt.logs[0].data,
+      strict: false,
+    });
+
+    console.log({ eventLog });
+
+    return eventLog.args.proposalId;
+  };
+
+  const castVote = async (proposalId: string | number, support: number) => {
+    if (!address || !walletClient) throw new Error("Wallet not connected");
+
+    const { request } = await governorContract.simulate.castVote([
+      BigInt(proposalId),
+      support,
+    ]);
+
+    const hash = await walletClient.writeContract(request);
+
+    const receipt = await publicClient.waitForTransactionReceipt({
+      hash,
+    });
+
+    console.log("Receipt", receipt);
+
+    return receipt;
+  };
+
+  return {
+    createProposal,
+    simulateActions,
+    castVote,
+  };
+}

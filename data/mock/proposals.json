@@ -1,0 +1,72 @@
+[
+  {
+    "id": "88f79",
+    "title": "Minimum LCAI Stake Requirement for Proposal Creation",
+    "author": "0x742d...f44e",
+    "status": "active",
+    "votes": 374,
+    "timeLeft": "14d left",
+    "summary": "This proposal asks the community to decide the minimum stake of LCAI tokens required to create a governance proposal in the Lightchain AI DAO.",
+    "votingPower": {
+      "for": 140000,
+      "against": 35000,
+      "abstain": 20000
+    }
+  },
+  {
+    "id": "9011d",
+    "title": "Should LCAI Be Tradable Before Mainnet?",
+    "author": "0x742d...f44e",
+    "status": "active",
+    "votes": 822,
+    "timeLeft": "6d left",
+    "summary": "Community vote on whether LCAI tokens should be made tradable on exchanges before the mainnet launch.",
+    "votingPower": {
+      "for": 450000,
+      "against": 200000,
+      "abstain": 50000
+    }
+  },
+  {
+    "id": "4e13c",
+    "title": "How long should each voting period last?",
+    "author": "0x742d...f44e",
+    "status": "active",
+    "votes": 520,
+    "timeLeft": "6d left",
+    "summary": "Determining the optimal duration for voting periods to balance participation and efficiency.",
+    "votingPower": {
+      "for": 300000,
+      "against": 150000,
+      "abstain": 70000
+    }
+  },
+  {
+    "id": "4b071",
+    "title": "What percentage of total voting power should be required as a quorum for a proposal to pass?",
+    "author": "0x742d...f44e",
+    "status": "active",
+    "votes": 495,
+    "timeLeft": "6d left",
+    "summary": "Setting the minimum participation threshold required for proposals to be considered valid.",
+    "votingPower": {
+      "for": 280000,
+      "against": 120000,
+      "abstain": 95000
+    }
+  },
+  {
+    "id": "320b7",
+    "title": "Where should staked LCAI from proposal creation go?",
+    "author": "0x742d...f44e",
+    "status": "ended",
+    "votes": 583,
+    "timeLeft": "1d ago",
+    "summary": "Deciding the destination of LCAI tokens staked during proposal creation process.",
+    "votingPower": {
+      "for": 350000,
+      "against": 100000,
+      "abstain": 50000
+    }
+  }
+]

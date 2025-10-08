@@ -1,0 +1,27 @@
+{
+  "32851281747999056298457445878446735976706269129664883229982340802027617936767": {
+    "id": "32851281747999056298457445878446735976706269129664883229982340802027617936767",
+    "title": "Minimum LCAI Stake Requirement for Proposal Creation",
+    "author": "LightchainAI",
+    "status": "active",
+    "votes": 374,
+    "timeLeft": "14d left",
+    "created": "Sep 19, 2025 · 11:01 PM",
+    "startTime": "Sep 19, 2025 · 11:01 PM",
+    "endTime": "Oct 19, 2025 · 7:00 PM",
+    "summary": "This proposal asks the community to decide the minimum stake of LCAI tokens required to create a governance proposal in the Lightchain AI DAO. The threshold is meant to ensure proposals are created with a defined level of token commitment.",
+    "description": "# Summary This proposal asks the community to decide the minimum stake of LCAI tokens required to create a governance proposal in the Lightchain AI DAO. The threshold is meant to ensure proposals are created with a defined level of token commitment. --- **Proposal Creation Stake** = The minimum number of LCAI tokens that must be staked when submitting a proposal. • Tokens are returned if the proposal passes or meets quorum. • Tokens are burned if the proposal fails to meet minimum participation or is rejected. --- ## Options The community can choose from the following options: 1. **35,000 LCAI** - Conservative approach, allows broader participation 2. **70,000 LCAI** - Moderate approach, balances accessibility with commitment 3. **140,000 LCAI** - Restrictive approach, ensures high commitment from proposers ## Rationale Setting an appropriate stake requirement helps: - Prevent spam proposals - Ensure proposers have skin in the game - Maintain proposal quality standards - Protect governance integrity ## Implementation If approved, this change will be implemented in the next governance contract upgrade, expected within 30 days of proposal passage.",
+    "votingPower": {
+      "for": 140000,
+      "against": 35000,
+      "abstain": 20000,
+      "total": 195000
+    },
+    "choices": [
+      { "id": "1", "label": "For", "votes": 115000, "percentage": 82.26 },
+      { "id": "2", "label": "Against", "votes": 13900, "percentage": 9.97 },
+      { "id": "3", "label": "Abstain", "votes": 10900, "percentage": 7.76 }
+    ],
+    "discussion": "https://forum.lightchain.ai/t/proposal-88f79"
+  }
+}
