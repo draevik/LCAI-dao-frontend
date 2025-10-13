@@ -1,23 +1,11 @@
 "use client";
 
+import { useMemo } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Clock,
-  Users,
-  CheckCircle,
-  XCircle,
-  RadioIcon,
-  ClockIcon,
-  CircleMinusIcon,
-} from "lucide-react";
-import useContracts from "@/hooks/useContracts";
-import useWeb3Clients from "@/hooks/useWeb3Clients";
-import { formatEther, parseAbiItem } from "viem";
-import { useQuery } from "@tanstack/react-query";
-import { compactNumber, rmMarkdown } from "@/lib/utils";
-import { ProposalState } from "@/lib/constents";
+import { Clock, Users, Loader2Icon } from "lucide-react";
+import { compactNumber } from "@/lib/utils";
 import {
   Empty,
   EmptyContent,
@@ -27,67 +15,29 @@ import {
 } from "@/components/ui/empty";
 import $dayjs from "@/lib/dayjs";
 import LoadingBlock from "@/components/loading-block";
-
-function getStatusIcon(status: number) {
-  switch (status) {
-    case ProposalState.Active:
-      return <RadioIcon className="size-5 text-green-500" />;
-    case ProposalState.Succeeded:
-      return <CheckCircle className="size-5 text-green-500" />;
-    case ProposalState.Canceled || ProposalState.Defeated:
-      return <XCircle className="size-5 text-red-500" />;
-    case ProposalState.Expired:
-      return <CircleMinusIcon className="size-5 text-gray-500" />;
-    default:
-      return <ClockIcon className="size-5 text-gray-500" />;
-  }
-}
+import { GET_PROPOSALS } from "@/graphql/queries/get-proposals";
+import { useQuery as useApolloQuery } from "@apollo/client/react";
+import { useQuery } from "@tanstack/react-query";
+import useContracts from "@/hooks/useContracts";
+import ProposalStatusBadge from "@/components/proposal/proposal-status-badge";
+import { ProposalState } from "@/lib/constents";
 
 export default function Home() {
+  const { data, loading } = useApolloQuery(GET_PROPOSALS);
   const { governorContract } = useContracts();
-  const { publicClient } = useWeb3Clients();
 
-  const fetchProposals = async () => {
-    const latestBlock = await publicClient.getBlockNumber();
-    const logs = await publicClient.getLogs({
-      address: governorContract.address,
-      event: parseAbiItem(
-        "event ProposalCreated(uint256 proposalId, address proposer, address[] targets, uint256[] values, string[] signatures, bytes[] calldatas, uint256 voteStart, uint256 voteEnd, string description)"
+  const proposals = useMemo(() => data?.proposals || [], [data]);
+
+  // TODO: calculate proposal state directly from proposal data
+  const proposalState = useQuery({
+    queryKey: ["proposalStates"],
+    queryFn: () =>
+      Promise.all(
+        proposals.map((proposal) =>
+          governorContract.read.state([BigInt(proposal.proposal_id)])
+        )
       ),
-      fromBlock: 0n,
-      toBlock: latestBlock,
-    });
-    const proposals = await Promise.all(
-      logs.map(async (log) => {
-        console.log(log);
-        const id = log.args.proposalId!;
-        const [proposalState, votes, block] = await Promise.all([
-          governorContract.read.state([id]),
-          governorContract.read.proposalVotes([id]),
-          publicClient.getBlock({ blockNumber: log.blockNumber }),
-        ]);
-
-        return {
-          ...log.args,
-          id,
-          title: rmMarkdown(log.args.description?.split("\n\n")[0] || ""),
-          state: proposalState,
-          contractAddress: governorContract.address,
-          votes,
-          totalVotes: +formatEther(votes.reduce((a, b) => a + b)),
-          voteStart:
-            block.timestamp + (log.args.voteStart! - block.number) * 12n,
-          voteEnd: block.timestamp + (log.args.voteEnd! - block.number) * 12n,
-        };
-      })
-    );
-
-    return proposals;
-  };
-
-  const proposals = useQuery({
-    queryKey: ["proposals"],
-    queryFn: fetchProposals,
+    enabled: Boolean(proposals.length),
   });
 
   return (
@@ -109,21 +59,27 @@ export default function Home() {
         </div>
         <div className="px-6">
           <div className="divide-y">
-            {proposals.isLoading ? (
+            {loading ? (
               <LoadingBlock />
-            ) : proposals.data && proposals.data?.length ? (
-              proposals.data?.map((proposal) => (
+            ) : proposals.length ? (
+              proposals.map((proposal, index) => (
                 <Link
                   key={proposal.id}
                   href={`/proposal/${proposal.id}`}
                   className="py-4 flex hover:bg-border -mx-6 px-6 rounded-md"
                 >
                   <div className="flex-auto mr-4 w-0">
-                    <div className="flex items-start justify-betwee">
+                    {proposalState.isLoading ? (
+                      <Loader2Icon className="size-5 animate-spin" />
+                    ) : (
+                      <ProposalStatusBadge
+                        status={proposalState.data?.[index] || 0}
+                      />
+                    )}
+                    <div className="mt-2 flex items-start justify-between">
                       <div className="flex items-center gap-2 mb-2">
-                        {getStatusIcon(proposal.state)}
                         <span className="text-xl font-semibold hover:text-primary transition-colors">
-                          {proposal.title}
+                          {proposal.metadata.title}
                         </span>
                       </div>
                     </div>
@@ -134,8 +90,8 @@ export default function Home() {
                         <span>by</span>
                         <div className="flex items-center gap-1">
                           <span className="font-medium">
-                            {proposal.proposer?.slice(0, 6)}...
-                            {proposal.proposer?.slice(-4)}
+                            {proposal.author.id.slice(0, 6)}...
+                            {proposal.author.id.slice(-4)}
                           </span>
                           <Badge variant="outline" className="text-xs">
                             author
@@ -144,19 +100,21 @@ export default function Home() {
                       </div>
                       <div className="flex items-center gap-1">
                         <Users className="h-4 w-4" />
-                        <span>{compactNumber(proposal.totalVotes)} votes</span>
+                        <span>{compactNumber(proposal.vote_count)} votes</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Clock className="h-4 w-4" />
-                        {proposal.state === ProposalState.Pending ? (
+                        {proposalState.data?.[index] ===
+                        ProposalState.Pending ? (
                           <span>
                             Start{" "}
-                            {$dayjs.unix(Number(proposal.voteStart)).fromNow()}
+                            {$dayjs.unix(Number(proposal.start_time)).fromNow()}
                           </span>
                         ) : (
-                          proposal.state === ProposalState.Active && (
+                          proposalState.data?.[index] ===
+                            ProposalState.Active && (
                             <span>
-                              {$dayjs.unix(Number(proposal.voteEnd)).fromNow()}
+                              {$dayjs.unix(Number(proposal.end_time)).fromNow()}
                             </span>
                           )
                         )}

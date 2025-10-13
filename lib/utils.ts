@@ -35,3 +35,17 @@ export function compactNumber(num?: string | number) {
     notation: "compact",
   });
 }
+
+/**
+ * Convert Governor bravo choice value to common format.
+ * Governor Bravo: 0=against, 1=for, 2=abstain
+ * Common format uses 0 for For, 1 for Against, 2 for Abstain.
+ * @param choise common format choice value
+ * @returns Governor Bravo choice value
+ */
+export function convertChoice(choise: number) {
+  if (choise === 0) return 1;
+  if (choise === 1) return 0;
+
+  return choise;
+}

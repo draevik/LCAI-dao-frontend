@@ -1,26 +1,18 @@
 "use client";
 
 import { useAccount } from "wagmi";
-import { decodeEventLog, encodeFunctionData, parseEther } from "viem";
+import {
+  decodeEventLog,
+  encodeFunctionData,
+  encodePacked,
+  keccak256,
+  parseEther,
+} from "viem";
 import useContracts from "./useContracts";
 import useWeb3Clients from "./useWeb3Clients";
 import { ContractAction } from "@/types";
 import useCurrentChain from "./useCurrentChain";
 import config from "@/config";
-
-export interface Proposal {
-  id: string;
-  title: string;
-  description: string;
-  proposer: string;
-  state: number;
-  startBlock: bigint;
-  endBlock: bigint;
-  forVotes: bigint;
-  againstVotes: bigint;
-  abstainVotes: bigint;
-  eta: bigint;
-}
 
 export function useGovernance() {
   const chain = useCurrentChain();
@@ -107,9 +99,38 @@ export function useGovernance() {
     return receipt;
   };
 
+  const cancel = async (
+    targets: `0x${string}`[],
+    values: bigint[],
+    calldatas: `0x${string}`[],
+    description: string
+  ) => {
+    if (!address || !walletClient) throw new Error("Wallet not connected");
+
+    const descriptionHash = keccak256(encodePacked(["string"], [description]));
+
+    const { request } = await governorContract.simulate.cancel([
+      targets,
+      values,
+      calldatas,
+      descriptionHash,
+    ]);
+
+    const hash = await walletClient.writeContract(request);
+
+    const receipt = await publicClient.waitForTransactionReceipt({
+      hash,
+    });
+
+    console.log("Receipt", receipt);
+
+    return receipt;
+  };
+
   return {
     createProposal,
     simulateActions,
     castVote,
+    cancel,
   };
 }
