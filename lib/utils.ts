@@ -49,3 +49,7 @@ export function convertChoice(choise: number) {
 
   return choise;
 }
+
+export function clone<T>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj));
+}

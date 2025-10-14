@@ -27,3 +27,5 @@ export const VoteType = {
   For: 1,
   Abstain: 2,
 } as const;
+
+export const BASIC_CHOICES = ["For", "Against", "Abstain"];

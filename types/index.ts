@@ -1,3 +1,4 @@
+import { ApiProposal, ApiVote } from "@/graphqlApi/types";
 import { AbiFunction } from "viem";
 
 export type AbiObjectType = {
@@ -47,4 +48,73 @@ export type ContractAction = {
   method?: string;
   value?: string;
   args?: Record<string, string>;
+};
+
+export type BaseTransaction = {
+  to: `0x${string}`;
+  data: `0x${string}`;
+  value: string;
+  salt: string;
+};
+
+export type RawTransaction = BaseTransaction & {
+  _type: "raw";
+  _form: {
+    recipient: `0x${string}`;
+  };
+};
+
+export type PaginationOpts = { limit: number; skip?: number };
+
+export type ProposalsFilter = {
+  state?: "any" | "active" | "pending" | "closed";
+  labels?: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} & Record<string, any>;
+
+export type Proposal = ApiProposal & {
+  author: {
+    id: string;
+  };
+  choices: string[];
+  labels: string[];
+  scores: [string, string, string];
+  title: string;
+  body: string;
+  discussion: string;
+  executions: RawTransaction[];
+  execution_settled: boolean;
+  state: number;
+  quorum: number;
+};
+
+export type ProposalMetadataItem = {
+  id: string;
+  title: string;
+  body: string;
+  discussion: string;
+  execution: string;
+  choices: string[];
+  labels: string[];
+};
+
+export type Vote = ApiVote;
+
+export type Leaderboard = {
+  id: string;
+  user: User;
+  proposal_count: number;
+  vote_count: number;
+};
+
+export type User = {
+  id: string;
+  created: number | null;
+};
+
+export type UserActivity = {
+  id: string;
+  name?: string;
+  proposal_count: number;
+  vote_count: number;
 };

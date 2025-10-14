@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Blockies from "react-blockies";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -14,8 +14,6 @@ import {
   CircleMinusIcon,
   Loader2Icon,
   CopyIcon,
-  CheckCircleIcon,
-  XCircleIcon,
   ArrowLeftIcon,
   MoreHorizontalIcon,
   UsersIcon,
@@ -45,29 +43,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useCopyToClipboard } from "usehooks-ts";
 import ProposalStatusBadge from "@/components/proposal/proposal-status-badge";
-import { useQuery as useApolloQuery } from "@apollo/client/react";
-import { GET_PROPOSAL } from "@/graphql/queries/get-proposal";
-import { GET_VOTES_BY_PROPOSAL } from "@/graphql/queries/get-votes-by-proposal";
 import $dayjs from "@/lib/dayjs";
 import { ProposalState } from "@/lib/constents";
-import { Execution } from "@/models";
-
-const getVoteIcon = (vote: number) => {
-  switch (vote) {
-    case 0:
-      return <CheckCircleIcon className="size-4 text-green-500" />;
-    case 1:
-      return <XCircleIcon className="size-4 text-red-500" />;
-    case 2:
-      return <CircleMinusIcon className="size-4 text-gray-500" />;
-    default:
-      return null;
-  }
-};
+import useGraphqlApi from "@/hooks/useGraphqlApi";
+import ProposalVoteIcon from "@/components/proposal/proposal-vote-icon";
 
 export default function ProposalDetail() {
   const { open } = useAppKit();
   const { address } = useAccount();
+  const api = useGraphqlApi();
   const { governorContract, presaleVotingPowerContract } = useContracts();
   const { castVote, cancel } = useGovernance();
   const params = useParams();
@@ -75,23 +59,27 @@ export default function ProposalDetail() {
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
   const [, copy] = useCopyToClipboard();
 
-  const { data, loading, refetch } = useApolloQuery(GET_PROPOSAL, {
-    variables: { id: proposalId },
+  const {
+    data: proposal,
+    refetch,
+    isLoading,
+  } = useQuery({
+    queryKey: ["proposal", proposalId],
+    queryFn: () => api.loadProposal(proposalId, Date.now()),
+    enabled: true,
   });
 
-  const proposal = useMemo(() => data?.proposal || null, [data]);
-
-  const proposalState = useQuery({
-    queryKey: ["proposalStates", proposalId],
-    queryFn: () => governorContract.read.state([BigInt(proposalId)]),
+  const { data: votes } = useQuery({
+    queryKey: ["votes", proposalId],
+    queryFn: () =>
+      api.loadProposalVotes(
+        proposal!,
+        { limit: 10, skip: 0 },
+        "any",
+        "vp-desc"
+      ),
     enabled: Boolean(proposal),
   });
-
-  const { data: votesData } = useApolloQuery(GET_VOTES_BY_PROPOSAL, {
-    variables: { proposalId },
-  });
-
-  const votes = useMemo(() => votesData?.votes || [], [votesData]);
 
   const hasVoted = useQuery({
     queryKey: ["hasVoted", proposalId, address],
@@ -113,7 +101,7 @@ export default function ProposalDetail() {
       setSelectedChoice(null);
       refetch();
       toast.success(
-        `Vote cast for choice: ${proposal?.metadata.choices[selectedChoice!]}`
+        `Vote cast for choice: ${proposal?.metadata?.choices[selectedChoice!]}`
       );
     },
     onError: (error: TransactionExecutionError) => {
@@ -125,12 +113,11 @@ export default function ProposalDetail() {
   const cancelProposalMutation = useMutation({
     mutationFn: () => {
       if (!proposal) throw new Error("Proposal not found");
-      const execution: Execution[] = JSON.parse(proposal.metadata.execution);
       return cancel(
-        execution.map((e) => e.to),
-        execution.map((e) => BigInt(e.value)),
-        execution.map((e) => e.data),
-        proposal.metadata.body
+        proposal.executions.map((e) => e.to),
+        proposal.executions.map((e) => BigInt(e.value)),
+        proposal.executions.map((e) => e.data),
+        proposal.metadata?.body ?? ""
       );
     },
     onSuccess: () => {
@@ -143,7 +130,7 @@ export default function ProposalDetail() {
     },
   });
 
-  if (loading) return <LoadingBlock />;
+  if (isLoading) return <LoadingBlock />;
 
   if (!proposal) {
     return (
@@ -172,15 +159,10 @@ export default function ProposalDetail() {
 
       {/* Title and Status */}
       <div className="space-y-4">
-        {/* TODO: add status badge */}
-        {proposalState.isLoading ? (
-          <Loader2Icon className="size-5 animate-spin" />
-        ) : (
-          <ProposalStatusBadge status={proposalState.data || 0} />
-        )}
+        <ProposalStatusBadge status={proposal.state} />
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold">{proposal.metadata.title}</h1>
+            <h1 className="text-2xl font-bold">{proposal.metadata?.title}</h1>
           </div>
           <div className="flex items-center gap-2 ml-auto">
             <DropdownMenu>
@@ -199,7 +181,7 @@ export default function ProposalDetail() {
                   <CopyIcon className="size-4" />
                   Copy URL
                 </DropdownMenuItem>
-                {proposalState.data === ProposalState.Pending &&
+                {proposal.state === ProposalState.Pending &&
                   proposal.author.id === address && (
                     <DropdownMenuItem
                       onClick={() => cancelProposalMutation.mutate()}
@@ -237,12 +219,12 @@ export default function ProposalDetail() {
           </div>
           <div className="flex items-center gap-1">
             <ClockIcon className="h-4 w-4" />
-            {proposalState.data === ProposalState.Pending ? (
+            {proposal.state === ProposalState.Pending ? (
               <span>
                 Start {$dayjs.unix(Number(proposal.start_time)).fromNow()}
               </span>
             ) : (
-              proposalState.data === ProposalState.Active && (
+              proposal.state === ProposalState.Active && (
                 <span>{$dayjs.unix(Number(proposal.end_time)).fromNow()}</span>
               )
             )}
@@ -262,7 +244,7 @@ export default function ProposalDetail() {
             <TabsContent value="overview" className="space-y-6 mt-6">
               {/* Description */}
               <div className="prose prose-sm max-w-none dark:prose-invert">
-                <Markdown>{proposal.metadata.body}</Markdown>
+                <Markdown>{proposal.metadata?.body}</Markdown>
               </div>
 
               {/* Discussion Link */}
@@ -371,7 +353,7 @@ export default function ProposalDetail() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
-                {proposal.metadata.choices.map((choice, index) => (
+                {proposal.metadata?.choices.map((choice, index) => (
                   <div key={index}>
                     <button
                       onClick={() => setSelectedChoice(index)}
@@ -383,7 +365,7 @@ export default function ProposalDetail() {
                     >
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          {getVoteIcon(index)}
+                          <ProposalVoteIcon vote={index} />
                           <span className="font-medium text-sm">{choice}</span>
                         </div>
 

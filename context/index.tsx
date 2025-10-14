@@ -6,8 +6,6 @@ import { createAppKit } from "@reown/appkit/react";
 import React, { type ReactNode } from "react";
 import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
 import config from "@/config";
-import { ApolloProvider } from "@apollo/client/react";
-import { apolloClient } from "@/lib/apollo";
 
 // Set up queryClient
 const queryClient = new QueryClient({
@@ -55,11 +53,7 @@ function ContextProvider({
       config={wagmiAdapter.wagmiConfig as Config}
       initialState={initialState}
     >
-      <ApolloProvider client={apolloClient}>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      </ApolloProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </WagmiProvider>
   );
 }
