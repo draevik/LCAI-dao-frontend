@@ -27,9 +27,9 @@ export function ProposalActionButton({
   const queryClient = useQueryClient();
 
   const hasVoted = useQuery({
-    queryKey: ["hasVoted", proposal.id, address],
+    queryKey: ["hasVoted", proposal.proposal_id, address],
     queryFn: async () =>
-      governorContract.read.hasVoted([BigInt(proposal.id), address!]),
+      governorContract.read.hasVoted([BigInt(proposal.proposal_id), address!]),
     enabled: Boolean(address),
   });
 

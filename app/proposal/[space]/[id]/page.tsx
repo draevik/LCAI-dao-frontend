@@ -20,16 +20,17 @@ import { useQuery } from "@tanstack/react-query";
 export default function ProposalDetail() {
   const api = useGraphqlApi();
   const params = useParams();
-  const proposalId = params.id as string;
+  const id = params.id as string;
+  const space = params.space as string;
 
   const { data: proposal, isLoading } = useQuery({
-    queryKey: ["proposal", proposalId],
-    queryFn: () => api.loadProposal(proposalId, Date.now()),
+    queryKey: ["proposal", `${space}/${id}`],
+    queryFn: () => api.loadProposal(`${space}/${id}`, Date.now()),
     enabled: true,
   });
 
   const { data: votes } = useQuery({
-    queryKey: ["votes", proposalId],
+    queryKey: ["votes", `${space}/${id}`],
     queryFn: () =>
       api.loadProposalVotes(
         proposal!,

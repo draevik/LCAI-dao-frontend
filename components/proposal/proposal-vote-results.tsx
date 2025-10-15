@@ -21,7 +21,7 @@ export function ProposalVoteResults({ proposal }: ProposalVoteResultsProps) {
           <span>Quorum</span>
           <span>
             {compactNumber(proposal.scores_1_parsed + proposal.scores_3_parsed)}{" "}
-            of {compactNumber(proposal.quorum)}
+            of {compactNumber(proposal.quorum_parsed)}
           </span>
         </div>
         <div className="space-y-3">

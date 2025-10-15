@@ -54,7 +54,11 @@ export function ProposalVoteDialog({
 
   const castVoteMutation = useMutation({
     mutationFn: () =>
-      castVote(proposal.id, convertChoice(selectedChoice!), voteReason),
+      castVote(
+        proposal.proposal_id,
+        convertChoice(selectedChoice!),
+        voteReason
+      ),
     onSuccess: () => {
       setSelectedChoice(null);
       setVoteReason("");

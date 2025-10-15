@@ -19,16 +19,22 @@ export type Scalars = {
   Text: { input: any; output: any; }
 };
 
-/** Execution hash for tracking proposal execution status */
-export type ExecutionHash = {
+/** Leaderboard tracks user participation statistics within a space */
+export type Leaderboard = {
   _indexer: Scalars['String']['output'];
-  /** Unique identifier for the execution hash */
+  /** Unique identifier for the leaderboard entry */
   id: Scalars['String']['output'];
-  /** ID of the proposal this execution hash belongs to */
-  proposal_id: Scalars['String']['output'];
+  /** Number of proposals created by user in this space */
+  proposal_count: Scalars['Int']['output'];
+  /** Space this leaderboard entry belongs to */
+  space: Space;
+  /** User being tracked */
+  user: User;
+  /** Number of votes cast by user in this space */
+  vote_count: Scalars['Int']['output'];
 };
 
-export type ExecutionHash_Filter = {
+export type Leaderboard_Space_Filter = {
   _indexer?: InputMaybe<Scalars['String']['input']>;
   _indexer_contains?: InputMaybe<Scalars['String']['input']>;
   _indexer_contains_nocase?: InputMaybe<Scalars['String']['input']>;
@@ -37,6 +43,30 @@ export type ExecutionHash_Filter = {
   _indexer_not_contains?: InputMaybe<Scalars['String']['input']>;
   _indexer_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   _indexer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  created?: InputMaybe<Scalars['Int']['input']>;
+  created_gt?: InputMaybe<Scalars['Int']['input']>;
+  created_gte?: InputMaybe<Scalars['Int']['input']>;
+  created_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  created_lt?: InputMaybe<Scalars['Int']['input']>;
+  created_lte?: InputMaybe<Scalars['Int']['input']>;
+  created_not?: InputMaybe<Scalars['Int']['input']>;
+  created_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  decimals?: InputMaybe<Scalars['Int']['input']>;
+  decimals_gt?: InputMaybe<Scalars['Int']['input']>;
+  decimals_gte?: InputMaybe<Scalars['Int']['input']>;
+  decimals_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  decimals_lt?: InputMaybe<Scalars['Int']['input']>;
+  decimals_lte?: InputMaybe<Scalars['Int']['input']>;
+  decimals_not?: InputMaybe<Scalars['Int']['input']>;
+  decimals_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  execution_address?: InputMaybe<Scalars['String']['input']>;
+  execution_address_contains?: InputMaybe<Scalars['String']['input']>;
+  execution_address_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  execution_address_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  execution_address_not?: InputMaybe<Scalars['String']['input']>;
+  execution_address_not_contains?: InputMaybe<Scalars['String']['input']>;
+  execution_address_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  execution_address_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   id?: InputMaybe<Scalars['String']['input']>;
   id_contains?: InputMaybe<Scalars['String']['input']>;
   id_contains_nocase?: InputMaybe<Scalars['String']['input']>;
@@ -45,32 +75,102 @@ export type ExecutionHash_Filter = {
   id_not_contains?: InputMaybe<Scalars['String']['input']>;
   id_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  proposal_id?: InputMaybe<Scalars['String']['input']>;
-  proposal_id_contains?: InputMaybe<Scalars['String']['input']>;
-  proposal_id_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  proposal_id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  proposal_id_not?: InputMaybe<Scalars['String']['input']>;
-  proposal_id_not_contains?: InputMaybe<Scalars['String']['input']>;
-  proposal_id_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  proposal_id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-};
-
-export type ExecutionHash_OrderBy =
-  | '_indexer'
-  | 'id'
-  | 'proposal_id';
-
-/** Leaderboard tracks user participation statistics within a space */
-export type Leaderboard = {
-  _indexer: Scalars['String']['output'];
-  /** Unique identifier for the leaderboard entry */
-  id: Scalars['String']['output'];
-  /** Number of proposals created by user in this space */
-  proposal_count: Scalars['Int']['output'];
-  /** User being tracked */
-  user: User;
-  /** Number of votes cast by user in this space */
-  vote_count: Scalars['Int']['output'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_contains?: InputMaybe<Scalars['String']['input']>;
+  name_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name_not?: InputMaybe<Scalars['String']['input']>;
+  name_not_contains?: InputMaybe<Scalars['String']['input']>;
+  name_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  proposal_count?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  proposal_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_not?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  proposal_threshold?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  proposal_threshold_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  proposer_count?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  proposer_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_not?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  quorum?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  quorum_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  symbol?: InputMaybe<Scalars['String']['input']>;
+  symbol_contains?: InputMaybe<Scalars['String']['input']>;
+  symbol_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  symbol_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  symbol_not?: InputMaybe<Scalars['String']['input']>;
+  symbol_not_contains?: InputMaybe<Scalars['String']['input']>;
+  symbol_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  symbol_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  timelock_delay?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  timelock_delay_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_not?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  token?: InputMaybe<Scalars['String']['input']>;
+  token_contains?: InputMaybe<Scalars['String']['input']>;
+  token_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  token_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  token_not?: InputMaybe<Scalars['String']['input']>;
+  token_not_contains?: InputMaybe<Scalars['String']['input']>;
+  token_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  token_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  tx?: InputMaybe<Scalars['String']['input']>;
+  tx_contains?: InputMaybe<Scalars['String']['input']>;
+  tx_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  tx_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  tx_not?: InputMaybe<Scalars['String']['input']>;
+  tx_not_contains?: InputMaybe<Scalars['String']['input']>;
+  tx_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  tx_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  vote_count?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  vote_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_not?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voter_count?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voter_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_not?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_delay?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_gt?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_gte?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_delay_lt?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_lte?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_not?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
 };
 
 export type Leaderboard_User_Filter = {
@@ -141,6 +241,15 @@ export type Leaderboard_Filter = {
   proposal_count_lte?: InputMaybe<Scalars['Int']['input']>;
   proposal_count_not?: InputMaybe<Scalars['Int']['input']>;
   proposal_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  space?: InputMaybe<Scalars['String']['input']>;
+  space_?: InputMaybe<Leaderboard_Space_Filter>;
+  space_contains?: InputMaybe<Scalars['String']['input']>;
+  space_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  space_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  space_not?: InputMaybe<Scalars['String']['input']>;
+  space_not_contains?: InputMaybe<Scalars['String']['input']>;
+  space_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  space_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   user?: InputMaybe<Scalars['String']['input']>;
   user_?: InputMaybe<Leaderboard_User_Filter>;
   user_contains?: InputMaybe<Scalars['String']['input']>;
@@ -164,6 +273,7 @@ export type Leaderboard_OrderBy =
   | '_indexer'
   | 'id'
   | 'proposal_count'
+  | 'space'
   | 'user'
   | 'vote_count';
 
@@ -200,8 +310,6 @@ export type Proposal = {
   execution_tx: Maybe<Scalars['String']['output']>;
   /** Unique identifier for the proposal */
   id: Scalars['String']['output'];
-  /** UI link to proposal interface */
-  link: Scalars['String']['output'];
   /** Proposal metadata containing title, body, and choices */
   metadata: Maybe<ProposalMetadataItem>;
   /** ID of the proposal within the space */
@@ -226,6 +334,8 @@ export type Proposal = {
   scores_total_parsed: Scalars['Float']['output'];
   /** Timepoint used for voting power calculation (blocks on EVM, seconds on Starknet) */
   snapshot: Scalars['Int']['output'];
+  /** Space this proposal belongs to */
+  space: Space;
   /** When voting starts (only defined on EVM) */
   start_block_number: Maybe<Scalars['Int']['output']>;
   /** Timestamp when proposal starts */
@@ -335,6 +445,145 @@ export type Proposal_ProposalMetadataItem_Filter = {
   title_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   title_not_contains?: InputMaybe<Scalars['String']['input']>;
   title_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type Proposal_Space_Filter = {
+  _indexer?: InputMaybe<Scalars['String']['input']>;
+  _indexer_contains?: InputMaybe<Scalars['String']['input']>;
+  _indexer_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  _indexer_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  _indexer_not?: InputMaybe<Scalars['String']['input']>;
+  _indexer_not_contains?: InputMaybe<Scalars['String']['input']>;
+  _indexer_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  _indexer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  created?: InputMaybe<Scalars['Int']['input']>;
+  created_gt?: InputMaybe<Scalars['Int']['input']>;
+  created_gte?: InputMaybe<Scalars['Int']['input']>;
+  created_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  created_lt?: InputMaybe<Scalars['Int']['input']>;
+  created_lte?: InputMaybe<Scalars['Int']['input']>;
+  created_not?: InputMaybe<Scalars['Int']['input']>;
+  created_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  decimals?: InputMaybe<Scalars['Int']['input']>;
+  decimals_gt?: InputMaybe<Scalars['Int']['input']>;
+  decimals_gte?: InputMaybe<Scalars['Int']['input']>;
+  decimals_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  decimals_lt?: InputMaybe<Scalars['Int']['input']>;
+  decimals_lte?: InputMaybe<Scalars['Int']['input']>;
+  decimals_not?: InputMaybe<Scalars['Int']['input']>;
+  decimals_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  execution_address?: InputMaybe<Scalars['String']['input']>;
+  execution_address_contains?: InputMaybe<Scalars['String']['input']>;
+  execution_address_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  execution_address_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  execution_address_not?: InputMaybe<Scalars['String']['input']>;
+  execution_address_not_contains?: InputMaybe<Scalars['String']['input']>;
+  execution_address_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  execution_address_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_contains?: InputMaybe<Scalars['String']['input']>;
+  name_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name_not?: InputMaybe<Scalars['String']['input']>;
+  name_not_contains?: InputMaybe<Scalars['String']['input']>;
+  name_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  proposal_count?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  proposal_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_not?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  proposal_threshold?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  proposal_threshold_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  proposer_count?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  proposer_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_not?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  quorum?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  quorum_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  symbol?: InputMaybe<Scalars['String']['input']>;
+  symbol_contains?: InputMaybe<Scalars['String']['input']>;
+  symbol_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  symbol_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  symbol_not?: InputMaybe<Scalars['String']['input']>;
+  symbol_not_contains?: InputMaybe<Scalars['String']['input']>;
+  symbol_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  symbol_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  timelock_delay?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  timelock_delay_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_not?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  token?: InputMaybe<Scalars['String']['input']>;
+  token_contains?: InputMaybe<Scalars['String']['input']>;
+  token_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  token_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  token_not?: InputMaybe<Scalars['String']['input']>;
+  token_not_contains?: InputMaybe<Scalars['String']['input']>;
+  token_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  token_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  tx?: InputMaybe<Scalars['String']['input']>;
+  tx_contains?: InputMaybe<Scalars['String']['input']>;
+  tx_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  tx_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  tx_not?: InputMaybe<Scalars['String']['input']>;
+  tx_not_contains?: InputMaybe<Scalars['String']['input']>;
+  tx_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  tx_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  vote_count?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  vote_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_not?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voter_count?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voter_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_not?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_delay?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_gt?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_gte?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_delay_lt?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_lte?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_not?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
 };
 
 export type Proposal_User_Filter = {
@@ -478,14 +727,6 @@ export type Proposal_Filter = {
   id_not_contains?: InputMaybe<Scalars['String']['input']>;
   id_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  link?: InputMaybe<Scalars['String']['input']>;
-  link_contains?: InputMaybe<Scalars['String']['input']>;
-  link_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  link_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  link_not?: InputMaybe<Scalars['String']['input']>;
-  link_not_contains?: InputMaybe<Scalars['String']['input']>;
-  link_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  link_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   metadata?: InputMaybe<Scalars['String']['input']>;
   metadata_?: InputMaybe<Proposal_ProposalMetadataItem_Filter>;
   metadata_contains?: InputMaybe<Scalars['String']['input']>;
@@ -567,6 +808,15 @@ export type Proposal_Filter = {
   snapshot_lte?: InputMaybe<Scalars['Int']['input']>;
   snapshot_not?: InputMaybe<Scalars['Int']['input']>;
   snapshot_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  space?: InputMaybe<Scalars['String']['input']>;
+  space_?: InputMaybe<Proposal_Space_Filter>;
+  space_contains?: InputMaybe<Scalars['String']['input']>;
+  space_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  space_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  space_not?: InputMaybe<Scalars['String']['input']>;
+  space_not_contains?: InputMaybe<Scalars['String']['input']>;
+  space_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  space_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   start_block_number?: InputMaybe<Scalars['Int']['input']>;
   start_block_number_gt?: InputMaybe<Scalars['Int']['input']>;
   start_block_number_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -632,7 +882,6 @@ export type Proposal_OrderBy =
   | 'execution_time'
   | 'execution_tx'
   | 'id'
-  | 'link'
   | 'metadata'
   | 'proposal_id'
   | 'quorum'
@@ -645,6 +894,7 @@ export type Proposal_OrderBy =
   | 'scores_total'
   | 'scores_total_parsed'
   | 'snapshot'
+  | 'space'
   | 'start_block_number'
   | 'start_time'
   | 'timelock_delay'
@@ -657,14 +907,14 @@ export type Query = {
   _checkpoints: Array<_Checkpoint>;
   _metadata: Maybe<_Metadata>;
   _metadatas: Array<_Metadata>;
-  executionhash: Maybe<ExecutionHash>;
-  executionhashes: Array<ExecutionHash>;
   leaderboard: Maybe<Leaderboard>;
   leaderboards: Array<Leaderboard>;
   proposal: Maybe<Proposal>;
   proposalmetadataitem: Maybe<ProposalMetadataItem>;
   proposalmetadataitems: Array<ProposalMetadataItem>;
   proposals: Array<Proposal>;
+  space: Maybe<Space>;
+  spaces: Array<Space>;
   user: Maybe<User>;
   users: Array<User>;
   vote: Maybe<Vote>;
@@ -707,24 +957,6 @@ export type Query_MetadatasArgs = {
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<_Metadata_Filter>;
-};
-
-
-export type QueryExecutionhashArgs = {
-  block?: InputMaybe<Scalars['Int']['input']>;
-  id: Scalars['String']['input'];
-  indexer?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryExecutionhashesArgs = {
-  block?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  indexer?: InputMaybe<Scalars['String']['input']>;
-  orderBy?: InputMaybe<ExecutionHash_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  where?: InputMaybe<ExecutionHash_Filter>;
 };
 
 
@@ -782,6 +1014,24 @@ export type QueryProposalsArgs = {
 };
 
 
+export type QuerySpaceArgs = {
+  block?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars['String']['input'];
+  indexer?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QuerySpacesArgs = {
+  block?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  indexer?: InputMaybe<Scalars['String']['input']>;
+  orderBy?: InputMaybe<Space_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<Space_Filter>;
+};
+
+
 export type QueryUserArgs = {
   block?: InputMaybe<Scalars['Int']['input']>;
   id: Scalars['String']['input'];
@@ -834,6 +1084,203 @@ export type QueryVotesArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<Vote_Filter>;
 };
+
+/** Space represents a DAO or governance organization on Snapshot X */
+export type Space = {
+  _indexer: Scalars['String']['output'];
+  /** Timestamp when the space was created */
+  created: Scalars['Int']['output'];
+  /** Number of decimal places for the token */
+  decimals: Scalars['Int']['output'];
+  /** Contract address of the execution strategy */
+  execution_address: Scalars['String']['output'];
+  /** Unique identifier for the space */
+  id: Scalars['String']['output'];
+  /** Display name of the space */
+  name: Scalars['String']['output'];
+  /** Total number of proposals created in this space */
+  proposal_count: Scalars['Int']['output'];
+  /** Minimum voting power required to create a proposal */
+  proposal_threshold: Scalars['BigDecimalVP']['output'];
+  /** All proposals belonging to this space */
+  proposals: Array<Proposal>;
+  /** Number of unique proposers in this space */
+  proposer_count: Scalars['Int']['output'];
+  /** Minimum voting power required for execution */
+  quorum: Scalars['BigDecimalVP']['output'];
+  /** Token symbol (e.g., 'UNI', 'AAVE') */
+  symbol: Scalars['String']['output'];
+  /** Delay in blocks before timelock execution can proceed */
+  timelock_delay: Scalars['BigInt']['output'];
+  /** Token contract address (optional) */
+  token: Maybe<Scalars['String']['output']>;
+  /** Transaction hash of space creation */
+  tx: Scalars['String']['output'];
+  /** Total number of votes cast in this space */
+  vote_count: Scalars['Int']['output'];
+  /** Number of unique voters in this space */
+  voter_count: Scalars['Int']['output'];
+  /** Delay before voting starts after proposal creation (blocks on EVM, seconds on Starknet) */
+  voting_delay: Scalars['Int']['output'];
+};
+
+export type Space_Filter = {
+  _indexer?: InputMaybe<Scalars['String']['input']>;
+  _indexer_contains?: InputMaybe<Scalars['String']['input']>;
+  _indexer_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  _indexer_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  _indexer_not?: InputMaybe<Scalars['String']['input']>;
+  _indexer_not_contains?: InputMaybe<Scalars['String']['input']>;
+  _indexer_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  _indexer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  created?: InputMaybe<Scalars['Int']['input']>;
+  created_gt?: InputMaybe<Scalars['Int']['input']>;
+  created_gte?: InputMaybe<Scalars['Int']['input']>;
+  created_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  created_lt?: InputMaybe<Scalars['Int']['input']>;
+  created_lte?: InputMaybe<Scalars['Int']['input']>;
+  created_not?: InputMaybe<Scalars['Int']['input']>;
+  created_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  decimals?: InputMaybe<Scalars['Int']['input']>;
+  decimals_gt?: InputMaybe<Scalars['Int']['input']>;
+  decimals_gte?: InputMaybe<Scalars['Int']['input']>;
+  decimals_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  decimals_lt?: InputMaybe<Scalars['Int']['input']>;
+  decimals_lte?: InputMaybe<Scalars['Int']['input']>;
+  decimals_not?: InputMaybe<Scalars['Int']['input']>;
+  decimals_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  execution_address?: InputMaybe<Scalars['String']['input']>;
+  execution_address_contains?: InputMaybe<Scalars['String']['input']>;
+  execution_address_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  execution_address_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  execution_address_not?: InputMaybe<Scalars['String']['input']>;
+  execution_address_not_contains?: InputMaybe<Scalars['String']['input']>;
+  execution_address_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  execution_address_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_contains?: InputMaybe<Scalars['String']['input']>;
+  name_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name_not?: InputMaybe<Scalars['String']['input']>;
+  name_not_contains?: InputMaybe<Scalars['String']['input']>;
+  name_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  proposal_count?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  proposal_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_not?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  proposal_threshold?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  proposal_threshold_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  proposer_count?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  proposer_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_not?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  quorum?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  quorum_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  symbol?: InputMaybe<Scalars['String']['input']>;
+  symbol_contains?: InputMaybe<Scalars['String']['input']>;
+  symbol_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  symbol_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  symbol_not?: InputMaybe<Scalars['String']['input']>;
+  symbol_not_contains?: InputMaybe<Scalars['String']['input']>;
+  symbol_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  symbol_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  timelock_delay?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  timelock_delay_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_not?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  token?: InputMaybe<Scalars['String']['input']>;
+  token_contains?: InputMaybe<Scalars['String']['input']>;
+  token_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  token_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  token_not?: InputMaybe<Scalars['String']['input']>;
+  token_not_contains?: InputMaybe<Scalars['String']['input']>;
+  token_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  token_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  tx?: InputMaybe<Scalars['String']['input']>;
+  tx_contains?: InputMaybe<Scalars['String']['input']>;
+  tx_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  tx_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  tx_not?: InputMaybe<Scalars['String']['input']>;
+  tx_not_contains?: InputMaybe<Scalars['String']['input']>;
+  tx_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  tx_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  vote_count?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  vote_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_not?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voter_count?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voter_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_not?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_delay?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_gt?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_gte?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_delay_lt?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_lte?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_not?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+};
+
+export type Space_OrderBy =
+  | '_indexer'
+  | 'created'
+  | 'decimals'
+  | 'execution_address'
+  | 'id'
+  | 'name'
+  | 'proposal_count'
+  | 'proposal_threshold'
+  | 'proposer_count'
+  | 'quorum'
+  | 'symbol'
+  | 'timelock_delay'
+  | 'token'
+  | 'tx'
+  | 'vote_count'
+  | 'voter_count'
+  | 'voting_delay';
 
 /** User represents a governance participant (voter or proposer) */
 export type User = {
@@ -915,6 +1362,8 @@ export type Vote = {
   metadata: Maybe<VoteMetadataItem>;
   /** ID of the proposal being voted on */
   proposal: Scalars['String']['output'];
+  /** Space where the vote was cast */
+  space: Space;
   /** Transaction hash of the vote */
   tx: Scalars['String']['output'];
   /** User who cast the vote */
@@ -961,6 +1410,145 @@ export type VoteMetadataItem_OrderBy =
   | '_indexer'
   | 'id'
   | 'reason';
+
+export type Vote_Space_Filter = {
+  _indexer?: InputMaybe<Scalars['String']['input']>;
+  _indexer_contains?: InputMaybe<Scalars['String']['input']>;
+  _indexer_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  _indexer_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  _indexer_not?: InputMaybe<Scalars['String']['input']>;
+  _indexer_not_contains?: InputMaybe<Scalars['String']['input']>;
+  _indexer_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  _indexer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  created?: InputMaybe<Scalars['Int']['input']>;
+  created_gt?: InputMaybe<Scalars['Int']['input']>;
+  created_gte?: InputMaybe<Scalars['Int']['input']>;
+  created_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  created_lt?: InputMaybe<Scalars['Int']['input']>;
+  created_lte?: InputMaybe<Scalars['Int']['input']>;
+  created_not?: InputMaybe<Scalars['Int']['input']>;
+  created_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  decimals?: InputMaybe<Scalars['Int']['input']>;
+  decimals_gt?: InputMaybe<Scalars['Int']['input']>;
+  decimals_gte?: InputMaybe<Scalars['Int']['input']>;
+  decimals_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  decimals_lt?: InputMaybe<Scalars['Int']['input']>;
+  decimals_lte?: InputMaybe<Scalars['Int']['input']>;
+  decimals_not?: InputMaybe<Scalars['Int']['input']>;
+  decimals_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  execution_address?: InputMaybe<Scalars['String']['input']>;
+  execution_address_contains?: InputMaybe<Scalars['String']['input']>;
+  execution_address_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  execution_address_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  execution_address_not?: InputMaybe<Scalars['String']['input']>;
+  execution_address_not_contains?: InputMaybe<Scalars['String']['input']>;
+  execution_address_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  execution_address_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_contains?: InputMaybe<Scalars['String']['input']>;
+  name_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name_not?: InputMaybe<Scalars['String']['input']>;
+  name_not_contains?: InputMaybe<Scalars['String']['input']>;
+  name_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  proposal_count?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  proposal_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_not?: InputMaybe<Scalars['Int']['input']>;
+  proposal_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  proposal_threshold?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  proposal_threshold_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  proposer_count?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  proposer_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_not?: InputMaybe<Scalars['Int']['input']>;
+  proposer_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  quorum?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  quorum_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  quorum_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  symbol?: InputMaybe<Scalars['String']['input']>;
+  symbol_contains?: InputMaybe<Scalars['String']['input']>;
+  symbol_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  symbol_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  symbol_not?: InputMaybe<Scalars['String']['input']>;
+  symbol_not_contains?: InputMaybe<Scalars['String']['input']>;
+  symbol_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  symbol_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  timelock_delay?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  timelock_delay_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_not?: InputMaybe<Scalars['BigInt']['input']>;
+  timelock_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  token?: InputMaybe<Scalars['String']['input']>;
+  token_contains?: InputMaybe<Scalars['String']['input']>;
+  token_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  token_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  token_not?: InputMaybe<Scalars['String']['input']>;
+  token_not_contains?: InputMaybe<Scalars['String']['input']>;
+  token_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  token_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  tx?: InputMaybe<Scalars['String']['input']>;
+  tx_contains?: InputMaybe<Scalars['String']['input']>;
+  tx_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  tx_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  tx_not?: InputMaybe<Scalars['String']['input']>;
+  tx_not_contains?: InputMaybe<Scalars['String']['input']>;
+  tx_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  tx_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  vote_count?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  vote_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_not?: InputMaybe<Scalars['Int']['input']>;
+  vote_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voter_count?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_gt?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_gte?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voter_count_lt?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_lte?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_not?: InputMaybe<Scalars['Int']['input']>;
+  voter_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_delay?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_gt?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_gte?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_delay_lt?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_lte?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_not?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+};
 
 export type Vote_User_Filter = {
   _indexer?: InputMaybe<Scalars['String']['input']>;
@@ -1078,6 +1666,15 @@ export type Vote_Filter = {
   proposal_not_contains?: InputMaybe<Scalars['String']['input']>;
   proposal_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   proposal_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  space?: InputMaybe<Scalars['String']['input']>;
+  space_?: InputMaybe<Vote_Space_Filter>;
+  space_contains?: InputMaybe<Scalars['String']['input']>;
+  space_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  space_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  space_not?: InputMaybe<Scalars['String']['input']>;
+  space_not_contains?: InputMaybe<Scalars['String']['input']>;
+  space_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  space_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   tx?: InputMaybe<Scalars['String']['input']>;
   tx_contains?: InputMaybe<Scalars['String']['input']>;
   tx_contains_nocase?: InputMaybe<Scalars['String']['input']>;
@@ -1116,6 +1713,7 @@ export type Vote_OrderBy =
   | 'id'
   | 'metadata'
   | 'proposal'
+  | 'space'
   | 'tx'
   | 'voter'
   | 'vp'
@@ -1205,14 +1803,14 @@ export type _Metadata_OrderBy =
 
 export type VoteFieldsFragment = { id: string, vp: any, vp_parsed: number, proposal: string, choice: number, created: number, tx: string, voter: { id: string }, metadata: { reason: any } | null };
 
-export type ProposalFieldsFragment = { id: string, proposal_id: string, quorum: any, execution_hash: string, start_time: number, start_block_number: number | null, end_time: number, end_block_number: number | null, snapshot: number, vp_decimals: number, scores_1: any, scores_2: any, scores_3: any, scores_total: any, scores_1_parsed: number, scores_2_parsed: number, scores_3_parsed: number, scores_total_parsed: number, execution_time: number, created: number, edited: number | null, tx: string, execution_tx: string | null, vote_count: number, execution_ready: boolean, executed: boolean, execution_settled: boolean, cancelled: boolean, author: { id: string }, metadata: { id: string, title: any | null, body: any | null, discussion: any | null, execution: any | null, choices: Array<string>, labels: Array<string> } | null };
+export type ProposalFieldsFragment = { id: string, proposal_id: string, quorum: any, timelock_delay: any | null, execution_hash: string, start_time: number, start_block_number: number | null, end_time: number, end_block_number: number | null, snapshot: number, vp_decimals: number, scores_1: any, scores_2: any, scores_3: any, scores_total: any, scores_1_parsed: number, scores_2_parsed: number, scores_3_parsed: number, scores_total_parsed: number, execution_time: number, created: number, edited: number | null, tx: string, execution_tx: string | null, vote_count: number, execution_ready: boolean, executed: boolean, execution_settled: boolean, cancelled: boolean, author: { id: string }, metadata: { id: string, title: any | null, body: any | null, discussion: any | null, execution: any | null, choices: Array<string>, labels: Array<string> } | null };
 
 export type ProposalQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type ProposalQuery = { proposal: { id: string, proposal_id: string, quorum: any, execution_hash: string, start_time: number, start_block_number: number | null, end_time: number, end_block_number: number | null, snapshot: number, vp_decimals: number, scores_1: any, scores_2: any, scores_3: any, scores_total: any, scores_1_parsed: number, scores_2_parsed: number, scores_3_parsed: number, scores_total_parsed: number, execution_time: number, created: number, edited: number | null, tx: string, execution_tx: string | null, vote_count: number, execution_ready: boolean, executed: boolean, execution_settled: boolean, cancelled: boolean, author: { id: string }, metadata: { id: string, title: any | null, body: any | null, discussion: any | null, execution: any | null, choices: Array<string>, labels: Array<string> } | null } | null };
+export type ProposalQuery = { proposal: { id: string, proposal_id: string, quorum: any, timelock_delay: any | null, execution_hash: string, start_time: number, start_block_number: number | null, end_time: number, end_block_number: number | null, snapshot: number, vp_decimals: number, scores_1: any, scores_2: any, scores_3: any, scores_total: any, scores_1_parsed: number, scores_2_parsed: number, scores_3_parsed: number, scores_total_parsed: number, execution_time: number, created: number, edited: number | null, tx: string, execution_tx: string | null, vote_count: number, execution_ready: boolean, executed: boolean, execution_settled: boolean, cancelled: boolean, author: { id: string }, metadata: { id: string, title: any | null, body: any | null, discussion: any | null, execution: any | null, choices: Array<string>, labels: Array<string> } | null } | null };
 
 export type ProposalsQueryVariables = Exact<{
   first: Scalars['Int']['input'];
@@ -1221,7 +1819,7 @@ export type ProposalsQueryVariables = Exact<{
 }>;
 
 
-export type ProposalsQuery = { proposals: Array<{ id: string, proposal_id: string, quorum: any, execution_hash: string, start_time: number, start_block_number: number | null, end_time: number, end_block_number: number | null, snapshot: number, vp_decimals: number, scores_1: any, scores_2: any, scores_3: any, scores_total: any, scores_1_parsed: number, scores_2_parsed: number, scores_3_parsed: number, scores_total_parsed: number, execution_time: number, created: number, edited: number | null, tx: string, execution_tx: string | null, vote_count: number, execution_ready: boolean, executed: boolean, execution_settled: boolean, cancelled: boolean, author: { id: string }, metadata: { id: string, title: any | null, body: any | null, discussion: any | null, execution: any | null, choices: Array<string>, labels: Array<string> } | null }> };
+export type ProposalsQuery = { proposals: Array<{ id: string, proposal_id: string, quorum: any, timelock_delay: any | null, execution_hash: string, start_time: number, start_block_number: number | null, end_time: number, end_block_number: number | null, snapshot: number, vp_decimals: number, scores_1: any, scores_2: any, scores_3: any, scores_total: any, scores_1_parsed: number, scores_2_parsed: number, scores_3_parsed: number, scores_total_parsed: number, execution_time: number, created: number, edited: number | null, tx: string, execution_tx: string | null, vote_count: number, execution_ready: boolean, executed: boolean, execution_settled: boolean, cancelled: boolean, author: { id: string }, metadata: { id: string, title: any | null, body: any | null, discussion: any | null, execution: any | null, choices: Array<string>, labels: Array<string> } | null }> };
 
 export type VotesQueryVariables = Exact<{
   indexer: Scalars['String']['input'];
@@ -1273,9 +1871,9 @@ export type _MetadataQueryVariables = Exact<{
 export type _MetadataQuery = { _metadata: { value: string | null } | null };
 
 export const VoteFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"voteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Vote"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"voter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reason"}}]}},{"kind":"Field","name":{"kind":"Name","value":"vp"}},{"kind":"Field","name":{"kind":"Name","value":"vp_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"}},{"kind":"Field","name":{"kind":"Name","value":"choice"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}}]}}]} as unknown as DocumentNode<VoteFieldsFragment, unknown>;
-export const ProposalFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"proposalFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"quorum"}},{"kind":"Field","name":{"kind":"Name","value":"execution_hash"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"discussion"}},{"kind":"Field","name":{"kind":"Name","value":"execution"}},{"kind":"Field","name":{"kind":"Name","value":"choices"}},{"kind":"Field","name":{"kind":"Name","value":"labels"}}]}},{"kind":"Field","name":{"kind":"Name","value":"start_time"}},{"kind":"Field","name":{"kind":"Name","value":"start_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"end_time"}},{"kind":"Field","name":{"kind":"Name","value":"end_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"snapshot"}},{"kind":"Field","name":{"kind":"Name","value":"vp_decimals"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_time"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"edited"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}},{"kind":"Field","name":{"kind":"Name","value":"execution_tx"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"execution_ready"}},{"kind":"Field","name":{"kind":"Name","value":"executed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_settled"}},{"kind":"Field","name":{"kind":"Name","value":"cancelled"}}]}}]} as unknown as DocumentNode<ProposalFieldsFragment, unknown>;
-export const ProposalDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Proposal"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"proposal"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"proposalFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"proposalFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"quorum"}},{"kind":"Field","name":{"kind":"Name","value":"execution_hash"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"discussion"}},{"kind":"Field","name":{"kind":"Name","value":"execution"}},{"kind":"Field","name":{"kind":"Name","value":"choices"}},{"kind":"Field","name":{"kind":"Name","value":"labels"}}]}},{"kind":"Field","name":{"kind":"Name","value":"start_time"}},{"kind":"Field","name":{"kind":"Name","value":"start_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"end_time"}},{"kind":"Field","name":{"kind":"Name","value":"end_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"snapshot"}},{"kind":"Field","name":{"kind":"Name","value":"vp_decimals"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_time"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"edited"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}},{"kind":"Field","name":{"kind":"Name","value":"execution_tx"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"execution_ready"}},{"kind":"Field","name":{"kind":"Name","value":"executed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_settled"}},{"kind":"Field","name":{"kind":"Name","value":"cancelled"}}]}}]} as unknown as DocumentNode<ProposalQuery, ProposalQueryVariables>;
-export const ProposalsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Proposals"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal_filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"proposals"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"EnumValue","value":"created"}},{"kind":"Argument","name":{"kind":"Name","value":"orderDirection"},"value":{"kind":"EnumValue","value":"desc"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"proposalFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"proposalFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"quorum"}},{"kind":"Field","name":{"kind":"Name","value":"execution_hash"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"discussion"}},{"kind":"Field","name":{"kind":"Name","value":"execution"}},{"kind":"Field","name":{"kind":"Name","value":"choices"}},{"kind":"Field","name":{"kind":"Name","value":"labels"}}]}},{"kind":"Field","name":{"kind":"Name","value":"start_time"}},{"kind":"Field","name":{"kind":"Name","value":"start_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"end_time"}},{"kind":"Field","name":{"kind":"Name","value":"end_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"snapshot"}},{"kind":"Field","name":{"kind":"Name","value":"vp_decimals"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_time"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"edited"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}},{"kind":"Field","name":{"kind":"Name","value":"execution_tx"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"execution_ready"}},{"kind":"Field","name":{"kind":"Name","value":"executed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_settled"}},{"kind":"Field","name":{"kind":"Name","value":"cancelled"}}]}}]} as unknown as DocumentNode<ProposalsQuery, ProposalsQueryVariables>;
+export const ProposalFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"proposalFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"quorum"}},{"kind":"Field","name":{"kind":"Name","value":"timelock_delay"}},{"kind":"Field","name":{"kind":"Name","value":"execution_hash"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"discussion"}},{"kind":"Field","name":{"kind":"Name","value":"execution"}},{"kind":"Field","name":{"kind":"Name","value":"choices"}},{"kind":"Field","name":{"kind":"Name","value":"labels"}}]}},{"kind":"Field","name":{"kind":"Name","value":"start_time"}},{"kind":"Field","name":{"kind":"Name","value":"start_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"end_time"}},{"kind":"Field","name":{"kind":"Name","value":"end_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"snapshot"}},{"kind":"Field","name":{"kind":"Name","value":"vp_decimals"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_time"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"edited"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}},{"kind":"Field","name":{"kind":"Name","value":"execution_tx"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"execution_ready"}},{"kind":"Field","name":{"kind":"Name","value":"executed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_settled"}},{"kind":"Field","name":{"kind":"Name","value":"cancelled"}}]}}]} as unknown as DocumentNode<ProposalFieldsFragment, unknown>;
+export const ProposalDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Proposal"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"proposal"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"proposalFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"proposalFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"quorum"}},{"kind":"Field","name":{"kind":"Name","value":"timelock_delay"}},{"kind":"Field","name":{"kind":"Name","value":"execution_hash"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"discussion"}},{"kind":"Field","name":{"kind":"Name","value":"execution"}},{"kind":"Field","name":{"kind":"Name","value":"choices"}},{"kind":"Field","name":{"kind":"Name","value":"labels"}}]}},{"kind":"Field","name":{"kind":"Name","value":"start_time"}},{"kind":"Field","name":{"kind":"Name","value":"start_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"end_time"}},{"kind":"Field","name":{"kind":"Name","value":"end_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"snapshot"}},{"kind":"Field","name":{"kind":"Name","value":"vp_decimals"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_time"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"edited"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}},{"kind":"Field","name":{"kind":"Name","value":"execution_tx"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"execution_ready"}},{"kind":"Field","name":{"kind":"Name","value":"executed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_settled"}},{"kind":"Field","name":{"kind":"Name","value":"cancelled"}}]}}]} as unknown as DocumentNode<ProposalQuery, ProposalQueryVariables>;
+export const ProposalsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Proposals"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal_filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"proposals"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"EnumValue","value":"created"}},{"kind":"Argument","name":{"kind":"Name","value":"orderDirection"},"value":{"kind":"EnumValue","value":"desc"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"proposalFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"proposalFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"quorum"}},{"kind":"Field","name":{"kind":"Name","value":"timelock_delay"}},{"kind":"Field","name":{"kind":"Name","value":"execution_hash"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"discussion"}},{"kind":"Field","name":{"kind":"Name","value":"execution"}},{"kind":"Field","name":{"kind":"Name","value":"choices"}},{"kind":"Field","name":{"kind":"Name","value":"labels"}}]}},{"kind":"Field","name":{"kind":"Name","value":"start_time"}},{"kind":"Field","name":{"kind":"Name","value":"start_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"end_time"}},{"kind":"Field","name":{"kind":"Name","value":"end_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"snapshot"}},{"kind":"Field","name":{"kind":"Name","value":"vp_decimals"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_time"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"edited"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}},{"kind":"Field","name":{"kind":"Name","value":"execution_tx"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"execution_ready"}},{"kind":"Field","name":{"kind":"Name","value":"executed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_settled"}},{"kind":"Field","name":{"kind":"Name","value":"cancelled"}}]}}]} as unknown as DocumentNode<ProposalsQuery, ProposalsQueryVariables>;
 export const VotesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Votes"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Vote_orderBy"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderDirection"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"OrderDirection"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Vote_filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"votes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"indexer"},"value":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderDirection"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderDirection"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"voteFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"voteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Vote"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"voter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reason"}}]}},{"kind":"Field","name":{"kind":"Name","value":"vp"}},{"kind":"Field","name":{"kind":"Name","value":"vp_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"}},{"kind":"Field","name":{"kind":"Name","value":"choice"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}}]}}]} as unknown as DocumentNode<VotesQuery, VotesQueryVariables>;
 export const UserVotesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserVotes"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"voter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"votes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"indexer"},"value":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"voter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"voter"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"voteFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"voteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Vote"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"voter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reason"}}]}},{"kind":"Field","name":{"kind":"Name","value":"vp"}},{"kind":"Field","name":{"kind":"Name","value":"vp_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"}},{"kind":"Field","name":{"kind":"Name","value":"choice"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}}]}}]} as unknown as DocumentNode<UserVotesQuery, UserVotesQueryVariables>;
 export const UserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"User"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"indexer"},"value":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_count"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"created"}}]}}]}}]} as unknown as DocumentNode<UserQuery, UserQueryVariables>;

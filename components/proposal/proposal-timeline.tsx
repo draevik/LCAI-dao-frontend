@@ -1,7 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import $dayjs from "@/lib/dayjs";
-import config from "@/config";
 import type { Proposal } from "@/types";
 
 interface ProposalTimelineProps {
@@ -64,9 +63,7 @@ export function ProposalTimeline({ proposal }: ProposalTimelineProps) {
                 <div className="text-xs text-muted-foreground">
                   {$dayjs
                     .unix(
-                      Number(
-                        proposal.execution_time - config.daoSystem.timelockDelay
-                      )
+                      Number(proposal.execution_time - proposal.timelock_delay)
                     )
                     .format("MMM D, YYYY · h:mm A")}
                 </div>

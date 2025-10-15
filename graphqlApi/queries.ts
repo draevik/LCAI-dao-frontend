@@ -24,6 +24,7 @@ gql(`
       id
     }
     quorum
+    timelock_delay
     execution_hash
     metadata {
       id

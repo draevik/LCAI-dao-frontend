@@ -83,9 +83,8 @@ export type Proposal = ApiProposal & {
   body: string;
   discussion: string;
   executions: RawTransaction[];
-  execution_settled: boolean;
   state: number;
-  quorum: number;
+  quorum_parsed: number;
 };
 
 export type ProposalMetadataItem = {

@@ -19,10 +19,10 @@ import {
   VOTES_QUERY,
 } from "./queries";
 import { clone } from "@/lib/utils";
+import { formatUnits } from "viem";
 
 const getProposalState = (proposal: ApiProposal, current: number) => {
-  const quorum = 1e9 * (4 / 100);
-  // const quorum = BigInt(proposal.quorum);
+  const quorum = BigInt(proposal.quorum);
   const scoresFor = BigInt(proposal.scores_1);
   const scoresAgainst = BigInt(proposal.scores_2);
   const scoresAbstain = BigInt(proposal.scores_3);
@@ -81,8 +81,7 @@ function formatProposal(proposal: ApiProposal, current: number): Proposal {
     executions: formatExecution(proposal.metadata?.execution),
     execution_settled: proposal.execution_settled,
     state,
-    // TODO: quorum
-    quorum: 1e9 * (4 / 100),
+    quorum_parsed: +formatUnits(proposal.quorum, proposal.vp_decimals),
   };
 }
 

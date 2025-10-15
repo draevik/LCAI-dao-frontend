@@ -71,7 +71,9 @@ export default function Home() {
 
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
-                        <span>#{proposal.id.toString().slice(0, 6)}...</span>
+                        <span>
+                          #{proposal.proposal_id.toString().slice(0, 6)}...
+                        </span>
                         <span>by</span>
                         <div className="flex items-center gap-1">
                           <span className="font-medium">
