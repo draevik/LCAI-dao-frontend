@@ -70,7 +70,11 @@ function formatProposal(proposal: ApiProposal, current: number): Proposal {
     },
     choices: proposal.metadata?.choices ?? BASIC_CHOICES,
     labels: proposal.metadata?.labels ?? [],
-    scores: [proposal.scores_1, proposal.scores_2, proposal.scores_3],
+    scores: [
+      proposal.scores_1_parsed,
+      proposal.scores_2_parsed,
+      proposal.scores_3_parsed,
+    ],
     title: proposal.metadata?.title ?? `Proposal #${proposal.proposal_id}`,
     body: proposal.metadata?.body ?? "",
     discussion: proposal.metadata?.discussion ?? "",

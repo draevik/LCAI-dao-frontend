@@ -1,69 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import Blockies from "react-blockies";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
-import {
-  CircleMinusIcon,
-  Loader2Icon,
-  CopyIcon,
-  ArrowLeftIcon,
-  MoreHorizontalIcon,
-  UsersIcon,
-  ClockIcon,
-} from "lucide-react";
-import { formatEther, TransactionExecutionError } from "viem";
-import useContracts from "@/hooks/useContracts";
-import { compactNumber, convertChoice } from "@/lib/utils";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useAccount } from "wagmi";
 import LoadingBlock from "@/components/loading-block";
-import Markdown from "react-markdown";
-import { useGovernance } from "@/hooks/useGovernance";
-import { toast } from "sonner";
-import { useAppKit } from "@reown/appkit/react";
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from "@/components/ui/empty";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useCopyToClipboard } from "usehooks-ts";
-import ProposalStatusBadge from "@/components/proposal/proposal-status-badge";
-import $dayjs from "@/lib/dayjs";
-import { ProposalState } from "@/lib/constents";
 import useGraphqlApi from "@/hooks/useGraphqlApi";
-import ProposalVoteIcon from "@/components/proposal/proposal-vote-icon";
+import { ProposalHeader } from "@/components/proposal/proposal-header";
+import { ProposalTitleSection } from "@/components/proposal/proposal-title-section";
+import { ProposalOverviewTab } from "@/components/proposal/proposal-overview-tab";
+import { ProposalVotesTab } from "@/components/proposal/proposal-votes-tab";
+import { ProposalVoteDialog } from "@/components/proposal/proposal-vote-dialog";
+import { ProposalActionButton } from "@/components/proposal/proposal-action-button";
+import { ProposalVoteResults } from "@/components/proposal/proposal-vote-results";
+import { ProposalTimeline } from "@/components/proposal/proposal-timeline";
+import { useQuery } from "@tanstack/react-query";
 
 export default function ProposalDetail() {
-  const { open } = useAppKit();
-  const { address } = useAccount();
   const api = useGraphqlApi();
-  const { governorContract, presaleVotingPowerContract } = useContracts();
-  const { castVote, cancel } = useGovernance();
   const params = useParams();
   const proposalId = params.id as string;
-  const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
-  const [, copy] = useCopyToClipboard();
 
-  const {
-    data: proposal,
-    refetch,
-    isLoading,
-  } = useQuery({
+  const { data: proposal, isLoading } = useQuery({
     queryKey: ["proposal", proposalId],
     queryFn: () => api.loadProposal(proposalId, Date.now()),
     enabled: true,
@@ -81,54 +40,7 @@ export default function ProposalDetail() {
     enabled: Boolean(proposal),
   });
 
-  const hasVoted = useQuery({
-    queryKey: ["hasVoted", proposalId, address],
-    queryFn: async () =>
-      governorContract.read.hasVoted([BigInt(proposalId), address!]),
-    enabled: Boolean(address),
-  });
-
-  const userVotingPower = useQuery({
-    queryKey: ["votingPower", address],
-    queryFn: async () => presaleVotingPowerContract.read.balanceOf([address!]),
-    select: (votingPower) => +formatEther(votingPower),
-    enabled: Boolean(address),
-  });
-
-  const castVoteMutation = useMutation({
-    mutationFn: () => castVote(proposalId, convertChoice(selectedChoice!)),
-    onSuccess: () => {
-      setSelectedChoice(null);
-      refetch();
-      toast.success(
-        `Vote cast for choice: ${proposal?.metadata?.choices[selectedChoice!]}`
-      );
-    },
-    onError: (error: TransactionExecutionError) => {
-      console.error("Error casting vote:", error?.walk().message);
-      toast.error("Failed to cast vote");
-    },
-  });
-
-  const cancelProposalMutation = useMutation({
-    mutationFn: () => {
-      if (!proposal) throw new Error("Proposal not found");
-      return cancel(
-        proposal.executions.map((e) => e.to),
-        proposal.executions.map((e) => BigInt(e.value)),
-        proposal.executions.map((e) => e.data),
-        proposal.metadata?.body ?? ""
-      );
-    },
-    onSuccess: () => {
-      refetch();
-      toast.success("Proposal cancelled");
-    },
-    onError: (error: TransactionExecutionError) => {
-      console.error("Error cancelling proposal:", error?.walk().message);
-      toast.error("Failed to cancel proposal");
-    },
-  });
+  const [isVoteDialogOpen, setIsVoteDialogOpen] = useState(false);
 
   if (isLoading) return <LoadingBlock />;
 
@@ -147,90 +59,9 @@ export default function ProposalDetail() {
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-6xl">
-      {/* Header */}
-      <div className="flex items-center gap-2 mb-8">
-        <Link href="/">
-          <Button variant="ghost" size="icon" type="button">
-            <ArrowLeftIcon className="h-4 w-4" />
-          </Button>
-        </Link>
-        <h1 className="text-3xl font-bold tracking-tight">Proposal</h1>
-      </div>
+      <ProposalHeader />
 
-      {/* Title and Status */}
-      <div className="space-y-4">
-        <ProposalStatusBadge status={proposal.state} />
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold">{proposal.metadata?.title}</h1>
-          </div>
-          <div className="flex items-center gap-2 ml-auto">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="secondary" size="sm">
-                  <MoreHorizontalIcon className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="min-w-48">
-                <DropdownMenuItem
-                  onClick={() => {
-                    copy(window.location.href);
-                    toast.success("URL copied to clipboard");
-                  }}
-                >
-                  <CopyIcon className="size-4" />
-                  Copy URL
-                </DropdownMenuItem>
-                {proposal.state === ProposalState.Pending &&
-                  proposal.author.id === address && (
-                    <DropdownMenuItem
-                      onClick={() => cancelProposalMutation.mutate()}
-                    >
-                      {cancelProposalMutation.isPending ? (
-                        <Loader2Icon className="size-4 animate-spin" />
-                      ) : (
-                        <CircleMinusIcon className="size-4" />
-                      )}
-                      Cancel Proposal
-                    </DropdownMenuItem>
-                  )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <span>#{proposal.id.toString().slice(0, 6)}...</span>
-            <span>by</span>
-            <div className="flex items-center gap-1">
-              <span className="font-medium">
-                {proposal.author?.id.slice(0, 6)}...
-                {proposal.author?.id.slice(-4)}
-              </span>
-              <Badge variant="outline" className="text-xs">
-                author
-              </Badge>
-            </div>
-          </div>
-          <div className="flex items-center gap-1">
-            <UsersIcon className="h-4 w-4" />
-            <span>{compactNumber(proposal.scores_total_parsed)} votes</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <ClockIcon className="h-4 w-4" />
-            {proposal.state === ProposalState.Pending ? (
-              <span>
-                Start {$dayjs.unix(Number(proposal.start_time)).fromNow()}
-              </span>
-            ) : (
-              proposal.state === ProposalState.Active && (
-                <span>{$dayjs.unix(Number(proposal.end_time)).fromNow()}</span>
-              )
-            )}
-          </div>
-        </div>
-      </div>
+      <ProposalTitleSection proposal={proposal} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
         {/* Main Content */}
@@ -242,244 +73,36 @@ export default function ProposalDetail() {
             </TabsList>
 
             <TabsContent value="overview" className="space-y-6 mt-6">
-              {/* Description */}
-              <div className="prose prose-sm max-w-none dark:prose-invert">
-                <Markdown>{proposal.metadata?.body}</Markdown>
-              </div>
-
-              {/* Discussion Link */}
-              {/* {proposal.discussion && (
-                <div className="pt-4">
-                  <a
-                    href={proposal.discussion}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                    View Discussion
-                  </a>
-                </div>
-              )} */}
+              <ProposalOverviewTab content={proposal.metadata?.body} />
             </TabsContent>
 
             <TabsContent value="votes" className="mt-6">
-              <div className="space-y-4">
-                <div className="text-sm text-muted-foreground">
-                  Showing {votes?.length?.toLocaleString()} addresses
-                </div>
-
-                {/* Mock vote list */}
-                <div className="space-y-3">
-                  {!votes?.length ? (
-                    <Empty className="border border-dashed">
-                      <EmptyHeader>
-                        <EmptyTitle>No votes found</EmptyTitle>
-                        <EmptyDescription>
-                          Be the first to vote on this proposal
-                        </EmptyDescription>
-                      </EmptyHeader>
-                    </Empty>
-                  ) : (
-                    votes?.map((vote, index) => (
-                      <Card key={index} className="p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <Blockies
-                              seed={vote.voter.id}
-                              size={16}
-                              scale={2}
-                              className="rounded-full"
-                            />
-                            <div>
-                              <div className="font-medium text-sm">
-                                {vote.voter.id}
-                              </div>
-                              <div className="text-xs text-muted-foreground">
-                                Voted for:{" "}
-                                <span className="font-medium">
-                                  {vote.choice}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-medium text-sm">
-                              {vote.vp_parsed.toLocaleString()}
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {$dayjs
-                                .unix(vote.created)
-                                .format("MMM D, YYYY · h:mm A")}
-                            </div>
-                          </div>
-                        </div>
-                      </Card>
-                    ))
-                  )}
-                </div>
-              </div>
+              <ProposalVotesTab
+                votes={votes}
+                choices={proposal.metadata?.choices}
+              />
             </TabsContent>
           </Tabs>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Cast Your Vote */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm font-medium">
-                CAST YOUR VOTE
-              </CardTitle>
-              {address && (
-                <>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Blockies
-                      seed={address}
-                      size={8}
-                      scale={2}
-                      className="rounded-full"
-                    />
-                    <span>
-                      {address.slice(0, 6)}...
-                      {address.slice(-4)}
-                    </span>
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    Voting power: {userVotingPower.data?.toLocaleString()}
-                  </div>
-                </>
-              )}
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
-                {proposal.metadata?.choices.map((choice, index) => (
-                  <div key={index}>
-                    <button
-                      onClick={() => setSelectedChoice(index)}
-                      className={`w-full p-3 text-left border rounded-lg transition-colors ${
-                        selectedChoice === index
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-primary/50"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <ProposalVoteIcon vote={index} />
-                          <span className="font-medium text-sm">{choice}</span>
-                        </div>
+          <div className="grid">
+            <ProposalActionButton
+              proposal={proposal}
+              onVoteAction={() => setIsVoteDialogOpen(true)}
+            />
+          </div>
 
-                        <span className="text-xs text-muted-foreground">
-                          {compactNumber(
-                            proposal[
-                              `scores_${index + 1}_parsed` as "scores_1_parsed"
-                            ]
-                          )}
-                        </span>
-                      </div>
+          <ProposalVoteDialog
+            open={isVoteDialogOpen}
+            onOpenChange={setIsVoteDialogOpen}
+            proposal={proposal}
+          />
 
-                      <div className="space-y-1">
-                        <Progress
-                          value={
-                            (Number(
-                              proposal[
-                                `scores_${
-                                  index + 1
-                                }_parsed` as "scores_1_parsed"
-                              ]
-                            ) /
-                              Number(proposal.scores_total_parsed)) *
-                            100
-                          }
-                          className="h-1"
-                        />
-                      </div>
-                    </button>
-                  </div>
-                ))}
-              </div>
-              <Separator />
+          <ProposalVoteResults proposal={proposal} />
 
-              <div className="text-xs text-muted-foreground">
-                Total: {compactNumber(proposal.scores_total_parsed)}
-              </div>
-              <Button
-                onClick={() => (address ? castVoteMutation.mutate() : open())}
-                disabled={
-                  proposal.execution_ready ||
-                  hasVoted.data ||
-                  selectedChoice === null ||
-                  castVoteMutation.isPending
-                }
-                className="w-full"
-              >
-                {castVoteMutation.isPending && (
-                  <Loader2Icon className="animate-spin" />
-                )}
-                {hasVoted.data ? "Already Voted" : "Vote"}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Timeline */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm font-medium">TIMELINE</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-gray-400 mt-2" />
-                  <div>
-                    <div className="font-medium text-sm">Published onchain</div>
-                    <div className="text-xs text-muted-foreground">
-                      {$dayjs
-                        .unix(Number(proposal.created))
-                        .format("MMM D, YYYY · h:mm A")}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-green-500 mt-2" />
-                  <div>
-                    <div className="font-medium text-sm">
-                      Voting period started
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {$dayjs
-                        .unix(Number(proposal.start_time))
-                        .format("MMM D, YYYY · h:mm A")}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-orange-500 mt-2" />
-                  <div>
-                    <div className="font-medium text-sm">End voting period</div>
-                    <div className="text-xs text-muted-foreground">
-                      {$dayjs
-                        .unix(Number(proposal.end_time))
-                        .format("MMM D, YYYY · h:mm A")}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 text-muted-foreground">
-                  <div className="w-2 h-2 rounded-full bg-gray-400" />
-                  <div>
-                    <div className="font-medium text-sm">Queue proposal</div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 text-muted-foreground">
-                  <div className="w-2 h-2 rounded-full bg-gray-400" />
-                  <div>
-                    <div className="font-medium text-sm">Execute proposal</div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <ProposalTimeline proposal={proposal} />
         </div>
       </div>
     </div>

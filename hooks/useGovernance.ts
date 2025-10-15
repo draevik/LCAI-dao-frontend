@@ -7,6 +7,7 @@ import {
   encodePacked,
   keccak256,
   parseEther,
+  SimulateContractReturnType,
 } from "viem";
 import useContracts from "./useContracts";
 import useWeb3Clients from "./useWeb3Clients";
@@ -80,15 +81,36 @@ export function useGovernance() {
     return eventLog.args.proposalId;
   };
 
-  const castVote = async (proposalId: string | number, support: number) => {
+  const castVote = async (
+    proposalId: string | number,
+    support: number,
+    reason?: string
+  ) => {
     if (!address || !walletClient) throw new Error("Wallet not connected");
 
-    const { request } = await governorContract.simulate.castVote([
-      BigInt(proposalId),
-      support,
-    ]);
+    let simulation:
+      | SimulateContractReturnType<typeof governorContract.abi, "castVote">
+      | SimulateContractReturnType<
+          typeof governorContract.abi,
+          "castVoteWithReason"
+        >;
 
-    const hash = await walletClient.writeContract(request);
+    if (reason) {
+      simulation = await governorContract.simulate.castVoteWithReason(
+        [BigInt(proposalId), support, reason],
+        { account: address }
+      );
+    } else {
+      simulation = await governorContract.simulate.castVote(
+        [BigInt(proposalId), support],
+        { account: address }
+      );
+    }
+
+    const hash = await walletClient.writeContract(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      simulation.request as unknown as any
+    );
 
     const receipt = await publicClient.waitForTransactionReceipt({
       hash,
@@ -127,10 +149,68 @@ export function useGovernance() {
     return receipt;
   };
 
+  const queue = async (
+    targets: `0x${string}`[],
+    values: bigint[],
+    calldatas: `0x${string}`[],
+    description: string
+  ) => {
+    if (!address || !walletClient) throw new Error("Wallet not connected");
+
+    const descriptionHash = keccak256(encodePacked(["string"], [description]));
+
+    const { request } = await governorContract.simulate.queue([
+      targets,
+      values,
+      calldatas,
+      descriptionHash,
+    ]);
+
+    const hash = await walletClient.writeContract(request);
+
+    const receipt = await publicClient.waitForTransactionReceipt({
+      hash,
+    });
+
+    console.log("Receipt", receipt);
+
+    return receipt;
+  };
+
+  const execute = async (
+    targets: `0x${string}`[],
+    values: bigint[],
+    calldatas: `0x${string}`[],
+    description: string
+  ) => {
+    if (!address || !walletClient) throw new Error("Wallet not connected");
+
+    const descriptionHash = keccak256(encodePacked(["string"], [description]));
+
+    const { request } = await governorContract.simulate.execute([
+      targets,
+      values,
+      calldatas,
+      descriptionHash,
+    ]);
+
+    const hash = await walletClient.writeContract(request);
+
+    const receipt = await publicClient.waitForTransactionReceipt({
+      hash,
+    });
+
+    console.log("Receipt", receipt);
+
+    return receipt;
+  };
+
   return {
     createProposal,
     simulateActions,
     castVote,
     cancel,
+    queue,
+    execute,
   };
 }

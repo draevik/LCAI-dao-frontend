@@ -78,7 +78,7 @@ export type Proposal = ApiProposal & {
   };
   choices: string[];
   labels: string[];
-  scores: [string, string, string];
+  scores: [number, number, number];
   title: string;
   body: string;
   discussion: string;
