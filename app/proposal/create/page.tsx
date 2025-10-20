@@ -10,7 +10,6 @@ import { useGovernance } from "@/hooks/useGovernance";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -20,6 +19,31 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  MDXEditor,
+  headingsPlugin,
+  listsPlugin,
+  quotePlugin,
+  thematicBreakPlugin,
+  markdownShortcutPlugin,
+  linkPlugin,
+  linkDialogPlugin,
+  imagePlugin,
+  tablePlugin,
+  codeBlockPlugin,
+  codeMirrorPlugin,
+  toolbarPlugin,
+  UndoRedo,
+  BoldItalicUnderlineToggles,
+  BlockTypeSelect,
+  CreateLink,
+  InsertImage,
+  InsertTable,
+  InsertThematicBreak,
+  ListsToggle,
+  CodeToggle,
+} from "@mdxeditor/editor";
+import "@mdxeditor/editor/style.css";
 import { ContractActionDialog } from "@/components/contract-action-dialog";
 import { ContractAction } from "@/types";
 import {
@@ -48,6 +72,8 @@ import { useAppKit } from "@reown/appkit/react";
 import { useAccount } from "wagmi";
 import config from "@/config";
 import $dayjs from "@/lib/dayjs";
+import { useTheme } from "next-themes";
+import { cn } from "@/lib/utils";
 
 const choices = [
   {
@@ -92,6 +118,7 @@ export default function CreateProposal() {
   const [actions, setActions] = useState<ContractAction[]>([]);
   const { open } = useAppKit();
   const { isConnected } = useAccount();
+  const { theme } = useTheme();
 
   // Initialize React Hook Form with Zod validation
   const form = useForm<ProposalFormValues>({
@@ -254,11 +281,49 @@ export default function CreateProposal() {
                       <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Propose something..."
-                        className="min-h-[200px] resize-none"
-                        {...field}
-                      />
+                      <div className="border rounded-md overflow-hidden">
+                        <MDXEditor
+                          className={cn({ "dark-theme": theme === "dark" })}
+                          markdown={field.value}
+                          onChange={field.onChange}
+                          placeholder="Propose something..."
+                          plugins={[
+                            headingsPlugin(),
+                            listsPlugin(),
+                            quotePlugin(),
+                            thematicBreakPlugin(),
+                            linkPlugin(),
+                            linkDialogPlugin(),
+                            imagePlugin(),
+                            tablePlugin(),
+                            codeBlockPlugin({ defaultCodeBlockLanguage: "js" }),
+                            codeMirrorPlugin({
+                              codeBlockLanguages: {
+                                js: "JavaScript",
+                                ts: "TypeScript",
+                                sol: "Solidity",
+                                json: "JSON",
+                              },
+                            }),
+                            markdownShortcutPlugin(),
+                            toolbarPlugin({
+                              toolbarContents: () => (
+                                <>
+                                  <UndoRedo />
+                                  <BoldItalicUnderlineToggles />
+                                  <ListsToggle />
+                                  <CreateLink />
+                                  <InsertImage />
+                                  <InsertTable />
+                                  <InsertThematicBreak />
+                                  <CodeToggle />
+                                </>
+                              ),
+                            }),
+                          ]}
+                          contentEditableClassName="min-h-[200px] prose prose-sm dark:prose-invert max-w-none px-4 py-3"
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
