@@ -27,7 +27,7 @@ const hardhat = {
 };
 
 // counter 0x610178da211fef7d417bc0e6fed39f05609ad788
-// lcai counter 0xe7c2074eD35ed9F3e3eCe9E159B513260f571d4F
+// lcai counter 0x2CA89a0add8553752e37d2f455937ca739a1069C
 
 const config = {
   chains: [lcaiTestnet] as [Chain, ...Chain[]],
@@ -42,17 +42,17 @@ const config = {
 
   timeLock: {
     [hardhat.id]: `0x5fbdb2315678afecb367f032d93f642f64180aa3`,
-    [lcaiTestnet.id]: `0x2925fcaaAcC7b2c41BDc68383899f78Cd26b3B21`,
+    [lcaiTestnet.id]: `0x6FDA6BFfdf8f6ea638D1AdED3d5Bdf337dec7DAc`,
   } as Record<number, `0x${string}`>,
 
   governor: {
     [hardhat.id]: `0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0`,
-    [lcaiTestnet.id]: `0xD61EEAD276De743393de11bBc9997Aa7Cc95ca31`,
+    [lcaiTestnet.id]: `0x58Fc79c5DeF257b0DD86ca59b48870E343946Fe5`,
   } as Record<number, `0x${string}`>,
 
   presaleVotingPower: {
     [hardhat.id]: `0xe7f1725e7734ce288f8367e1bb143e90bb3f0512`,
-    [lcaiTestnet.id]: `0xaea6e8C8149b9aA996e3151C5aaB6855F6Fa8Daa`,
+    [lcaiTestnet.id]: `0xF1c352E47C3c2498aA809e4d4E19295089aCF360`,
   } as Record<number, `0x${string}`>,
 };
 
