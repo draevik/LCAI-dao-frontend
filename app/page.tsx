@@ -24,7 +24,12 @@ export default function Home() {
 
   const { isLoading, data: proposals } = useQuery({
     queryKey: ["proposals"],
-    queryFn: () => api.loadProposals([], { limit: 10, skip: 0 }, Date.now()),
+    queryFn: () =>
+      api.loadProposals(
+        [],
+        { limit: 10, skip: 0 },
+        Math.floor(Date.now() / 1000)
+      ),
   });
 
   return (

@@ -25,7 +25,8 @@ export default function ProposalDetail() {
 
   const { data: proposal, isLoading } = useQuery({
     queryKey: ["proposal", `${space}/${id}`],
-    queryFn: () => api.loadProposal(`${space}/${id}`, Date.now()),
+    queryFn: () =>
+      api.loadProposal(`${space}/${id}`, Math.floor(Date.now() / 1000)),
     enabled: true,
   });
 
