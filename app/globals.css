@@ -9,13 +9,13 @@
   padding-inline: 1rem;
 
   @media (min-width: 64rem) {
-    max-width: 64rem;
+    max-width: 83rem;
   }
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-foreground: var(--content-secondary);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -51,11 +51,16 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --color-content-primary: var(--content-primary);
+  --color-content-soft: var(--content-soft);
+  --color-surface-x-soft: var(--surface-x-soft);
+  --color-surface-tolt: var(--surface-tolt);
+  --color-content-secondary: var(--content-secondary);
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #ffffff;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -88,10 +93,19 @@
   --sidebar-ring: oklch(0.708 0 0);
   --tw-prose-headings: oklch(0.985 0 0);
   --tw-prose-body: oklch(0.985 0 0);
+  --content-primary: #0F0F14;
+  --content-soft: rgba(100, 100, 100, 0.70);
+  --surface-x-soft: rgba(2, 2, 3, 0.02);
+  --surface-tolt: #e0e0e0;
+  --surface-base-dark: #ffffff;
+  --content-secondary: #565e78;
+  --mdx-tolbar: #ededed;
+  --content-default: #373842;
+  --border-default: rgba(115, 118, 170, 0.20);
 }
 
 .dark {
-  --background: oklch(0.13 0.02 283.31);
+  --background: #070710;
   --foreground: oklch(0.86 0.05 282.7);
   --card: oklch(0.86 0.05 282.7 / 0.04);
   --card-foreground: oklch(0.985 0 0);
@@ -122,6 +136,16 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --content-primary: #ccceef;
+  --content-soft: rgba(154, 156, 207, 0.40);
+  --surface-x-soft: rgba(204, 206, 239, 0.04);
+  --surface-tolt: #2D2D3C;
+  --surface-base-dark: #121217;
+  --content-secondary: #9A9CCF;
+  --content-default: #9798B6;
+  --mdx-tolbar: #1a1a24;
+  --content-default: #9798B6;
+  --border-default: rgba(2, 2, 3, 0.04);
 }
 
 @layer base {
@@ -181,4 +205,16 @@
 ::view-transition-new(root) {
   /* Apply the reveal animation */
   animation: reveal 0.4s ease-in-out forwards;
+}
+
+/* MDX Editor root variable */
+.mdx_editor_root, ._editorRoot_1e2ox_53 {
+  --basePageBg: var(--surface-base-dark) !important;
+  --baseBase: var(--surface-tolt) !important;
+  --baseBg: var(--mdx-tolbar) !important;
+  --baseBgHover: var(--surface-tolt);
+  --baseBgActive: var(--surface-tolt) !important;
+  --baseText: var(--content-primary) !important;
+  --baseTextContrast: var(--content-default) !important;
+  --baseSolid: var(--content-soft) !important;
 }

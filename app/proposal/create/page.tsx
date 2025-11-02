@@ -225,142 +225,143 @@ export default function CreateProposal() {
   });
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="flex items-center gap-2 mb-8">
-        <Link href="/">
-          <Button variant="ghost" size="icon" type="button">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-        </Link>
-        <h1 className="text-3xl font-bold tracking-tight">New proposal</h1>
+    <>
+      <div className="border-b border-border-default">
+        <div className="container mx-auto py-4">
+          <Link href="/" className="inline-flex items-center gap-1.5 text-content-primary hover:text-primary transition-colors duration-200">
+              <ArrowLeft size={16} /> New Proposal
+          </Link>
+        </div>
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Form */}
-        <div className="lg:col-span-2">
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleSubmit)}
-              className="space-y-6"
-            >
-              {/* <div className="flex items-center w-full py-2 px-3 rounded border text-[17px] bg-rose-100 border-rose-300 text-rose-500 dark:bg-rose-700 dark:border-rose-700 dark:text-neutral-100 mb-4">
+      <div className="container mx-auto py-8 px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Form */}
+          <div className="lg:col-span-2">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="space-y-6"
+              >
+                {/* <div className="flex items-center w-full py-2 px-3 rounded border text-[17px] bg-rose-100 border-rose-300 text-rose-500 dark:bg-rose-700 dark:border-rose-700 dark:text-neutral-100 mb-4">
                 <InfoIcon className="size-5 mr-2" />
                 You need to be a member of the space in order to create a
                 proposal.
               </div> */}
 
-              {/* Title */}
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Title <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter proposal title"
-                        className="w-full"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Description */}
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Description (Markdown){" "}
-                      <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <div className="border rounded-md overflow-hidden">
-                        <MDXEditor
-                          className={cn({ "dark-theme": theme === "dark" })}
-                          markdown={field.value}
-                          onChange={field.onChange}
-                          placeholder="Propose something..."
-                          plugins={[
-                            headingsPlugin(),
-                            listsPlugin(),
-                            quotePlugin(),
-                            thematicBreakPlugin(),
-                            linkPlugin(),
-                            linkDialogPlugin(),
-                            imagePlugin(),
-                            tablePlugin(),
-                            codeBlockPlugin({ defaultCodeBlockLanguage: "js" }),
-                            codeMirrorPlugin({
-                              codeBlockLanguages: {
-                                js: "JavaScript",
-                                ts: "TypeScript",
-                                sol: "Solidity",
-                                json: "JSON",
-                              },
-                            }),
-                            markdownShortcutPlugin(),
-                            toolbarPlugin({
-                              toolbarContents: () => (
-                                <>
-                                  <UndoRedo />
-                                  <BoldItalicUnderlineToggles />
-                                  <ListsToggle />
-                                  <CreateLink />
-                                  <InsertImage />
-                                  <InsertTable />
-                                  <InsertThematicBreak />
-                                  <CodeToggle />
-                                </>
-                              ),
-                            }),
-                          ]}
-                          contentEditableClassName="min-h-[200px] prose prose-sm dark:prose-invert max-w-none px-4 py-3"
+                {/* Title */}
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        Title <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter proposal title"
+                          className="w-full"
+                          {...field}
                         />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              {/* Discussion */}
-              <FormField
-                control={form.control}
-                name="discussion"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Discussion URL
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="e.g. https://forum.balancer.fi/t/proposal..."
-                        className="w-full"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription className="text-xs text-muted-foreground">
-                      Link to forum discussion or other relevant resources
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                {/* Description */}
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        Description (Markdown){" "}
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <div className="border rounded-md overflow-hidden">
+                          <MDXEditor
+                            className="mdx_editor_root"
+                            markdown={field.value}
+                            onChange={field.onChange}
+                            placeholder="Propose something..."
+                            plugins={[
+                              headingsPlugin(),
+                              listsPlugin(),
+                              quotePlugin(),
+                              thematicBreakPlugin(),
+                              linkPlugin(),
+                              linkDialogPlugin(),
+                              imagePlugin(),
+                              tablePlugin(),
+                              codeBlockPlugin({
+                                defaultCodeBlockLanguage: "js",
+                              }),
+                              codeMirrorPlugin({
+                                codeBlockLanguages: {
+                                  js: "JavaScript",
+                                  ts: "TypeScript",
+                                  sol: "Solidity",
+                                  json: "JSON",
+                                },
+                              }),
+                              markdownShortcutPlugin(),
+                              toolbarPlugin({
+                                toolbarContents: () => (
+                                  <>
+                                    <UndoRedo />
+                                    <BoldItalicUnderlineToggles />
+                                    <ListsToggle />
+                                    <CreateLink />
+                                    <InsertImage />
+                                    <InsertTable />
+                                    <InsertThematicBreak />
+                                    <CodeToggle />
+                                  </>
+                                ),
+                              }),
+                            ]}
+                            contentEditableClassName="min-h-[200px] prose prose-sm dark:prose-invert max-w-none px-4 py-3"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              {/* Execution */}
-              <Card className="py-4">
-                <div className="px-6 border-b pb-4">
-                  <div className="flex flex-wrap items-center justify-between">
-                    <h4 className="text-xl font-bold">Execution</h4>
-                    <div className="flex items-center gap-2">
-                      {/* <Button 
+                {/* Discussion */}
+                <FormField
+                  control={form.control}
+                  name="discussion"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        Discussion URL
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="e.g. https://forum.balancer.fi/t/proposal..."
+                          className="w-full"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription className="text-xs text-content-secondary">
+                        Link to forum discussion or other relevant resources
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Execution */}
+                <Card className="py-4">
+                  <div className="px-6 border-b pb-4">
+                    <div className="flex flex-wrap items-center justify-between">
+                      <h4 className="text-xl font-semibold text-content-primary">Execution</h4>
+                      <div className="flex items-center gap-2">
+                        {/* <Button 
                       variant="outline" 
                       type="button"
                       onClick={() => openDialog('send')}
@@ -368,216 +369,219 @@ export default function CreateProposal() {
                       <CoinsIcon />
                       Send Token
                     </Button> */}
-                      <Button
-                        variant="outline"
-                        type="button"
-                        onClick={() => openDialog("contract")}
-                      >
-                        <CodeIcon />
-                        Add Contract Call
-                      </Button>
+                        <Button className="text-content-primary"
+                          variant="outline"
+                          type="button"
+                          onClick={() => openDialog("contract")}
+                        >
+                          <CodeIcon />
+                          Add Contract Call
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <CardContent>
-                  <div className="mb-4">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-3 uppercase">
-                      Actions
-                    </h3>
-                  </div>
+                  <CardContent>
+                    <div className="mb-4">
+                      <h3 className="text-sm font-medium text-content-primary mb-3 uppercase">
+                        Actions
+                      </h3>
+                    </div>
 
-                  <div className="space-y-3">
-                    {actions.length > 0 ? (
-                      actions.map((action) => (
-                        <div
-                          key={action.id}
-                          className="flex items-center justify-between p-3 rounded-lg border bg-background/50"
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-2">
-                              {/* <ArrowDownUpIcon className="h-4 w-4 text-muted-foreground" /> */}
-                              {action.type === "send" ? (
-                                <CoinsIcon className="h-4 w-4 text-muted-foreground" />
-                              ) : (
-                                <CodeIcon className="h-4 w-4 text-muted-foreground" />
-                              )}
-                            </div>
-                            <span className="text-sm font-medium">
-                              {action.method} to {action.target.slice(0, 6)}...
-                              {action.target.slice(-4)}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0"
-                              type="button"
-                              onClick={() => openDialog(action.type, action)}
-                            >
-                              <PencilIcon />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0"
-                              type="button"
-                              onClick={() => deleteAction(action.id)}
-                            >
-                              <Trash2Icon />
-                            </Button>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <Empty className="border border-dashed">
-                        <EmptyHeader>
-                          <EmptyTitle>No Actions</EmptyTitle>
-                          <EmptyDescription>
-                            Add actions to your proposal.
-                          </EmptyDescription>
-                        </EmptyHeader>
-                        <EmptyContent>
-                          <Button
-                            variant="outline"
-                            type="button"
-                            onClick={() => openDialog("contract")}
+                    <div className="space-y-3">
+                      {actions.length > 0 ? (
+                        actions.map((action) => (
+                          <div
+                            key={action.id}
+                            className="flex items-center justify-between p-3 rounded-lg border bg-background/50"
                           >
-                            <CodeIcon />
-                            Add Contract Call
-                          </Button>
-                        </EmptyContent>
-                      </Empty>
-                    )}
-                  </div>
-
-                  <div className="flex items-center justify-between mt-4 pt-3 border-t">
-                    <span className="text-sm text-muted-foreground">
-                      {actions.length} action{actions.length === 1 ? "" : "s"}
-                    </span>
-                    <Button
-                      variant={
-                        simulationStatus === "idle"
-                          ? "outline"
-                          : simulationStatus === "success"
-                          ? "success"
-                          : "error"
-                      }
-                      size="sm"
-                      className="h-8"
-                      type="button"
-                      disabled={
-                        simulateActionsMutation.isPending ||
-                        actions.length === 0
-                      }
-                      onClick={() => simulateActionsMutation.mutate(actions)}
-                    >
-                      {simulateActionsMutation.isPending ? (
-                        <Loader2Icon className="size-4 animate-spin" />
+                            <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-2">
+                                {/* <ArrowDownUpIcon className="h-4 w-4 text-muted-foreground" /> */}
+                                {action.type === "send" ? (
+                                  <CoinsIcon className="h-4 w-4 text-muted-foreground" />
+                                ) : (
+                                  <CodeIcon className="h-4 w-4 text-muted-foreground" />
+                                )}
+                              </div>
+                              <span className="text-sm font-medium">
+                                {action.method} to {action.target.slice(0, 6)}
+                                ...
+                                {action.target.slice(-4)}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                                type="button"
+                                onClick={() => openDialog(action.type, action)}
+                              >
+                                <PencilIcon />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                                type="button"
+                                onClick={() => deleteAction(action.id)}
+                              >
+                                <Trash2Icon />
+                              </Button>
+                            </div>
+                          </div>
+                        ))
                       ) : (
-                        <ShieldCheckIcon className="size-4" />
+                        <Empty className="border border-dashed">
+                          <EmptyHeader>
+                            <EmptyTitle>No Actions</EmptyTitle>
+                            <EmptyDescription>
+                              Add actions to your proposal.
+                            </EmptyDescription>
+                          </EmptyHeader>
+                          <EmptyContent>
+                            <Button className="text-content-primary"
+                              variant="outline"
+                              type="button"
+                              onClick={() => openDialog("contract")}
+                            >
+                              <CodeIcon />
+                              Add Contract Call
+                            </Button>
+                          </EmptyContent>
+                        </Empty>
                       )}
-                      Simulate Execution
+                    </div>
+
+                    <div className="flex items-center justify-between mt-4 pt-3 border-t">
+                      <span className="text-sm text-muted-foreground">
+                        {actions.length} action{actions.length === 1 ? "" : "s"}
+                      </span>
+                      <Button
+                        variant={
+                          simulationStatus === "idle"
+                            ? "outline"
+                            : simulationStatus === "success"
+                            ? "success"
+                            : "error"
+                        }
+                        size="sm"
+                        className="h-8"
+                        type="button"
+                        disabled={
+                          simulateActionsMutation.isPending ||
+                          actions.length === 0
+                        }
+                        onClick={() => simulateActionsMutation.mutate(actions)}
+                      >
+                        {simulateActionsMutation.isPending ? (
+                          <Loader2Icon className="size-4 animate-spin" />
+                        ) : (
+                          <ShieldCheckIcon className="size-4" />
+                        )}
+                        Simulate Execution
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Submit Button */}
+                <div className="flex justify-end gap-4 pt-4">
+                  {isConnected ? (
+                    <Button
+                      type="submit"
+                      size="lg"
+                      className="flex-1"
+                      disabled={createProposalMutation.isPending}
+                    >
+                      {createProposalMutation.isPending ? (
+                        <Loader2Icon className="animate-spin" />
+                      ) : (
+                        <SendIcon />
+                      )}
+                      Publish
                     </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      size="lg"
+                      className="flex-1"
+                      onClick={() => open()}
+                    >
+                      Connect Wallet
+                    </Button>
+                  )}
+                </div>
+              </form>
+            </Form>
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* LCAI Governor */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="font-medium text-content-primary text-sm">
+                  LCAI Governor
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-content-secondary text-base">
+                      Proposal threshold
+                    </span>
+                    <span className="ml-auto text-content-primary">
+                      {config.daoSystem.proposalThreshold} LCAI
+                    </span>
                   </div>
-                </CardContent>
-              </Card>
-
-              {/* Submit Button */}
-              <div className="flex justify-end gap-4 pt-4">
-                {isConnected ? (
-                  <Button
-                    type="submit"
-                    size="lg"
-                    className="flex-1"
-                    disabled={createProposalMutation.isPending}
+                  <div className="flex items-center gap-2">
+                    <span className="text-content-secondary text-base">Quorum needed</span>
+                    <span className="ml-auto text-content-primary">
+                      {config.daoSystem.quorumNeeded}%
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-content-secondary text-base">
+                      Proposal delay
+                    </span>
+                    <span className="ml-auto text-content-primary">
+                      {$dayjs
+                        .duration(config.daoSystem.proposalDelay, "seconds")
+                        .humanize()}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-content-secondary text-base">Voting period</span>
+                    <span className="ml-auto text-content-primary">
+                      {$dayjs
+                        .duration(config.daoSystem.votingPeriod, "seconds")
+                        .humanize()}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            {/* Choices */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="font-medium text-content-primary text-sm">Choices</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {choices.map((choice) => (
+                  <div
+                    key={choice.id}
+                    className="flex items-center gap-2 bg-border rounded-lg px-2 py-2"
                   >
-                    {createProposalMutation.isPending ? (
-                      <Loader2Icon className="animate-spin" />
-                    ) : (
-                      <SendIcon />
-                    )}
-                    Publish
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    size="lg"
-                    className="flex-1"
-                    onClick={() => open()}
-                  >
-                    Connect Wallet
-                  </Button>
-                )}
-              </div>
-            </form>
-          </Form>
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* LCAI Governor */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="font-bold uppercase">
-                LCAI Governor
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">
-                    Proposal threshold
-                  </span>
-                  <span className="ml-auto">
-                    {config.daoSystem.proposalThreshold} LCAI
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">Quorum needed</span>
-                  <span className="ml-auto">
-                    {config.daoSystem.quorumNeeded}%
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">Proposal delay</span>
-                  <span className="ml-auto">
-                    {$dayjs
-                      .duration(config.daoSystem.proposalDelay, "seconds")
-                      .humanize()}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">Voting period</span>
-                  <span className="ml-auto">
-                    {$dayjs
-                      .duration(config.daoSystem.votingPeriod, "seconds")
-                      .humanize()}
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          {/* Choices */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="font-bold">CHOICES</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {choices.map((choice) => (
-                <div
-                  key={choice.id}
-                  className="flex items-center gap-2 bg-border rounded-lg px-2 py-2"
-                >
-                  {choice.icon}
-                  <span>{choice.label}</span>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-          {/* Timeline */}
-          {/* <Card>
+                    {choice.icon}
+                    <span>{choice.label}</span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+            {/* Timeline */}
+            {/* <Card>
             <CardHeader>
               <CardTitle className="font-bold">TIMELINE</CardTitle>
             </CardHeader>
@@ -632,17 +636,18 @@ export default function CreateProposal() {
               </div>
             </CardContent>
           </Card> */}
+          </div>
         </div>
-      </div>
 
-      {/* Contract Action Dialog */}
-      <ContractActionDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        onSave={saveAction}
-        editingAction={editingAction}
-        dialogType={dialogType}
-      />
-    </div>
+        {/* Contract Action Dialog */}
+        <ContractActionDialog
+          isOpen={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+          onSave={saveAction}
+          editingAction={editingAction}
+          dialogType={dialogType}
+        />
+      </div>
+    </>
   );
 }

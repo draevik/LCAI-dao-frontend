@@ -3,21 +3,15 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Clock, Users, Loader2Icon } from "lucide-react";
+import { Clock, Users, Loader2Icon, Plus } from "lucide-react";
 import { compactNumber } from "@/lib/utils";
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from "@/components/ui/empty";
 import $dayjs from "@/lib/dayjs";
 import LoadingBlock from "@/components/loading-block";
 import { useQuery } from "@tanstack/react-query";
 import ProposalStatusBadge from "@/components/proposal/proposal-status-badge";
 import { ProposalState } from "@/lib/constents";
 import useGraphqlApi from "@/hooks/useGraphqlApi";
+import Image from "next/image";
 
 export default function Home() {
   const api = useGraphqlApi();
@@ -34,13 +28,13 @@ export default function Home() {
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <div className="flex flex-col gap-6 py-6 shadow-sm">
-        <div className="flex items-center justify-between px-6">
+      <div className="flex flex-col gap-6 pb-6 sm:py-6">
+        <div className="flex flex-wrap gap-y-3 gap-x-5 items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">
+            <h1 className="text-3xl font-bold tracking-tight text-content-primary">
               DAO Governance
             </h1>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-content-secondary mt-2">
               Participate in community governance and vote on important
               proposals
             </p>
@@ -114,19 +108,16 @@ export default function Home() {
                 </Link>
               ))
             ) : (
-              <Empty className="border border-dashed">
-                <EmptyHeader>
-                  <EmptyTitle>No proposals found</EmptyTitle>
-                  <EmptyDescription>
-                    Create your first proposal
-                  </EmptyDescription>
-                </EmptyHeader>
-                <EmptyContent>
-                  <Button variant="outline" type="button" asChild>
-                    <Link href="/proposal/create">Create Proposal</Link>
-                  </Button>
-                </EmptyContent>
-              </Empty>
+              <div className="flex flex-col gap-6 items-center mt-10">
+                <Image src="/images/icons/folder-black.png" width={167} height={132} alt="Folder icon"></Image>
+                <div className="text-center">
+                  <h4 className="text-2xl font-smeibold leading-[1.20] -tracking-[0.24px] text-content-primary mb-2">No proposals found</h4>
+                  <p className="text-content-default -tracking-[0.16px]">Create your first proposal</p>
+                </div>
+                <Button>
+                  <Link className="flex items-center gap-1" href="/proposal/create"><Plus /> Create Proposal</Link>
+                </Button>
+              </div>
             )}
           </div>
         </div>
