@@ -1,11 +1,7 @@
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from "@/components/ui/empty";
 import { VoteListItem } from "./vote-list-item";
 import type { Vote } from "@/types";
+import Image from "next/image";
+import { useTheme } from "next-themes";
 
 interface ProposalVotesTabProps {
   votes?: Vote[];
@@ -13,22 +9,36 @@ interface ProposalVotesTabProps {
 }
 
 export function ProposalVotesTab({ votes, choices }: ProposalVotesTabProps) {
+  const { theme } = useTheme();
   return (
     <div className="space-y-4">
-      <div className="text-sm text-muted-foreground">
+      <div className="text-sm text-content-secondary">
         Showing {votes?.length.toLocaleString() ?? 0} addresses
       </div>
 
       <div className="space-y-3">
         {!votes?.length ? (
-          <Empty className="border border-dashed">
-            <EmptyHeader>
-              <EmptyTitle>No votes found</EmptyTitle>
-              <EmptyDescription>
+          <div className="flex flex-col gap-6 items-center pt-15 pb-15">
+            <Image
+              className="max-w-30 sm:max-w-max"
+              src={
+                theme == "dark"
+                  ? "/images/icons/folder-black.png"
+                  : "/images/icons/folder-white.png"
+              }
+              width={167}
+              height={132}
+              alt="Folder icon"
+            ></Image>
+            <div className="text-center">
+              <h4 className="text-2xl font-smeibold leading-[1.20] -tracking-[0.24px] text-content-primary mb-2">
+                No votes found
+              </h4>
+              <p className="text-content-default -tracking-[0.16px]">
                 Be the first to vote on this proposal
-              </EmptyDescription>
-            </EmptyHeader>
-          </Empty>
+              </p>
+            </div>
+          </div>
         ) : (
           votes.map((vote, index) => (
             <VoteListItem

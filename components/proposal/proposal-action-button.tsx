@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { ProposalState } from "@/lib/constents";
 import $dayjs from "@/lib/dayjs";
 import type { Proposal } from "@/types";
@@ -10,6 +9,7 @@ import { toast } from "sonner";
 import { TransactionExecutionError } from "viem";
 import { useAppKit } from "@reown/appkit/react";
 import { useMemo } from "react";
+import { Button } from "../common/Button";
 
 interface ProposalActionButtonProps {
   proposal: Proposal;

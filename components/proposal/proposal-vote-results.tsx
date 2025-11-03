@@ -8,18 +8,18 @@ interface ProposalVoteResultsProps {
   proposal: Proposal;
 }
 
-export function ProposalVoteResults({ proposal }: ProposalVoteResultsProps) {
+export function ProposalVoteResults({proposal}:ProposalVoteResultsProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center justify-between">
+        <CardTitle className="text-content-primary">
           Vote Results
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="text-sm flex items-center justify-between gap-2">
-          <span>Quorum</span>
-          <span>
+          <span className="text-content-primary">Quorum</span>
+          <span className="text-content-primary">
             {compactNumber(proposal.scores_1_parsed + proposal.scores_3_parsed)}{" "}
             of {compactNumber(proposal.quorum_parsed)}
           </span>
@@ -37,10 +37,10 @@ export function ProposalVoteResults({ proposal }: ProposalVoteResultsProps) {
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <ProposalVoteIcon vote={index} />
-                      <span className="font-medium text-sm">{choice}</span>
+                      <span className="font-medium text-sm text-content-primary">{choice}</span>
                     </div>
 
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-content-secondary">
                       ({percentage}%) {compactNumber(score)}
                     </span>
                   </div>

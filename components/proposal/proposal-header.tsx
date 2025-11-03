@@ -1,16 +1,14 @@
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ArrowLeftIcon } from "lucide-react";
 
 export function ProposalHeader() {
   return (
-    <div className="flex items-center gap-2 mb-8">
-      <Link href="/">
-        <Button variant="ghost" size="icon" type="button">
-          <ArrowLeftIcon className="h-4 w-4" />
-        </Button>
-      </Link>
-      <h1 className="text-3xl font-bold tracking-tight">Proposal</h1>
-    </div>
+    <div className="border-b border-border-default">
+        <div className="container mx-auto py-4">
+          <Link href="/" className="inline-flex items-center gap-1.5 text-content-primary hover:text-content-secondary transition-colors duration-200">
+              <ArrowLeft size={16} /> Proposal Details
+          </Link>
+        </div>
+      </div>
   );
 }

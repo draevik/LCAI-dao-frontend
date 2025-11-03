@@ -11,43 +11,43 @@ export function ProposalTimeline({ proposal }: ProposalTimelineProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>TIMELINE</CardTitle>
+        <CardTitle className="text-content-primary">Timeline</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-3">
+        <div className="space-y-5">
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-gray-400 mt-2" />
             <div>
-              <div className="font-medium text-sm">Published onchain</div>
-              <div className="text-xs text-muted-foreground">
+              <span className="font-semibold text-content-primary block">Published onchain</span>
+              <span className="text-xs text-content-secondary font-semibold">
                 {$dayjs
                   .unix(Number(proposal.created))
                   .format("MMM D, YYYY · h:mm A")}
-              </div>
+              </span>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-green-500 mt-2" />
             <div>
-              <div className="font-medium text-sm">Voting period started</div>
-              <div className="text-xs text-muted-foreground">
+              <span className="font-semibold text-content-primary block">Voting period started</span>
+              <span className="text-xs text-content-secondary font-semibold">
                 {$dayjs
                   .unix(Number(proposal.start_time))
                   .format("MMM D, YYYY · h:mm A")}
-              </div>
+              </span>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-orange-500 mt-2" />
             <div>
-              <div className="font-medium text-sm">End voting period</div>
-              <div className="text-xs text-muted-foreground">
+              <span className="font-semibold text-content-primary block">End voting period</span>
+              <span className="text-xs text-content-secondary font-semibold">
                 {$dayjs
                   .unix(Number(proposal.end_time))
                   .format("MMM D, YYYY · h:mm A")}
-              </div>
+              </span>
             </div>
           </div>
 
@@ -56,17 +56,17 @@ export function ProposalTimeline({ proposal }: ProposalTimelineProps) {
               "text-muted-foreground": !proposal.execution_time,
             })}
           >
-            <div className="w-2 h-2 rounded-full bg-gray-400 mt-2" />
+            <div className="w-2 h-2 rounded-full bg-indigo-500 mt-2" />
             <div>
-              <div className="font-medium text-sm">Queue proposal</div>
+              <span className="font-semibold text-content-primary block">Queue proposal</span>
               {proposal.execution_time ? (
-                <div className="text-xs text-muted-foreground">
+                <span className="text-xs text-muted-foreground">
                   {$dayjs
                     .unix(
                       Number(proposal.execution_time - proposal.timelock_delay)
                     )
                     .format("MMM D, YYYY · h:mm A")}
-                </div>
+                </span>
               ) : null}
             </div>
           </div>
@@ -78,13 +78,13 @@ export function ProposalTimeline({ proposal }: ProposalTimelineProps) {
           >
             <div className="w-2 h-2 rounded-full bg-gray-400 mt-2" />
             <div>
-              <div className="font-medium text-sm">Execute proposal</div>
+              <span className="font-semibold text-content-primary block">Execute proposal</span>
               {proposal.execution_time ? (
-                <div className="text-xs text-muted-foreground">
+                <span className="text-xs text-content-secondary font-semibold">
                   {$dayjs
                     .unix(Number(proposal.execution_time))
                     .format("MMM D, YYYY · h:mm A")}
-                </div>
+                </span>
               ) : null}
             </div>
           </div>

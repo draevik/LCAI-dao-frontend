@@ -20,17 +20,17 @@ export function VoteListItem({ vote, choiceLabel }: VoteListItemProps) {
             className="rounded-full"
           />
           <div>
-            <div className="font-medium text-sm">{vote.voter.id}</div>
-            <div className="text-xs text-muted-foreground">
+            <div className="font-medium text-sm text-content-primary">{vote.voter.id}</div>
+            <div className="text-xs text-content-secondary">
               Voted for: <span className="font-medium">{choiceLabel}</span>
             </div>
           </div>
         </div>
         <div className="text-right">
-          <div className="font-medium text-sm">
+          <div className="font-medium text-sm text-content-primary">
             {vote.vp_parsed.toLocaleString()}
           </div>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-xs text-content-secondary">
             {$dayjs.unix(vote.created).format("MMM D, YYYY · h:mm A")}
           </div>
         </div>

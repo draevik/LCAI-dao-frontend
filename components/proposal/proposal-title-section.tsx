@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -25,6 +24,7 @@ import { useGovernance } from "@/hooks/useGovernance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAccount } from "wagmi";
 import { TransactionExecutionError } from "viem";
+import { Button } from "../common/Button";
 
 interface ProposalTitleSectionProps {
   proposal: Proposal;
@@ -60,46 +60,32 @@ export function ProposalTitleSection({ proposal }: ProposalTitleSectionProps) {
   return (
     <div className="space-y-4">
       <ProposalStatusBadge status={proposal.state} />
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-start gap-x-5 gap-y-2 justify-between">
+        <h1 className="page-title">{proposal.metadata?.title}</h1>
         <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold">{proposal.metadata?.title}</h1>
-        </div>
-        <div className="flex items-center gap-2 ml-auto">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="sm">
-                <MoreHorizontalIcon className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="min-w-48">
-              <DropdownMenuItem
-                onClick={() => {
-                  copy(window.location.href);
-                  toast.success("URL copied to clipboard");
-                }}
+          <Button
+            onClick={() => {
+              copy(window.location.href);
+              toast.success("URL copied to clipboard");
+            }}
+            variant="outline"
+            leftIcon={CopyIcon}
+          >
+            Copy URL
+          </Button>
+          {proposal.state === ProposalState.Pending &&
+            proposal.author.id === address && (
+              <Button
+                leftIcon={CircleMinusIcon}
+                onClick={() => cancelProposalMutation.mutate()}
               >
-                <CopyIcon className="size-4" />
-                Copy URL
-              </DropdownMenuItem>
-              {proposal.state === ProposalState.Pending &&
-                proposal.author.id === address && (
-                  <DropdownMenuItem
-                    onClick={() => cancelProposalMutation.mutate()}
-                  >
-                    {cancelProposalMutation.isPending ? (
-                      <Loader2Icon className="size-4 animate-spin" />
-                    ) : (
-                      <CircleMinusIcon className="size-4" />
-                    )}
-                    Cancel Proposal
-                  </DropdownMenuItem>
-                )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                Cancel Proposal
+              </Button>
+            )}
         </div>
       </div>
 
-      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+      <div className="flex items-center gap-x-4 gap-y-2 flex-wrap text-sm">
         <div className="flex items-center gap-1">
           <span>#{proposal.proposal_id.toString().slice(0, 6)}...</span>
           <span>by</span>
@@ -115,19 +101,19 @@ export function ProposalTitleSection({ proposal }: ProposalTitleSectionProps) {
         </div>
         <div className="flex items-center gap-1">
           <UsersIcon className="h-4 w-4" />
-          <span>{compactNumber(proposal.vote_count)} votes</span>
+          <span className="whitespace-nowrap">{compactNumber(proposal.vote_count)} votes</span>
         </div>
         {(proposal.state === ProposalState.Pending ||
           proposal.state === ProposalState.Active) && (
           <div className="flex items-center gap-1">
             <ClockIcon className="h-4 w-4" />
             {proposal.state === ProposalState.Pending ? (
-              <span>
+              <span className="whitespace-nowrap">
                 Voting Start{" "}
                 {$dayjs.unix(Number(proposal.start_time)).fromNow()}
               </span>
             ) : (
-              <span>
+              <span className="whitespace-nowrap">
                 Voting End {$dayjs.unix(Number(proposal.end_time)).fromNow()}
               </span>
             )}

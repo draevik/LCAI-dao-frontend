@@ -60,53 +60,54 @@ export default function ProposalDetail() {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-6xl">
+    <>
       <ProposalHeader />
+      <div className="container mx-auto py-8 px-4">
+        <ProposalTitleSection proposal={proposal} />
 
-      <ProposalTitleSection proposal={proposal} />
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 mt-6">
+          {/* Main Content */}
+          <div>
+            <Tabs defaultValue="overview" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="overview">OVERVIEW</TabsTrigger>
+                <TabsTrigger value="votes">VOTES</TabsTrigger>
+              </TabsList>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
-        {/* Main Content */}
-        <div className="lg:col-span-2">
-          <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="overview">OVERVIEW</TabsTrigger>
-              <TabsTrigger value="votes">VOTES</TabsTrigger>
-            </TabsList>
+              <TabsContent value="overview" className="space-y-6 mt-6">
+                <ProposalOverviewTab content={proposal.metadata?.body} />
+              </TabsContent>
 
-            <TabsContent value="overview" className="space-y-6 mt-6">
-              <ProposalOverviewTab content={proposal.metadata?.body} />
-            </TabsContent>
-
-            <TabsContent value="votes" className="mt-6">
-              <ProposalVotesTab
-                votes={votes}
-                choices={proposal.metadata?.choices}
-              />
-            </TabsContent>
-          </Tabs>
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          <div className="grid">
-            <ProposalActionButton
-              proposal={proposal}
-              onVoteAction={() => setIsVoteDialogOpen(true)}
-            />
+              <TabsContent value="votes" className="mt-6">
+                <ProposalVotesTab
+                  votes={votes}
+                  choices={proposal.metadata?.choices}
+                />
+              </TabsContent>
+            </Tabs>
           </div>
 
-          <ProposalVoteDialog
-            open={isVoteDialogOpen}
-            onOpenChange={setIsVoteDialogOpen}
-            proposal={proposal}
-          />
+          {/* Sidebar */}
+          <div className="space-y-6">
+            <div className="grid">
+              <ProposalActionButton
+                proposal={proposal}
+                onVoteAction={() => setIsVoteDialogOpen(true)}
+              />
+            </div>
 
-          <ProposalVoteResults proposal={proposal} />
+            <ProposalVoteDialog
+              open={isVoteDialogOpen}
+              onOpenChange={setIsVoteDialogOpen}
+              proposal={proposal}
+            />
 
-          <ProposalTimeline proposal={proposal} />
+            <ProposalVoteResults proposal={proposal} />
+
+            <ProposalTimeline proposal={proposal} />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
