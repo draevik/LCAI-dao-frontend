@@ -42,7 +42,8 @@ import {
 } from "@/components/ui/form";
 import counterAbi from "@/contracts/abi/counterAbi";
 import useGetAbiContract from "@/hooks/useGetAbiContract";
-import { Loader2Icon } from "lucide-react";
+import { Loader2Icon, BookUserIcon } from "lucide-react";
+import { ContractPickerDialog } from "./contract-picker-dialog";
 
 const abiOptions = [
   { value: "imported", label: "Use the imported ABI" },
@@ -76,6 +77,7 @@ export function ContractActionDialog({
 }: ContractActionDialogProps) {
   const [writeContractAbi, setWriteContractAbi] = useState<AbiFunction[]>([]);
   const [methodInputs, setMethodInputs] = useState<AbiFunction["inputs"]>([]);
+  const [showContractPicker, setShowContractPicker] = useState(false);
 
   // Create dynamic schema based on method inputs
   const currentSchema =
@@ -199,46 +201,69 @@ export function ContractActionDialog({
     form.setValue("args", newArgs);
   }, [methodInputs, form]);
 
+  const handleSelectContract = (address: string) => {
+    setValue("target", address);
+    setShowContractPicker(false);
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-2xl px-0">
-        <DialogHeader className="px-6">
-          <DialogTitle>Contract Call</DialogTitle>
-          <DialogDescription className="text-muted-foreground">
-            Add a contract call to your proposal
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      {/* Contract Picker Modal */}
+      <ContractPickerDialog
+        isOpen={showContractPicker}
+        onClose={() => setShowContractPicker(false)}
+        onSelect={handleSelectContract}
+      />
 
-        <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <ScrollArea className="max-h-[80vh] overflow-auto">
-              <div className="space-y-6 pt-4 px-6">
-                <div className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="target"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Target contract address</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <Input
-                              placeholder={zeroAddress}
-                              disabled={autoAbi.isFetching}
-                              {...field}
-                            />
-                            {autoAbi.isFetching && (
-                              <Loader2Icon className="absolute right-2 top-1/2 -translate-y-1/2 animate-spin" />
-                            )}
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+      {/* Main Dialog */}
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="sm:max-w-2xl px-0">
+          <DialogHeader className="px-6">
+            <DialogTitle>Contract Call</DialogTitle>
+            <DialogDescription className="text-muted-foreground">
+              Add a contract call to your proposal
+            </DialogDescription>
+          </DialogHeader>
 
-                  <div className="space-y-2">
-                    {/* <Label htmlFor="abi-select">
+          <Form {...form}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <ScrollArea className="max-h-[80vh] overflow-auto">
+                <div className="space-y-6 pt-4 px-6">
+                  <div className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="target"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Target contract address</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Input
+                                placeholder="Address or ENS"
+                                disabled={autoAbi.isFetching}
+                                {...field}
+                              />
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                                onClick={() => setShowContractPicker(true)}
+                              >
+                                <BookUserIcon className="h-4 w-4" />
+                              </Button>
+                              {autoAbi.isFetching && (
+                                <Loader2Icon className="absolute right-10 top-1/2 -translate-y-1/2 animate-spin h-4 w-4" />
+                              )}
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <div className="space-y-2">
+                      {/* <Label htmlFor="abi-select">
                       Select an ABI or upload yours
                     </Label>
                     <Select
@@ -256,147 +281,148 @@ export function ContractActionDialog({
                         ))}
                       </SelectContent>
                     </Select> */}
-                    <FormField
-                      control={form.control}
-                      name="abiOption"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Select an ABI or upload yours</FormLabel>
-                          <Select
-                            disabled={autoAbi.isFetching}
-                            value={field.value}
-                            onValueChange={(value) => {
-                              field.onChange(value);
-                              handleAbiOptionChange(value);
-                            }}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Select an ABI" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {abiOptions.map((option) => (
-                                <SelectItem
-                                  key={option.value}
-                                  value={option.value}
-                                >
-                                  {option.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  {form.getValues("abiOption") === "upload" && (
-                    <AbiDropzone onAbiParsed={handleAbiParsed} />
-                  )}
-
-                  {writeContractAbi.length > 0 && (
-                    <FormField
-                      control={form.control}
-                      name="method"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Contract method</FormLabel>
-                          <Select
-                            value={field.value}
-                            onValueChange={(value) => {
-                              field.onChange(value);
-                              handleMethodChange(value);
-                            }}
-                          >
-                            <FormControl>
+                      <FormField
+                        control={form.control}
+                        name="abiOption"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Select an ABI or upload yours</FormLabel>
+                            <Select
+                              disabled={autoAbi.isFetching}
+                              value={field.value}
+                              onValueChange={(value) => {
+                                field.onChange(value);
+                                handleAbiOptionChange(value);
+                              }}
+                            >
                               <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select a contract method..." />
+                                <SelectValue placeholder="Select an ABI" />
                               </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {writeContractAbi.map((method) => (
-                                <SelectItem
-                                  key={method.name}
-                                  value={method.name}
-                                >
-                                  {method.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                          <p className="text-muted-foreground text-xs">
-                            This ABI is a standard. Please, be sure the smart
-                            contract implements the method you selected.
+                              <SelectContent>
+                                {abiOptions.map((option) => (
+                                  <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                  >
+                                    {option.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    {form.getValues("abiOption") === "upload" && (
+                      <AbiDropzone onAbiParsed={handleAbiParsed} />
+                    )}
+
+                    {writeContractAbi.length > 0 && (
+                      <FormField
+                        control={form.control}
+                        name="method"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Contract method</FormLabel>
+                            <Select
+                              value={field.value}
+                              onValueChange={(value) => {
+                                field.onChange(value);
+                                handleMethodChange(value);
+                              }}
+                            >
+                              <FormControl>
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select a contract method..." />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {writeContractAbi.map((method) => (
+                                  <SelectItem
+                                    key={method.name}
+                                    value={method.name}
+                                  >
+                                    {method.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                            <p className="text-muted-foreground text-xs">
+                              This ABI is a standard. Please, be sure the smart
+                              contract implements the method you selected.
+                            </p>
+                          </FormItem>
+                        )}
+                      />
+                    )}
+
+                    {methodInputs.length > 0 && (
+                      <>
+                        <Separator />
+
+                        <div className="space-y-2">
+                          <Label>Calldatas</Label>
+                          <p className="text-sm text-muted-foreground mb-3">
+                            The data for the function arguments you wish to send
+                            when the action executes
                           </p>
-                        </FormItem>
-                      )}
-                    />
-                  )}
 
-                  {methodInputs.length > 0 && (
-                    <>
-                      <Separator />
+                          <div className="space-y-3 p-4 border rounded-lg">
+                            {methodInputs.map((input) => (
+                              <FormField
+                                key={input.name}
+                                control={form.control}
+                                name={`args.${input.name}` as `args.${string}`}
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>
+                                      {input.name}
+                                      <span className="text-xs text-muted-foreground ml-2">
+                                        ({input.type})
+                                      </span>
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder={input.type}
+                                        {...field}
+                                        type="text"
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                            ))}
+                          </div>
 
-                      <div className="space-y-2">
-                        <Label>Calldatas</Label>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          The data for the function arguments you wish to send
-                          when the action executes
-                        </p>
-
-                        <div className="space-y-3 p-4 border rounded-lg">
-                          {methodInputs.map((input) => (
-                            <FormField
-                              key={input.name}
-                              control={form.control}
-                              name={`args.${input.name}` as `args.${string}`}
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>
-                                    {input.name}
-                                    <span className="text-xs text-muted-foreground ml-2">
-                                      ({input.type})
-                                    </span>
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      placeholder={input.type}
-                                      {...field}
-                                      type="text"
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                          ))}
-                        </div>
-
-                        {/* <div className="flex items-center gap-2 mt-3">
+                          {/* <div className="flex items-center gap-2 mt-3">
                 <input type="checkbox" id="send-ether" className="rounded" />
                 <Label htmlFor="send-ether" className="text-sm">
                   Also send Ether to the target address? (this is not common)
                 </Label>
               </div> */}
-                      </div>
-                    </>
-                  )}
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </ScrollArea>
+              </ScrollArea>
 
-            <DialogFooter className="px-6 mt-6">
-              <Button variant="outline" type="button" onClick={onClose}>
-                Cancel
-              </Button>
-              <Button type="submit">
-                {editingAction ? "Update" : "Add"} Transaction
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+              <DialogFooter className="px-6 mt-6">
+                <Button variant="outline" type="button" onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button type="submit">
+                  {editingAction ? "Update" : "Add"} Transaction
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
