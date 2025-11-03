@@ -40,6 +40,21 @@ const config = {
     timelockDelay: 60 * 60 * 24 * 2, // 2 days
   },
 
+  predefinedContracts: {
+    [hardhat.id]: [
+      {
+        name: "Counter (Example)",
+        address: "0x2CA89a0add8553752e37d2f455937ca739a1069C",
+      },
+    ],
+    [lcaiTestnet.id]: [
+      {
+        name: "Counter (Example)",
+        address: "0x2CA89a0add8553752e37d2f455937ca739a1069C",
+      },
+    ],
+  } as Record<number, { name: string; address: `0x${string}` }[]>,
+
   timeLock: {
     [hardhat.id]: `0x5fbdb2315678afecb367f032d93f642f64180aa3`,
     [lcaiTestnet.id]: `0x6FDA6BFfdf8f6ea638D1AdED3d5Bdf337dec7DAc`,
