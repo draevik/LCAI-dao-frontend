@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -41,9 +41,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import counterAbi from "@/contracts/abi/counterAbi";
+import useGetAbiContract from "@/hooks/useGetAbiContract";
+import { Loader2Icon } from "lucide-react";
 
 const abiOptions = [
-  // { value: "imported", label: "Use the imported ABI" },
+  { value: "imported", label: "Use the imported ABI" },
   {
     value: "erc20",
     label: "ERC 20",
@@ -90,7 +92,17 @@ export function ContractActionDialog({
     },
   });
 
-  const { handleSubmit, setValue } = form;
+  const { handleSubmit, setValue, watch } = form;
+
+  const autoAbi = useGetAbiContract(watch("target") as `0x${string}`);
+
+  useEffect(() => {
+    if (autoAbi.data) {
+      handleAbiOptionChange("imported");
+    } else {
+      handleAbiOptionChange("upload");
+    }
+  }, [autoAbi.data]);
 
   const handleAbiOptionChange = (value: string) => {
     setMethodInputs([]);
@@ -98,20 +110,21 @@ export function ContractActionDialog({
     setValue("method", "");
     setValue("abiOption", value);
 
-    if (value !== "upload") {
-      const abiOption = abiOptions.find((i) => i.value === value)!;
-      const contractWriteMethods = (abiOption.abi?.filter(
-        (item) =>
-          item.type === "function" &&
-          (item.stateMutability === "payable" ||
-            item.stateMutability === "nonpayable")
-      ) || []) as AbiFunction[];
-      setWriteContractAbi(contractWriteMethods);
-    }
+    const methods =
+      value === "imported"
+        ? autoAbi.data
+        : abiOptions.find((i) => i.value === value)?.abi;
+    handleAbiParsed(methods || []);
   };
 
   const handleAbiParsed = (methods: AbiFunction[]) => {
-    setWriteContractAbi(methods);
+    const writeMethods = methods.filter(
+      (item: AbiFunction) =>
+        item.type === "function" &&
+        (item.stateMutability === "payable" ||
+          item.stateMutability === "nonpayable")
+    );
+    setWriteContractAbi(writeMethods);
     setValue("method", "");
     setMethodInputs([]);
   };
@@ -198,7 +211,7 @@ export function ContractActionDialog({
 
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <ScrollArea className="max-h-[80vh]">
+            <ScrollArea className="max-h-[80vh] overflow-auto">
               <div className="space-y-6 pt-4 px-6">
                 <div className="space-y-4">
                   <FormField
@@ -208,7 +221,16 @@ export function ContractActionDialog({
                       <FormItem>
                         <FormLabel>Target contract address</FormLabel>
                         <FormControl>
-                          <Input placeholder={zeroAddress} {...field} />
+                          <div className="relative">
+                            <Input
+                              placeholder={zeroAddress}
+                              disabled={autoAbi.isFetching}
+                              {...field}
+                            />
+                            {autoAbi.isFetching && (
+                              <Loader2Icon className="absolute right-2 top-1/2 -translate-y-1/2 animate-spin" />
+                            )}
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -241,6 +263,7 @@ export function ContractActionDialog({
                         <FormItem>
                           <FormLabel>Select an ABI or upload yours</FormLabel>
                           <Select
+                            disabled={autoAbi.isFetching}
                             value={field.value}
                             onValueChange={(value) => {
                               field.onChange(value);
