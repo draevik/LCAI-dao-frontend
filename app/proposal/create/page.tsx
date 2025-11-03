@@ -228,7 +228,7 @@ export default function CreateProposal() {
     <>
       <div className="border-b border-border-default">
         <div className="container mx-auto py-4">
-          <Link href="/" className="inline-flex items-center gap-1.5 text-content-primary hover:text-primary transition-colors duration-200">
+          <Link href="/" className="inline-flex items-center gap-1.5 text-content-primary hover:text-content-secondary transition-colors duration-200">
               <ArrowLeft size={16} /> New Proposal
           </Link>
         </div>
@@ -487,7 +487,7 @@ export default function CreateProposal() {
                 </Card>
 
                 {/* Submit Button */}
-                <div className="flex justify-end gap-4 pt-4">
+                <div className="flex justify-end gap-4">
                   {isConnected ? (
                     <Button
                       type="submit"

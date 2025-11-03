@@ -1,6 +1,7 @@
 import { ExternalLinkIcon } from "lucide-react";
 import { useMemo } from "react";
 import Markdown from "react-markdown";
+import { Button } from "../common/Button";
 
 interface ProposalOverviewTabProps {
   content?: string;
@@ -24,15 +25,9 @@ export function ProposalOverviewTab({ content }: ProposalOverviewTabProps) {
 
       {discussion && (
         <div className="pt-4">
-          <a
-            href={discussion}
+          <Button className="no-underline" href={discussion} variant="outline"
             target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
-          >
-            <ExternalLinkIcon className="h-4 w-4" />
-            View Discussion
-          </a>
+            rel="noopener noreferrer" rightIcon={ExternalLinkIcon}>View Discussion</Button>
         </div>
       )}
     </div>

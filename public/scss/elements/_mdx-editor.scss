@@ -17,9 +17,9 @@
         margin-top: 6px;
 
       &[type="submit"] {
-        background: var(--primary);
+        background: var(--surface-primary);
         border: 0;
-        color: var(--content-primary);
+        color: var(--color-white);
         font-weight: 600;
         cursor: pointer;
         padding: 6px 20px;
@@ -84,9 +84,9 @@
         margin-top: 8px;
 
         &[type="submit"] {
-          background: var(--primary);
+          background: var(--surface-primary);
           border: 0;
-          color: var(--content-primary);
+          color: var(--color-white);
           font-weight: 600;
           cursor: pointer;
           padding: 6px 30px;
