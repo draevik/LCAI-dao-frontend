@@ -1,9 +1,8 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import type { ButtonHTMLAttributes } from "react";
-import { LucideIcon } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconDefinition } from "@fortawesome/pro-regular-svg-icons";
 
 export type ButtonVariant = "primary" | "outline" | "gradient";
 export type ButtonSize = "sm" | "md" | "lg";
@@ -12,8 +11,8 @@ export interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "href"> {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  leftIcon?: LucideIcon;
-  rightIcon?: LucideIcon;
+  leftIcon?: IconDefinition;
+  rightIcon?: IconDefinition;
   block?: boolean;
   href?: string;
   target?: React.HTMLAttributeAnchorTarget;
@@ -25,7 +24,7 @@ const baseStyles =
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "bg-primary text-white hover:text-white hover:bg-primary-600 active:bg-primary-600",
+    "bg-primary-500 text-white hover:text-white hover:bg-primary-600 active:bg-primary-600",
   outline:
     "border border-border-default-40 bg-surface-x-soft text-content-primary hover:text-white hover:bg-primary active:bg-primary",
   gradient: "bg-gradient-button-primary text-white hover:text-white",
@@ -34,7 +33,7 @@ const variants: Record<ButtonVariant, string> = {
 const sizes: Record<ButtonSize, string> = {
   sm: "px-3 py-2 text-sm font-semibold",
   md: "px-4 py-2.5 text-base font-semibold",
-  lg: "px-5 py-2.5 text-base font-medium",
+  lg: "px-5 py-2.5 text-base font-semibold",
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -69,9 +68,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const content = (
       <>
-        {LeftIcon ? <LeftIcon className="w-4 h-4" aria-hidden /> : null}
+        {LeftIcon ? <FontAwesomeIcon icon={LeftIcon} className="w-4 h-4" aria-hidden /> : null}
         <span className="truncate">{children}</span>
-        {RightIcon ? <RightIcon className="w-4 h-4" aria-hidden /> : null}
+        {RightIcon ? <FontAwesomeIcon icon={RightIcon} className="w-4 h-4" aria-hidden /> : null}
       </>
     );
 

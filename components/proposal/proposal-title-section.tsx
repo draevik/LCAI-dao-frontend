@@ -1,15 +1,5 @@
 import { Badge } from "@/components/ui/badge";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  CircleMinusIcon,
-  Loader2Icon,
-  CopyIcon,
-  MoreHorizontalIcon,
   UsersIcon,
   ClockIcon,
 } from "lucide-react";
@@ -25,6 +15,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAccount } from "wagmi";
 import { TransactionExecutionError } from "viem";
 import { Button } from "../common/Button";
+import { faCircleMinus, faClone } from "@fortawesome/pro-regular-svg-icons";
 
 interface ProposalTitleSectionProps {
   proposal: Proposal;
@@ -69,14 +60,14 @@ export function ProposalTitleSection({ proposal }: ProposalTitleSectionProps) {
               toast.success("URL copied to clipboard");
             }}
             variant="outline"
-            leftIcon={CopyIcon}
+            leftIcon={faClone}
           >
             Copy URL
           </Button>
           {proposal.state === ProposalState.Pending &&
             proposal.author.id === address && (
               <Button
-                leftIcon={CircleMinusIcon}
+                leftIcon={faCircleMinus}
                 onClick={() => cancelProposalMutation.mutate()}
               >
                 Cancel Proposal

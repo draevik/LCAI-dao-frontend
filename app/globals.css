@@ -232,3 +232,13 @@
       --tw-prose-bold: var(--content-primary);
     }
 }
+
+
+
+/* Redix ui scrollbar remove problem issue fix */
+html {
+  body[data-scroll-locked] {
+    overflow-y: auto !important;
+    margin-right: 0px !important;
+  }
+}
