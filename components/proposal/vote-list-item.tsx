@@ -11,8 +11,8 @@ interface VoteListItemProps {
 export function VoteListItem({ vote, choiceLabel }: VoteListItemProps) {
   return (
     <Card className="p-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="flex items-end justify-between gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
           <Blockies
             seed={vote.voter.id}
             size={16}
@@ -20,8 +20,10 @@ export function VoteListItem({ vote, choiceLabel }: VoteListItemProps) {
             className="rounded-full"
           />
           <div>
-            <div className="font-medium text-sm text-content-primary">{vote.voter.id}</div>
-            <div className="text-xs text-content-secondary">
+            <div className="font-medium text-sm text-content-primary">
+              <span className="break-all">{vote.voter.id}</span>
+            </div>
+            <div className="text-xs text-content-default">
               Voted for: <span className="font-medium">{choiceLabel}</span>
             </div>
           </div>
@@ -30,7 +32,7 @@ export function VoteListItem({ vote, choiceLabel }: VoteListItemProps) {
           <div className="font-medium text-sm text-content-primary">
             {vote.vp_parsed.toLocaleString()}
           </div>
-          <div className="text-xs text-content-secondary">
+          <div className="text-xs text-content-default">
             {$dayjs.unix(vote.created).format("MMM D, YYYY · h:mm A")}
           </div>
         </div>

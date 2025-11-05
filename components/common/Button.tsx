@@ -24,7 +24,7 @@ const baseStyles =
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "bg-primary-500 text-white hover:text-white hover:bg-primary-600 active:bg-primary-600",
+    "bg-primary text-white hover:text-white hover:bg-primary-600 active:bg-primary-600",
   outline:
     "border border-border-default-40 bg-surface-x-soft text-content-primary hover:text-white hover:bg-primary active:bg-primary",
   gradient: "bg-gradient-button-primary text-white hover:text-white",

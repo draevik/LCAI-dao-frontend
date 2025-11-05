@@ -54,8 +54,8 @@ export function ContractPickerDialog({
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Select Contract</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-content-primary">Select Contract</DialogTitle>
+          <DialogDescription className="text-content-secondary">
             Choose a predefined contract address
           </DialogDescription>
         </DialogHeader>
@@ -78,23 +78,23 @@ export function ContractPickerDialog({
                 key={contract.address}
                 type="button"
                 onClick={() => handleSelect(contract.address)}
-                className="w-full flex items-center gap-3 p-3 rounded-lg border hover:bg-accent transition-colors text-left"
+                className="w-full flex items-center gap-3 p-3 rounded-lg border border-border-default hover:bg-surface-x-soft transition-colors text-left"
               >
                 <div className="flex-1">
-                  <p className="font-medium">{contract.name}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-content-primary">{contract.name}</p>
+                  <p className="text-sm text-content-secondary">
                     {contract.address}
                   </p>
                 </div>
               </button>
             ))}
             {filteredContracts.length === 0 && contracts.length > 0 && (
-              <p className="text-sm text-muted-foreground text-center py-4">
+              <p className="text-sm text-content-secondary text-center py-4">
                 No contracts found matching &quot;{searchQuery}&quot;
               </p>
             )}
             {contracts.length === 0 && (
-              <p className="text-sm text-muted-foreground text-center py-4">
+              <p className="text-sm text-content-secondary text-center py-4">
                 No predefined contracts available for this network
               </p>
             )}

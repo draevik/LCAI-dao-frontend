@@ -12,7 +12,7 @@ export function ProposalVotesTab({ votes, choices }: ProposalVotesTabProps) {
   const { theme } = useTheme();
   return (
     <div className="space-y-4">
-      <div className="text-sm text-content-secondary">
+      <div className="text-sm text-content-primary">
         Showing {votes?.length.toLocaleString() ?? 0} addresses
       </div>
 

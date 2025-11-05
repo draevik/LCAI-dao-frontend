@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -44,6 +43,8 @@ import counterAbi from "@/contracts/abi/counterAbi";
 import useGetAbiContract from "@/hooks/useGetAbiContract";
 import { Loader2Icon, BookUserIcon } from "lucide-react";
 import { ContractPickerDialog } from "./contract-picker-dialog";
+import { Button } from "./common/Button";
+import { Button as ButtonUi } from "@/components/ui/button";
 
 const abiOptions = [
   { value: "imported", label: "Use the imported ABI" },
@@ -217,10 +218,10 @@ export function ContractActionDialog({
 
       {/* Main Dialog */}
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-2xl px-0">
+        <DialogContent className="sm:max-w-2xl px-0 outline-none">
           <DialogHeader className="px-6">
-            <DialogTitle>Contract Call</DialogTitle>
-            <DialogDescription className="text-muted-foreground">
+            <DialogTitle className="text-xl sm:text-2xl text-content-primary">Contract Call</DialogTitle>
+            <DialogDescription className="text-content-secondary">
               Add a contract call to your proposal
             </DialogDescription>
           </DialogHeader>
@@ -243,15 +244,13 @@ export function ContractActionDialog({
                                 disabled={autoAbi.isFetching}
                                 {...field}
                               />
-                              <Button
+                              <ButtonUi
                                 type="button"
-                                variant="ghost"
-                                size="icon"
                                 className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
                                 onClick={() => setShowContractPicker(true)}
                               >
                                 <BookUserIcon className="h-4 w-4" />
-                              </Button>
+                              </ButtonUi>
                               {autoAbi.isFetching && (
                                 <Loader2Icon className="absolute right-10 top-1/2 -translate-y-1/2 animate-spin h-4 w-4" />
                               )}
@@ -295,7 +294,7 @@ export function ContractActionDialog({
                                 handleAbiOptionChange(value);
                               }}
                             >
-                              <SelectTrigger className="w-full">
+                              <SelectTrigger className="w-full py-3">
                                 <SelectValue placeholder="Select an ABI" />
                               </SelectTrigger>
                               <SelectContent>
@@ -334,13 +333,13 @@ export function ContractActionDialog({
                               }}
                             >
                               <FormControl>
-                                <SelectTrigger className="w-full">
+                                <SelectTrigger className="w-full py-3 capitalize">
                                   <SelectValue placeholder="Select a contract method..." />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
                                 {writeContractAbi.map((method) => (
-                                  <SelectItem
+                                  <SelectItem className="capitalize"
                                     key={method.name}
                                     value={method.name}
                                   >
@@ -350,7 +349,7 @@ export function ContractActionDialog({
                               </SelectContent>
                             </Select>
                             <FormMessage />
-                            <p className="text-muted-foreground text-xs">
+                            <p className="text-content-secondary text-xs">
                               This ABI is a standard. Please, be sure the smart
                               contract implements the method you selected.
                             </p>
@@ -364,8 +363,8 @@ export function ContractActionDialog({
                         <Separator />
 
                         <div className="space-y-2">
-                          <Label>Calldatas</Label>
-                          <p className="text-sm text-muted-foreground mb-3">
+                          <Label className="text-content-primary">Calldatas</Label>
+                          <p className="text-sm text-content-secondary mb-3">
                             The data for the function arguments you wish to send
                             when the action executes
                           </p>
@@ -378,7 +377,7 @@ export function ContractActionDialog({
                                 name={`args.${input.name}` as `args.${string}`}
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel>
+                                    <FormLabel className="capitalize">
                                       {input.name}
                                       <span className="text-xs text-muted-foreground ml-2">
                                         ({input.type})

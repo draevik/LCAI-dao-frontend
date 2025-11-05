@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
+import { Button as ButtonCommon } from "@/components/common/Button";
 import { Label } from "@/components/ui/label";
 import { Upload, FileText, X, AlertCircle } from "lucide-react";
 import { AbiObjectType, WriteContractItemTypeAbi } from "@/types";
@@ -178,11 +179,11 @@ export function AbiDropzone({ onAbiParsed, onFileChange }: AbiDropzoneProps) {
         <p className="text-xs text-muted-foreground mb-3">
           Or click to browse your files
         </p>
-        <Button variant="outline" size="sm" type="button" asChild>
+        <ButtonCommon variant="outline" size="sm" type="button">
           <label htmlFor="abi-upload" className="cursor-pointer">
             Browse Files
           </label>
-        </Button>
+        </ButtonCommon>
         <input
           id="abi-upload"
           type="file"

@@ -62,16 +62,15 @@ export default function ProposalDetail() {
   return (
     <>
       <ProposalHeader />
-      <div className="container mx-auto py-8 px-4">
-        <ProposalTitleSection proposal={proposal} />
-
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 mt-6">
+      <div className="container mx-auto py-8 sm:py-15 px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_355px] gap-8">
           {/* Main Content */}
-          <div>
-            <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="overview">OVERVIEW</TabsTrigger>
-                <TabsTrigger value="votes">VOTES</TabsTrigger>
+          <div className="space-y-8">
+            <ProposalTitleSection proposal={proposal} />
+            <Tabs defaultValue="overview" className="w-full justify-start">
+              <TabsList className="bg-transparent border-b border-surface-soft rounded-none w-full flex gap-1">
+                <TabsTrigger className="max-w-fit border-0 rounded-t-2xl rounded-b-none px-6 py-4 text-lg font-semibold -tracking-[0.18px] text-content-primary leading-[1] bg-surface-soft data-[state=active]:bg-[image:var(--gradient-primary)] data-[state=active]:text-white" value="overview">Overview</TabsTrigger>
+                <TabsTrigger className="max-w-fit border-0 rounded-t-2xl rounded-b-none px-6 py-4 text-lg font-semibold -tracking-[0.18px] text-content-primary leading-[1] bg-surface-soft data-[state=active]:bg-[image:var(--gradient-primary)] data-[state=active]:text-white" value="votes">Votes</TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview" className="space-y-6 mt-6">

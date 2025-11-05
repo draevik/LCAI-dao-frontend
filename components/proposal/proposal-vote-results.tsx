@@ -11,20 +11,18 @@ interface ProposalVoteResultsProps {
 export function ProposalVoteResults({proposal}:ProposalVoteResultsProps) {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="text-content-primary">
-          Vote Results
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+      <div className="px-6">
+        <h5 className="leading-[1.7] text-lg -tracking-[0.18px] font-semibold text-content-primary">Vote Results</h5>
+      </div>
+      <CardContent className="space-y-3">
         <div className="text-sm flex items-center justify-between gap-2">
-          <span className="text-content-primary">Quorum</span>
-          <span className="text-content-primary">
+          <span className="text-content-primary text-body-15">Quorum</span>
+          <span className="text-content-primary text-body-15">
             {compactNumber(proposal.scores_1_parsed + proposal.scores_3_parsed)}{" "}
             of {compactNumber(proposal.quorum_parsed)}
           </span>
         </div>
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {proposal.metadata?.choices.map((choice, index) => {
             const score = proposal.scores[index];
             const percentage = score
@@ -33,21 +31,19 @@ export function ProposalVoteResults({proposal}:ProposalVoteResultsProps) {
 
             return (
               <div key={index}>
-                <div className="w-full p-3 text-left border rounded-lg transition-colors">
-                  <div className="flex items-center justify-between mb-2">
+                <div className="w-full p-4 text-left border border-surface-soft bg-surface-base-extralight rounded-xl transition-colors">
+                  <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <ProposalVoteIcon vote={index} />
-                      <span className="font-medium text-sm text-content-primary">{choice}</span>
+                      <span className="font-medium text-base text-content-primary">{choice}</span>
                     </div>
 
-                    <span className="text-xs text-content-secondary">
+                    <span className="text-sm text-content-default">
                       ({percentage}%) {compactNumber(score)}
                     </span>
                   </div>
 
-                  <div className="space-y-1">
-                    <Progress value={percentage} className="h-1" />
-                  </div>
+                    <Progress value={percentage} className="h-1.5" />
                 </div>
               </div>
             );

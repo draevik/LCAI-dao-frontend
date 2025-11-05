@@ -40,7 +40,7 @@ const DarkSwitch = () => {
             <li>
               <button
                 data-theme="light"
-                className="setColor light"
+                className="setColor light bg-blackest"
                 onClick={toggleTheme}
               >
                 <Image src={dark} alt="Sun images" />
@@ -50,7 +50,7 @@ const DarkSwitch = () => {
             <li>
               <button
                 data-theme="dark"
-                className="setColor dark"
+                className="setColor dark bg-blackest"
                 onClick={toggleTheme}
               >
                 <Image src={light} alt="Vector Images" />

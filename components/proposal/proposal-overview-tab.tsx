@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import Markdown from "react-markdown";
 import { Button } from "../common/Button";
-import { faArrowUpRightFromSquare } from "@fortawesome/pro-regular-svg-icons";
+import { faPaperPlane } from "@fortawesome/pro-regular-svg-icons";
 
 interface ProposalOverviewTabProps {
   content?: string;
@@ -27,7 +27,7 @@ export function ProposalOverviewTab({ content }: ProposalOverviewTabProps) {
         <div className="pt-4">
           <Button className="no-underline" href={discussion} variant="outline"
             target="_blank"
-            rel="noopener noreferrer" rightIcon={faArrowUpRightFromSquare}>View Discussion</Button>
+            rel="noopener noreferrer" rightIcon={faPaperPlane}>View Discussion</Button>
         </div>
       )}
     </div>

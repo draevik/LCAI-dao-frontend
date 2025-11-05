@@ -7,8 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useGovernance } from "@/hooks/useGovernance";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -74,6 +73,14 @@ import config from "@/config";
 import $dayjs from "@/lib/dayjs";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/common/Button";
+import {
+  faCodeSimple,
+  faLoader,
+  faPaperPlane,
+  faPen,
+} from "@fortawesome/pro-regular-svg-icons";
+import { Button as ButtonUi } from "@/components/ui/button";
 
 const choices = [
   {
@@ -228,13 +235,16 @@ export default function CreateProposal() {
     <>
       <div className="border-b border-border-default">
         <div className="container mx-auto py-4">
-          <Link href="/" className="inline-flex items-center gap-1.5 text-content-primary hover:text-content-secondary transition-colors duration-200">
-              <ArrowLeft size={16} /> New Proposal
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-content-primary hover:text-content-secondary transition-colors duration-200"
+          >
+            <ArrowLeft size={16} /> New Proposal
           </Link>
         </div>
       </div>
       <div className="container mx-auto pt-8 pb-14 sm:pb-20 px-4">
-        <div className="grid grid-cols-1 xl:grid-cols-[1fr_355px] gap-8 xl:gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_355px] gap-8 xl:gap-16">
           {/* Main Form */}
           <Form {...form}>
             <form
@@ -358,7 +368,9 @@ export default function CreateProposal() {
               <Card className="py-4">
                 <div className="px-6 border-b pb-4">
                   <div className="flex flex-wrap items-center justify-between">
-                    <h4 className="text-xl font-semibold text-content-primary">Execution</h4>
+                    <h4 className="text-xl font-semibold text-content-primary">
+                      Execution
+                    </h4>
                     <div className="flex items-center gap-2">
                       {/* <Button 
                     variant="outline" 
@@ -368,12 +380,12 @@ export default function CreateProposal() {
                     <CoinsIcon />
                     Send Token
                   </Button> */}
-                      <Button className="text-content-primary"
+                      <Button
+                        leftIcon={faCodeSimple}
                         variant="outline"
                         type="button"
                         onClick={() => openDialog("contract")}
                       >
-                        <CodeIcon />
                         Add Contract Call
                       </Button>
                     </div>
@@ -411,18 +423,17 @@ export default function CreateProposal() {
                           </div>
                           <div className="flex items-center gap-2">
                             <Button
-                              variant="ghost"
+                              leftIcon={faPen}
+                              variant="outline"
                               size="sm"
-                              className="h-8 w-8 p-0"
                               type="button"
                               onClick={() => openDialog(action.type, action)}
                             >
                               <PencilIcon />
                             </Button>
                             <Button
-                              variant="ghost"
+                              variant="outline"
                               size="sm"
-                              className="h-8 w-8 p-0"
                               type="button"
                               onClick={() => deleteAction(action.id)}
                             >
@@ -440,12 +451,12 @@ export default function CreateProposal() {
                           </EmptyDescription>
                         </EmptyHeader>
                         <EmptyContent>
-                          <Button className="text-content-primary"
+                          <Button
+                            leftIcon={faCodeSimple}
                             variant="outline"
                             type="button"
                             onClick={() => openDialog("contract")}
                           >
-                            <CodeIcon />
                             Add Contract Call
                           </Button>
                         </EmptyContent>
@@ -454,10 +465,10 @@ export default function CreateProposal() {
                   </div>
 
                   <div className="flex items-center justify-between mt-4 pt-3 border-t">
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-sm text-content-secondary">
                       {actions.length} action{actions.length === 1 ? "" : "s"}
                     </span>
-                    <Button
+                    <ButtonUi
                       variant={
                         simulationStatus === "idle"
                           ? "outline"
@@ -480,7 +491,7 @@ export default function CreateProposal() {
                         <ShieldCheckIcon className="size-4" />
                       )}
                       Simulate Execution
-                    </Button>
+                    </ButtonUi>
                   </div>
                 </CardContent>
               </Card>
@@ -489,20 +500,20 @@ export default function CreateProposal() {
               <div className="flex justify-end gap-4">
                 {isConnected ? (
                   <Button
+                    variant="primary"
+                    leftIcon={
+                      createProposalMutation.isPending ? faLoader : faPaperPlane
+                    }
                     type="submit"
                     size="lg"
                     className="flex-1"
                     disabled={createProposalMutation.isPending}
                   >
-                    {createProposalMutation.isPending ? (
-                      <Loader2Icon className="animate-spin" />
-                    ) : (
-                      <SendIcon />
-                    )}
                     Publish
                   </Button>
                 ) : (
                   <Button
+                    variant="primary"
                     type="button"
                     size="lg"
                     className="flex-1"
@@ -516,57 +527,59 @@ export default function CreateProposal() {
           </Form>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <div className="lg:sticky top-10 space-y-10 rounded-2xl h-max border border-border-default bg-surface-x-soft p-6">
             {/* LCAI Governor */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="font-medium text-content-primary text-sm">
+            <div>
+              <div className="border-b border-border-default mb-3.5">
+                <h6 className="font-medium text-content-primary text-sm mb-2.5">
                   LCAI Governor
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-content-secondary text-base">
-                      Proposal threshold
-                    </span>
-                    <span className="ml-auto text-content-primary">
-                      {config.daoSystem.proposalThreshold} LCAI
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-content-secondary text-base">Quorum needed</span>
-                    <span className="ml-auto text-content-primary">
-                      {config.daoSystem.quorumNeeded}%
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-content-secondary text-base">
-                      Proposal delay
-                    </span>
-                    <span className="ml-auto text-content-primary">
-                      {$dayjs
-                        .duration(config.daoSystem.proposalDelay, "seconds")
-                        .humanize()}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-content-secondary text-base">Voting period</span>
-                    <span className="ml-auto text-content-primary">
-                      {$dayjs
-                        .duration(config.daoSystem.votingPeriod, "seconds")
-                        .humanize()}
-                    </span>
-                  </div>
+                </h6>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-content-secondary text-sm">
+                    Proposal threshold
+                  </span>
+                  <span className="ml-auto text-content-primary text-sm">
+                    {config.daoSystem.proposalThreshold} LCAI
+                  </span>
                 </div>
-              </CardContent>
-            </Card>
+                <div className="flex items-center gap-2">
+                  <span className="text-content-secondary text-sm">
+                    Quorum needed
+                  </span>
+                  <span className="ml-auto text-content-primary text-sm">
+                    {config.daoSystem.quorumNeeded}%
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-content-secondary text-sm">
+                    Proposal delay
+                  </span>
+                  <span className="ml-auto text-content-primary text-sm">
+                    {$dayjs
+                      .duration(config.daoSystem.proposalDelay, "seconds")
+                      .humanize()}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-content-secondary text-sm">
+                    Voting period
+                  </span>
+                  <span className="ml-auto text-content-primary text-sm">
+                    {$dayjs
+                      .duration(config.daoSystem.votingPeriod, "seconds")
+                      .humanize()}
+                  </span>
+                </div>
+              </div>
+            </div>
             {/* Choices */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="font-medium text-content-primary text-sm">Choices</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
+            <div>
+              <h6 className="font-medium text-content-primary text-sm mb-2.5">
+                Choices
+              </h6>
+              <div className="space-y-3">
                 {choices.map((choice) => (
                   <div
                     key={choice.id}
@@ -576,8 +589,8 @@ export default function CreateProposal() {
                     <span>{choice.label}</span>
                   </div>
                 ))}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
             {/* Timeline */}
             {/* <Card>
             <CardHeader>

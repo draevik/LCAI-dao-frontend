@@ -9,7 +9,7 @@
   padding-inline: 1rem;
 
   @media (min-width: 64rem) {
-    max-width: 83rem;
+    max-width: 84.5rem;
   }
 }
 
@@ -37,7 +37,7 @@
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
+  --color-muted-foreground: var(--content-secondary);
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
@@ -60,6 +60,18 @@
   --color-primary-600: #5a4fd8;
   --color-primary: var(--surface-primary);
   --color-content-brand: #7064E9;
+  --color-content-medium: var(--content-medium);
+  --color-content-success-light: #1DAF61;
+  --color-content-error-light: #E93544;
+  --color-blackest: var(--blackest);
+  --color-content-default: var(--content-default);
+  --color-surface-base-extralight: var(--surface-base-extralight);
+  --gradient-primary: linear-gradient(270deg, #7064E9 0%, #DD00AC 100%);
+  --color-base-subtle: rgba(204, 206, 239, 0.02);
+  --color-surface-base-soft: rgba(204, 206, 239, 0.12);
+  --color-content-brand-light: #8C71F6;
+  --color-content-warning-light: #F79009;
+  --color-content-success-light: #1DAF61;
 }
 
 :root {
@@ -105,6 +117,8 @@
   --border-default: rgba(2, 2, 3, 0.04);
   --surface-soft: rgba(2, 2, 3, 0.04);
   --surface-primary: #7064e9;
+  --blackest: #f5f5f5;
+  --surface-base-extralight: rgba(22, 22, 26, 0.06);
 }
 
 .dark {
@@ -146,10 +160,12 @@
   --content-secondary: #9A9CCF;
   --content-default: #9798B6;
   --mdx-tolbar: #1a1a24;
-  --content-default: #9798B6;
   --border-default: rgba(115, 118, 170, 0.20);
   --surface-soft: rgba(204, 206, 239, 0.12);
   --surface-primary: #7064e9;
+  --content-medium: #7E7F94;
+  --blackest: #0f1021;
+  --surface-base-extralight: rgba(204, 206, 239, 0.06);
 }
 
 @layer base {
@@ -174,6 +190,15 @@
   /* heading */
   .page-title {
     @apply text-2xl md:text-3xl lg:text-4xl font-semibold leading-[1.2] -tracking-[0.36px] text-content-primary;
+  }
+
+  /* text */
+  .text-body-15 {
+    @apply text-[15px] leading-[1.5] -tracking-[0.15px]
+  }
+
+  .text-label-12 {
+    @apply text-xs leading-[1.2] -tracking-[0.12px]
   }
 }
 
@@ -226,7 +251,7 @@
 
 .dark\:prose-invert {
     &:is(.dark *) {
-      --tw-prose-body: var(--content-secondary);
+      --tw-prose-body: var(--content-default);
       --tw-prose-headings: var(--content-primary);
       --tw-prose-links: var(--color-content-brand);
       --tw-prose-bold: var(--content-primary);

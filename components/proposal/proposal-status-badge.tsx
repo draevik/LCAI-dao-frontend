@@ -1,44 +1,82 @@
-import { Badge } from "@/components/ui/badge";
 import { ProposalState, ProposalStateLabel } from "@/lib/constents";
-import { ClockIcon, CheckCircle, RadioIcon, XCircle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleXmark, faHourglassClock, faHourglassHalf, faSignalStream, faSquareCheck } from "@fortawesome/pro-regular-svg-icons";
 
 type Props = {
   status: number;
-  iconOnly?: boolean;
 };
 
-export default function ProposalStatusBadge({ status, iconOnly }: Props) {
+export default function ProposalStatusBadge({ status }: Props) {
   switch (status) {
     case ProposalState.Pending:
       return (
-        <Badge className="bg-gray-500/10 text-content-secondary">
-          <ClockIcon className="size-5 text-content-secondary" />{" "}
-          {iconOnly ? null : <span>Pending</span>}
-        </Badge>
+        <Tooltip>
+        <TooltipTrigger asChild>
+          <FontAwesomeIcon
+            className="inline-block mr-2 md:text-lg sm:text-base text-sm text-content-medium"
+            icon={faHourglassHalf}
+          />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p className="text-xs">Pending</p>
+        </TooltipContent>
+      </Tooltip>
       );
     case ProposalState.Active:
       return (
-        <Badge className="bg-green-500/10 text-green-600">
-          <RadioIcon className="size-5 text-green-500" />{" "}
-          {iconOnly ? null : <span>Active</span>}
-        </Badge>
+        <Tooltip>
+        <TooltipTrigger asChild>
+          <FontAwesomeIcon
+            className="inline-block mr-2 md:text-lg sm:text-base text-sm text-content-success-light"
+            icon={faSignalStream}
+          />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p className="text-xs">Active</p>
+        </TooltipContent>
+      </Tooltip>
       );
     case ProposalState.Succeeded:
       return (
-        <Badge className="bg-green-500/10 text-green-600">
-          <CheckCircle className="size-5 text-green-500" />{" "}
-          {iconOnly ? null : <span>Passed</span>}
-        </Badge>
+        <Tooltip>
+        <TooltipTrigger asChild>
+          <FontAwesomeIcon
+            className="inline-block mr-2 md:text-lg sm:text-base text-sm text-content-success-light"
+            icon={faSquareCheck}
+          />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p className="text-xs">Passed</p>
+        </TooltipContent>
+      </Tooltip>
       );
     case ProposalState.Canceled:
     case ProposalState.Defeated:
       return (
-        <Badge className="bg-red-500/10 text-red-600">
-          <XCircle className="size-5 text-red-500" />{" "}
-          {iconOnly ? null : <span>Rejected</span>}
-        </Badge>
+        <Tooltip>
+        <TooltipTrigger asChild>
+          <FontAwesomeIcon
+            className="inline-block mr-2 md:text-lg sm:text-base text-sm text-content-error-light"
+            icon={faCircleXmark}
+          />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p className="text-xs">Rejected</p>
+        </TooltipContent>
+      </Tooltip>
       );
     default:
-      return <Badge variant="secondary">{ProposalStateLabel[status]}</Badge>;
+      return (<Tooltip>
+        <TooltipTrigger asChild>
+          <FontAwesomeIcon
+            className="inline-block mr-2 md:text-lg sm:text-base text-sm text-content-medium"
+            icon={faHourglassClock}
+          />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p className="text-xs">{ProposalStateLabel[status]}</p>
+        </TooltipContent>
+      </Tooltip>)
   }
 }
