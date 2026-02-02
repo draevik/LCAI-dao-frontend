@@ -117,3 +117,41 @@ export type UserActivity = {
   proposal_count: number;
   vote_count: number;
 };
+
+export type Delegate = {
+  id: string;
+  address: string;
+  votingPower: string;
+  votingPowerParsed: number;
+  delegatorCount: number;
+  proposalCount: number;
+  voteCount: number;
+  created: number;
+  updated: number;
+};
+
+export type Delegation = {
+  id: string;
+  delegator: string;
+  delegate: string;
+  created: number;
+  tx: string;
+};
+
+export type SpaceStats = {
+  id: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+  token: string | null;
+  proposalCount: number;
+  voteCount: number;
+  proposerCount: number;
+  voterCount: number;
+  delegateCount: number;
+  quorum: string;
+  proposalThreshold: string;
+  votingDelay: number;
+  timelockDelay: string;
+  created: number;
+};

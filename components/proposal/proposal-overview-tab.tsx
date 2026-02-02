@@ -1,35 +1,39 @@
 import { useMemo } from "react";
 import Markdown from "react-markdown";
-import { Button } from "../common/Button";
-import { faPaperPlane } from "@fortawesome/pro-regular-svg-icons";
 
 interface ProposalOverviewTabProps {
   content?: string;
 }
 
 export function ProposalOverviewTab({ content }: ProposalOverviewTabProps) {
-  const description = useMemo(
-    () => content?.split("\n\n").slice(1, -1).join("\n\n") ?? "",
-    [content]
-  );
-
-  const discussion = useMemo(() => {
-    const discussionUrl =
-      (content?.split("\n\n").pop() || "").match(/\(([^)]+)\)/)?.[1] || "";
-    return discussionUrl;
+  const description = useMemo(() => {
+    if (!content) return "";
+    const lines = content.split("\n");
+    const firstLine = lines[0]?.trim() ?? "";
+    // Strip only the first title (H1 line starting with "# ")
+    if (firstLine.startsWith("# ")) {
+      return lines.slice(1).join("\n").trim() || "";
+    }
+    return content;
   }, [content]);
+
+  // const discussion = useMemo(() => {
+  //   const discussionUrl =
+  //     (content?.split("\n\n").pop() || "").match(/\(([^)]+)\)/)?.[1] || "";
+  //   return discussionUrl;
+  // }, [content]);
 
   return (
     <div className="prose prose-sm max-w-none dark:prose-invert">
       <Markdown>{description}</Markdown>
 
-      {discussion && (
+      {/* {discussion && (
         <div className="pt-4">
           <Button className="no-underline" href={discussion} variant="outline"
             target="_blank"
             rel="noopener noreferrer" rightIcon={faPaperPlane}>View Discussion</Button>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

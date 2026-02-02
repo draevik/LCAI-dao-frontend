@@ -170,3 +170,85 @@ export const LAST_INDEXED_BLOCK_QUERY = gql(`
     }
   }
 `);
+
+gql(`
+  fragment delegateFields on Delegate {
+    id
+    user {
+      id
+      proposal_count
+      vote_count
+    }
+    voting_power
+    voting_power_parsed
+    delegator_count
+    created
+    updated
+  }
+`);
+
+export const DELEGATES_QUERY = gql(`
+  query Delegates(
+    $indexer: String!
+    $first: Int!
+    $skip: Int!
+    $orderBy: Delegate_orderBy!
+    $orderDirection: OrderDirection!
+    $where: Delegate_filter
+  ) {
+    delegates(
+      indexer: $indexer
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      where: $where
+    ) {
+      ...delegateFields
+    }
+  }
+`);
+
+export const DELEGATE_QUERY = gql(`
+  query Delegate($indexer: String!, $id: String!) {
+    delegate(indexer: $indexer, id: $id) {
+      ...delegateFields
+    }
+  }
+`);
+
+export const USER_DELEGATION_QUERY = gql(`
+  query UserDelegation($indexer: String!, $id: String!) {
+    delegation(indexer: $indexer, id: $id) {
+      id
+      delegator {
+        id
+      }
+      delegate
+      created
+      tx
+    }
+  }
+`);
+
+export const SPACE_QUERY = gql(`
+  query Space($indexer: String!, $id: String!) {
+    space(indexer: $indexer, id: $id) {
+      id
+      name
+      symbol
+      decimals
+      token
+      proposal_count
+      vote_count
+      proposer_count
+      voter_count
+      delegate_count
+      quorum
+      proposal_threshold
+      voting_delay
+      timelock_delay
+      created
+    }
+  }
+`);

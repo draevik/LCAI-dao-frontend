@@ -1,79 +1,78 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import { Clock, Users} from "lucide-react";
-import { compactNumber } from "@/lib/utils";
-import $dayjs from "@/lib/dayjs";
-import LoadingBlock from "@/components/loading-block";
+import React, { useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import ProposalStatusBadge from "@/components/proposal/proposal-status-badge";
-import { ProposalState } from "@/lib/constents";
+import { useAccount } from "wagmi";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { StatsCard } from "@/components/home/stats-card";
+import { RecentProposals } from "@/components/home/recent-proposals";
+import { RisingDelegates } from "@/components/home/rising-delegates";
+import { DaoSidebar } from "@/components/home/dao-sidebar";
+import { ProposalsList } from "@/components/home/proposals-list";
+import { ParticipantsList } from "@/components/home/participants-list";
+import { DelegateModal } from "@/components/delegation/delegate-modal";
 import useGraphqlApi from "@/hooks/useGraphqlApi";
-import Image from "next/image";
-import { Button } from "@/components/common/Button";
-import { useTheme } from "next-themes";
-import { faPlus, faSparkle } from "@fortawesome/pro-regular-svg-icons";
-import ProposalFilter from "@/components/proposal/ProposalFilter";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import config from "@/config";
+import useCurrentChain from "@/hooks/useCurrentChain";
+import { FileText, Users, Home } from "lucide-react";
 
-export default function Home() {
-  const { theme } = useTheme();
+export default function HomePage() {
   const api = useGraphqlApi();
+  const { address } = useAccount();
+  const chain = useCurrentChain();
+  const [activeTab, setActiveTab] = useState("home");
+  const [delegateModalOpen, setDelegateModalOpen] = useState(false);
 
-  const { isLoading, data: proposals = [] } = useQuery({
+  // Get governor address as space ID
+  const spaceId = config.governor[chain.id];
+
+  // Fetch proposals
+  const {
+    isLoading: isLoadingProposals,
+    data: proposals = [],
+    refetch: refetchProposals,
+  } = useQuery({
     queryKey: ["proposals"],
     queryFn: () =>
-      api.loadProposals([], { limit: 10, skip: 0 }, Math.floor(Date.now() / 1000)),
+      api.loadProposals(
+        [],
+        { limit: 20, skip: 0 },
+        Math.floor(Date.now() / 1000)
+      ),
   });
 
-  // Manage filters
-  const [filters, setFilters] = useState({
-    status: "all",
-    createdBy: "all",
-    search: "",
+  // Fetch delegates
+  const {
+    isLoading: isLoadingDelegates,
+    data: delegates = [],
+    refetch: refetchDelegates,
+  } = useQuery({
+    queryKey: ["delegates", spaceId],
+    queryFn: () => api.loadDelegates(spaceId, { limit: 50, skip: 0 }),
+    enabled: !!spaceId,
   });
 
-  const handleFilterChange = (name: string, value: string) => {
-    setFilters((prev) => ({ ...prev, [name]: value }));
-  };
+  // Fetch space stats
+  const { isLoading: isLoadingStats, data: spaceStats } = useQuery({
+    queryKey: ["spaceStats", spaceId],
+    queryFn: () => api.loadSpaceStats(spaceId),
+    enabled: !!spaceId,
+  });
 
-  // Apply filters
-  const filteredProposals = useMemo(() => {
-    return proposals.filter((proposal) => {
-      // status filter
-      const stateMap: Record<string, number[]> = {
-        pending: [0],
-        active: [1],
-        passed: [2],
-        queued: [5],
-        failed: [3, 4, 6, 7], 
-      };
-      const matchesStatus =
-        filters.status === "all" ||
-        (stateMap[filters.status] || []).includes(proposal.state);
+  // Fetch user delegation
+  const { data: userDelegation } = useQuery({
+    queryKey: ["userDelegation", spaceId, address],
+    queryFn: () => api.loadUserDelegation(spaceId, address!),
+    enabled: !!spaceId && !!address,
+  });
 
-      // createdBy filter (adjust this logic as needed)
-      const matchesCreatedBy =
-        filters.createdBy === "all" ||
-        (filters.createdBy === "core" && proposal.author) ||
-        (filters.createdBy === "community" && !proposal.author) ||
-        (filters.createdBy === "me" && proposal.author.id === "CURRENT_USER_ID");
+  const handleDelegateSuccess = useCallback(() => {
+    refetchDelegates();
+    refetchProposals();
+  }, [refetchDelegates, refetchProposals]);
 
-      // search filter
-      const searchLower = filters.search.toLowerCase();
-      const matchesSearch =
-        !filters.search ||
-        proposal.metadata?.title?.toLowerCase().includes(searchLower) ||
-        proposal.proposal_id.toString().includes(searchLower) ||
-        proposal.author.id.toLowerCase().includes(searchLower);
-
-      return matchesStatus && matchesCreatedBy && matchesSearch;
-    });
-  }, [filters, proposals]);
-
-  console.log(filteredProposals)
+  const handleViewAllProposals = () => setActiveTab("proposals");
+  const handleViewAllParticipants = () => setActiveTab("participants");
 
   return (
     <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-10">
@@ -84,105 +83,86 @@ export default function Home() {
         </p>
       </div>
 
-      <ProposalFilter filters={filters} onFilterChange={handleFilterChange} />
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="mb-6 border-b border-border-default pb-2 w-full">
+          <TabsTrigger value="home" className="gap-2">
+            <Home className="h-4 w-4" />
+            Home
+          </TabsTrigger>
+          <TabsTrigger value="proposals" className="gap-2">
+            <FileText className="h-4 w-4" />
+            Proposals
+          </TabsTrigger>
+          <TabsTrigger value="participants" className="gap-2">
+            <Users className="h-4 w-4" />
+            Participants
+          </TabsTrigger>
+        </TabsList>
 
-      <div className="mt-4">
-        {isLoading ? (
-          <LoadingBlock />
-        ) : filteredProposals.length ? (
-          filteredProposals.map((proposal, idx: number) => (
-            <Link
-              key={proposal.id}
-              href={`/proposal/${proposal.id}`}
-              className={`sm:py-8 py-5 block transition-all duration-300 hover:px-4 sm:hover:px-6 hover:bg-surface-soft hover:border-surface-soft/20 ${
-                filteredProposals.length - 1 === idx
-                  ? ""
-                  : "border-b border-border-default"
-              }`}
-            >
-              <h3 className="text-content-primary flex items-baseline font-semibold leading-[1.2] tracking-[-0.24px] md:text-2xl sm:text-xl text-lg capitalize">
-                <ProposalStatusBadge status={proposal.state} />
-                {proposal.metadata?.title}
-              </h3>
-
-              <div className="flex flex-wrap sm:flex-nowrap items-center gap-x-4 gap-y-2 mt-4">
-                <div className="flex items-center gap-3">
-                  <span className="sm:text-base text-sm">#{proposal.proposal_id.toString().slice(0, 6)}...</span>
-                </div>
-                <span className="hidden sm:block">
-                <FontAwesomeIcon icon={faSparkle} className="size-3.5" />
-                </span>
-                <div className="flex items-center gap-1">
-                  <span className="text-content-primary sm:text-base text-sm">by</span>
-                  <span className="font-medium sm:text-base text-sm">
-                    {proposal.author.id.slice(0, 6)}...
-                    {proposal.author.id.slice(-4)}
-                  </span>
-                  <Badge variant="outline" className="text-xs">
-                    author
-                  </Badge>
-                </div>
-                <span className="hidden sm:block">
-                <FontAwesomeIcon icon={faSparkle} className="size-3.5" />
-                </span>
-                <div className="flex items-center gap-1">
-                  <Users className="h-4 w-4 sm:text-base text-sm" />
-                  <span className="whitespace-nowrap sm:text-base text-sm">
-                    {compactNumber(proposal.vote_count)} votes
-                  </span>
-                </div>
-                <span className="hidden sm:block">
-                <FontAwesomeIcon icon={faSparkle} className="size-3.5" />
-                </span>
-                <div className="flex items-center gap-1">
-                  <Clock className="h-4 w-4 sm:text-base text-sm" />
-                  {proposal.state === ProposalState.Pending ? (
-                    <span className="whitespace-nowrap sm:text-base text-sm">
-                      Start {$dayjs.unix(Number(proposal.start_time)).fromNow()}
-                    </span>
-                  ) : (
-                    proposal.state === ProposalState.Active && (
-                      <span className="whitespace-nowrap sm:text-base text-sm">
-                        {$dayjs.unix(Number(proposal.end_time)).fromNow()}
-                      </span>
-                    )
-                  )}
-                </div>
+        <TabsContent value="home">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Main content area */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Stats cards */}
+              <div className="grid grid-cols-2 gap-4">
+                <StatsCard
+                  title="Delegates"
+                  value={spaceStats?.delegateCount || 0}
+                  icon={<Users className="h-6 w-6 text-primary" />}
+                />
+                <StatsCard
+                  title="Proposals"
+                  value={spaceStats?.proposalCount || 0}
+                  icon={<FileText className="h-6 w-6 text-primary" />}
+                />
               </div>
-            </Link>
-          ))
-        ) : (
-          <div className="flex flex-col gap-6 items-center pt-15 pb-15">
-            <Image
-              className="max-w-30 sm:max-w-max"
-              src={
-                theme === "dark"
-                  ? "/images/icons/folder-black.png"
-                  : "/images/icons/folder-white.png"
-              }
-              width={167}
-              height={132}
-              alt="Folder icon"
-            />
-            <div className="text-center">
-              <h4 className="text-2xl font-semibold leading-[1.20] -tracking-[0.24px] text-content-primary mb-2">
-                No proposals found
-              </h4>
-              <p className="text-content-default -tracking-[0.16px]">
-                Create your first proposal
-              </p>
+
+              {/* Recent proposals */}
+              <RecentProposals
+                proposals={proposals}
+                isLoading={isLoadingProposals}
+                onViewAll={handleViewAllProposals}
+              />
+
+              {/* Rising delegates */}
+              <RisingDelegates
+                delegates={delegates}
+                isLoading={isLoadingDelegates}
+                onViewAll={handleViewAllParticipants}
+              />
             </div>
-            <Button
-              leftIcon={faPlus}
-              href="/proposal/create"
-              variant="primary"
-              size="lg"
-            >
-              Create Proposal
-            </Button>
+
+            {/* Sidebar */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-6">
+                <DaoSidebar
+                  spaceStats={spaceStats || null}
+                  userDelegation={userDelegation || null}
+                  onDelegateClick={() => setDelegateModalOpen(true)}
+                  isLoading={isLoadingStats}
+                />
+              </div>
+            </div>
           </div>
-        )}
-      </div>
+        </TabsContent>
+
+        <TabsContent value="proposals">
+          <ProposalsList proposals={proposals} isLoading={isLoadingProposals} />
+        </TabsContent>
+
+        <TabsContent value="participants">
+          <ParticipantsList
+            delegates={delegates}
+            isLoading={isLoadingDelegates}
+          />
+        </TabsContent>
+      </Tabs>
+
+      <DelegateModal
+        open={delegateModalOpen}
+        onOpenChange={setDelegateModalOpen}
+        onSuccess={handleDelegateSuccess}
+      />
     </div>
   );
 }

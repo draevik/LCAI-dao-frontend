@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -34,7 +33,6 @@ import {
   toolbarPlugin,
   UndoRedo,
   BoldItalicUnderlineToggles,
-  BlockTypeSelect,
   CreateLink,
   InsertImage,
   InsertTable,
@@ -54,7 +52,6 @@ import {
   CoinsIcon,
   Loader2Icon,
   PencilIcon,
-  SendIcon,
   ShieldCheckIcon,
   Trash2Icon,
 } from "lucide-react";
@@ -72,7 +69,6 @@ import { useAccount } from "wagmi";
 import config from "@/config";
 import $dayjs from "@/lib/dayjs";
 import { useTheme } from "next-themes";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/common/Button";
 import {
   faCodeSimple,
@@ -110,11 +106,11 @@ const proposalFormSchema = z.object({
     .string()
     .min(1, "Description is required")
     .min(10, "Description must be at least 10 characters"),
-  discussion: z
-    .string()
-    .refine((val) => val === "" || z.string().url().safeParse(val).success, {
-      message: "Must be a valid URL or empty",
-    }),
+  // discussion: z
+  //   .string()
+  //   .refine((val) => val === "" || z.string().url().safeParse(val).success, {
+  //     message: "Must be a valid URL or empty",
+  //   }),
 });
 
 type ProposalFormValues = z.infer<typeof proposalFormSchema>;
@@ -133,7 +129,7 @@ export default function CreateProposal() {
     defaultValues: {
       title: "",
       description: "",
-      discussion: "",
+      // discussion: "",
     },
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -215,7 +211,7 @@ export default function CreateProposal() {
   const createProposalMutation = useMutation({
     mutationFn: async () => {
       const values = form.getValues();
-      const fullDescription = `# ${values.title}\n\n${values.description}\n\n[Discussion](${values.discussion})`;
+      const fullDescription = `# ${values.title}\n\n## **Overview**\n\n${values.description}`;
 
       return createProposal(actions, fullDescription);
     },
@@ -341,7 +337,7 @@ export default function CreateProposal() {
               />
 
               {/* Discussion */}
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="discussion"
                 render={({ field }) => (
@@ -362,7 +358,7 @@ export default function CreateProposal() {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               {/* Execution */}
               <Card className="py-4">

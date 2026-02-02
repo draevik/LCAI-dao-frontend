@@ -22,6 +22,11 @@ type Documents = {
     "\n  query User($indexer: String!, $id: String!) {\n    user(indexer: $indexer, id: $id) {\n      id\n      proposal_count\n      vote_count\n      created\n    }\n  }\n": typeof types.UserDocument,
     "\n  query Leaderboard(\n    $indexer: String!\n    $first: Int!\n    $skip: Int!\n    $orderBy: Leaderboard_orderBy\n    $orderDirection: OrderDirection!\n    $where: Leaderboard_filter\n  ) {\n    leaderboards(\n      indexer: $indexer\n      first: $first\n      skip: $skip\n      orderBy: $orderBy\n      orderDirection: $orderDirection\n      where: $where\n    ) {\n      id\n      user {\n        id\n        created\n      }\n      proposal_count\n      vote_count\n    }\n  }\n": typeof types.LeaderboardDocument,
     "\n  query _Metadata($indexer: String!) {\n    _metadata(indexer: $indexer, id: \"last_indexed_block\") {\n      value\n    }\n  }\n": typeof types._MetadataDocument,
+    "\n  fragment delegateFields on Delegate {\n    id\n    user {\n      id\n      proposal_count\n      vote_count\n    }\n    voting_power\n    voting_power_parsed\n    delegator_count\n    created\n    updated\n  }\n": typeof types.DelegateFieldsFragmentDoc,
+    "\n  query Delegates(\n    $indexer: String!\n    $first: Int!\n    $skip: Int!\n    $orderBy: Delegate_orderBy!\n    $orderDirection: OrderDirection!\n    $where: Delegate_filter\n  ) {\n    delegates(\n      indexer: $indexer\n      first: $first\n      skip: $skip\n      orderBy: $orderBy\n      orderDirection: $orderDirection\n      where: $where\n    ) {\n      ...delegateFields\n    }\n  }\n": typeof types.DelegatesDocument,
+    "\n  query Delegate($indexer: String!, $id: String!) {\n    delegate(indexer: $indexer, id: $id) {\n      ...delegateFields\n    }\n  }\n": typeof types.DelegateDocument,
+    "\n  query UserDelegation($indexer: String!, $id: String!) {\n    delegation(indexer: $indexer, id: $id) {\n      id\n      delegator {\n        id\n      }\n      delegate\n      created\n      tx\n    }\n  }\n": typeof types.UserDelegationDocument,
+    "\n  query Space($indexer: String!, $id: String!) {\n    space(indexer: $indexer, id: $id) {\n      id\n      name\n      symbol\n      decimals\n      token\n      proposal_count\n      vote_count\n      proposer_count\n      voter_count\n      delegate_count\n      quorum\n      proposal_threshold\n      voting_delay\n      timelock_delay\n      created\n    }\n  }\n": typeof types.SpaceDocument,
 };
 const documents: Documents = {
     "\n  fragment voteFields on Vote {\n    id\n    voter {\n      id\n    }\n    metadata {\n      reason\n    }\n    vp\n    vp_parsed\n    proposal\n    choice\n    created\n    tx\n  }\n\n  fragment proposalFields on Proposal {\n    id\n    proposal_id\n    author {\n      id\n    }\n    quorum\n    timelock_delay\n    execution_hash\n    metadata {\n      id\n      title\n      body\n      discussion\n      execution\n      choices\n      labels\n    }\n    start_time\n    start_block_number\n    end_time\n    end_block_number\n    snapshot\n    vp_decimals\n    scores_1\n    scores_2\n    scores_3\n    scores_total\n    scores_1_parsed\n    scores_2_parsed\n    scores_3_parsed\n    scores_total_parsed\n    execution_time\n    created\n    edited\n    tx\n    execution_tx\n    vote_count\n    execution_ready\n    executed\n    execution_settled\n    cancelled\n  }\n": types.VoteFieldsFragmentDoc,
@@ -32,6 +37,11 @@ const documents: Documents = {
     "\n  query User($indexer: String!, $id: String!) {\n    user(indexer: $indexer, id: $id) {\n      id\n      proposal_count\n      vote_count\n      created\n    }\n  }\n": types.UserDocument,
     "\n  query Leaderboard(\n    $indexer: String!\n    $first: Int!\n    $skip: Int!\n    $orderBy: Leaderboard_orderBy\n    $orderDirection: OrderDirection!\n    $where: Leaderboard_filter\n  ) {\n    leaderboards(\n      indexer: $indexer\n      first: $first\n      skip: $skip\n      orderBy: $orderBy\n      orderDirection: $orderDirection\n      where: $where\n    ) {\n      id\n      user {\n        id\n        created\n      }\n      proposal_count\n      vote_count\n    }\n  }\n": types.LeaderboardDocument,
     "\n  query _Metadata($indexer: String!) {\n    _metadata(indexer: $indexer, id: \"last_indexed_block\") {\n      value\n    }\n  }\n": types._MetadataDocument,
+    "\n  fragment delegateFields on Delegate {\n    id\n    user {\n      id\n      proposal_count\n      vote_count\n    }\n    voting_power\n    voting_power_parsed\n    delegator_count\n    created\n    updated\n  }\n": types.DelegateFieldsFragmentDoc,
+    "\n  query Delegates(\n    $indexer: String!\n    $first: Int!\n    $skip: Int!\n    $orderBy: Delegate_orderBy!\n    $orderDirection: OrderDirection!\n    $where: Delegate_filter\n  ) {\n    delegates(\n      indexer: $indexer\n      first: $first\n      skip: $skip\n      orderBy: $orderBy\n      orderDirection: $orderDirection\n      where: $where\n    ) {\n      ...delegateFields\n    }\n  }\n": types.DelegatesDocument,
+    "\n  query Delegate($indexer: String!, $id: String!) {\n    delegate(indexer: $indexer, id: $id) {\n      ...delegateFields\n    }\n  }\n": types.DelegateDocument,
+    "\n  query UserDelegation($indexer: String!, $id: String!) {\n    delegation(indexer: $indexer, id: $id) {\n      id\n      delegator {\n        id\n      }\n      delegate\n      created\n      tx\n    }\n  }\n": types.UserDelegationDocument,
+    "\n  query Space($indexer: String!, $id: String!) {\n    space(indexer: $indexer, id: $id) {\n      id\n      name\n      symbol\n      decimals\n      token\n      proposal_count\n      vote_count\n      proposer_count\n      voter_count\n      delegate_count\n      quorum\n      proposal_threshold\n      voting_delay\n      timelock_delay\n      created\n    }\n  }\n": types.SpaceDocument,
 };
 
 /**
@@ -80,6 +90,26 @@ export function gql(source: "\n  query Leaderboard(\n    $indexer: String!\n    
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query _Metadata($indexer: String!) {\n    _metadata(indexer: $indexer, id: \"last_indexed_block\") {\n      value\n    }\n  }\n"): (typeof documents)["\n  query _Metadata($indexer: String!) {\n    _metadata(indexer: $indexer, id: \"last_indexed_block\") {\n      value\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment delegateFields on Delegate {\n    id\n    user {\n      id\n      proposal_count\n      vote_count\n    }\n    voting_power\n    voting_power_parsed\n    delegator_count\n    created\n    updated\n  }\n"): (typeof documents)["\n  fragment delegateFields on Delegate {\n    id\n    user {\n      id\n      proposal_count\n      vote_count\n    }\n    voting_power\n    voting_power_parsed\n    delegator_count\n    created\n    updated\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query Delegates(\n    $indexer: String!\n    $first: Int!\n    $skip: Int!\n    $orderBy: Delegate_orderBy!\n    $orderDirection: OrderDirection!\n    $where: Delegate_filter\n  ) {\n    delegates(\n      indexer: $indexer\n      first: $first\n      skip: $skip\n      orderBy: $orderBy\n      orderDirection: $orderDirection\n      where: $where\n    ) {\n      ...delegateFields\n    }\n  }\n"): (typeof documents)["\n  query Delegates(\n    $indexer: String!\n    $first: Int!\n    $skip: Int!\n    $orderBy: Delegate_orderBy!\n    $orderDirection: OrderDirection!\n    $where: Delegate_filter\n  ) {\n    delegates(\n      indexer: $indexer\n      first: $first\n      skip: $skip\n      orderBy: $orderBy\n      orderDirection: $orderDirection\n      where: $where\n    ) {\n      ...delegateFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query Delegate($indexer: String!, $id: String!) {\n    delegate(indexer: $indexer, id: $id) {\n      ...delegateFields\n    }\n  }\n"): (typeof documents)["\n  query Delegate($indexer: String!, $id: String!) {\n    delegate(indexer: $indexer, id: $id) {\n      ...delegateFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query UserDelegation($indexer: String!, $id: String!) {\n    delegation(indexer: $indexer, id: $id) {\n      id\n      delegator {\n        id\n      }\n      delegate\n      created\n      tx\n    }\n  }\n"): (typeof documents)["\n  query UserDelegation($indexer: String!, $id: String!) {\n    delegation(indexer: $indexer, id: $id) {\n      id\n      delegator {\n        id\n      }\n      delegate\n      created\n      tx\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query Space($indexer: String!, $id: String!) {\n    space(indexer: $indexer, id: $id) {\n      id\n      name\n      symbol\n      decimals\n      token\n      proposal_count\n      vote_count\n      proposer_count\n      voter_count\n      delegate_count\n      quorum\n      proposal_threshold\n      voting_delay\n      timelock_delay\n      created\n    }\n  }\n"): (typeof documents)["\n  query Space($indexer: String!, $id: String!) {\n    space(indexer: $indexer, id: $id) {\n      id\n      name\n      symbol\n      decimals\n      token\n      proposal_count\n      vote_count\n      proposer_count\n      voter_count\n      delegate_count\n      quorum\n      proposal_threshold\n      voting_delay\n      timelock_delay\n      created\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

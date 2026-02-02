@@ -6,6 +6,7 @@ import governorAbi from "@/contracts/abi/governorAbi";
 import config from "@/config";
 import presaleVotingPowerAbi from "@/contracts/abi/presaleVotingPowerAbi";
 import timelockAbi from "@/contracts/abi/timelockAbi";
+import { tokenAbi } from "@/contracts/abi/tokenAbi";
 
 const useContracts = () => {
   const chain = useCurrentChain();
@@ -49,10 +50,22 @@ const useContracts = () => {
     [chain.id, client]
   );
 
+  const tokenContract = useMemo(() => {
+    const tokenConfig = config.token?.[chain.id];
+    const tokenAddress = tokenConfig?.governanceToken;
+    if (!tokenAddress) return null;
+    return getContract({
+      address: tokenAddress,
+      abi: tokenAbi,
+      client,
+    });
+  }, [chain.id, client]);
+
   return {
     governorContract,
     presaleVotingPowerContract,
     timeLockContract,
+    tokenContract,
   };
 };
 

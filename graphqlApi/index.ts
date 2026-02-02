@@ -1,19 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BASIC_CHOICES, ProposalState } from "@/lib/constents";
 import {
+  Delegate,
+  Delegation,
   PaginationOpts,
   Proposal,
   ProposalsFilter,
   RawTransaction,
+  SpaceStats,
   Vote,
   User,
 } from "@/types";
 import { ApiProposal } from "./types";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import {
+  DELEGATES_QUERY,
+  DELEGATE_QUERY,
   LAST_INDEXED_BLOCK_QUERY,
   PROPOSAL_QUERY,
   PROPOSALS_QUERY,
+  SPACE_QUERY,
+  USER_DELEGATION_QUERY,
   USER_QUERY,
   USER_VOTES_QUERY,
   VOTES_QUERY,
@@ -117,8 +124,9 @@ export function createApi(uri: string) {
 
       const { data } = await apollo.query({
         query: VOTES_QUERY,
+        fetchPolicy: "network-only",
         variables: {
-          indexer: "lcai",
+          indexer: "mainnet",
           first: limit,
           skip,
           orderBy,
@@ -138,7 +146,7 @@ export function createApi(uri: string) {
     ): Promise<{ [key: string]: Vote }> => {
       const { data } = await apollo.query({
         query: USER_VOTES_QUERY,
-        variables: { indexer: "lcai", voter, first: limit, skip },
+        variables: { indexer: "mainnet", voter, first: limit, skip },
       });
 
       return Object.fromEntries(
@@ -215,7 +223,7 @@ export function createApi(uri: string) {
       const [{ data }] = await Promise.all([
         apollo.query({
           query: USER_QUERY,
-          variables: { indexer: "lcai", id },
+          variables: { indexer: "mainnet", id },
         }),
       ]);
 
@@ -224,9 +232,129 @@ export function createApi(uri: string) {
     async loadLastIndexedBlock(): Promise<number | null> {
       const { data } = await apollo.query({
         query: LAST_INDEXED_BLOCK_QUERY,
-        variables: { indexer: "lcai" },
+        variables: { indexer: "mainnet" },
       });
       return data?._metadata?.value ? Number(data._metadata.value) : null;
+    },
+    loadDelegates: async (
+      spaceId: string,
+      { limit, skip = 0 }: PaginationOpts,
+      sortBy:
+        | "voting_power-desc"
+        | "voting_power-asc"
+        | "delegator_count-desc"
+        | "delegator_count-asc"
+        | "created-desc"
+        | "created-asc" = "voting_power-desc"
+    ): Promise<Delegate[]> => {
+      const [orderBy, orderDirection] = sortBy.split("-") as [
+        "voting_power" | "delegator_count" | "created",
+        "desc" | "asc"
+      ];
+
+      const { data } = await apollo.query({
+        query: DELEGATES_QUERY,
+        fetchPolicy: "network-only",
+        variables: {
+          indexer: "mainnet",
+          first: limit,
+          skip,
+          orderBy,
+          orderDirection,
+          where: {
+            space: spaceId,
+          },
+        },
+      });
+
+      return (
+        data?.delegates?.map((delegate: any) => ({
+          id: delegate.id,
+          address: delegate.user.id,
+          votingPower: delegate.voting_power,
+          votingPowerParsed: delegate.voting_power_parsed,
+          delegatorCount: delegate.delegator_count,
+          proposalCount: delegate.user.proposal_count,
+          voteCount: delegate.user.vote_count,
+          created: delegate.created,
+          updated: delegate.updated,
+        })) || []
+      );
+    },
+    loadDelegate: async (
+      spaceId: string,
+      delegateAddress: string
+    ): Promise<Delegate | null> => {
+      const delegateId = `${spaceId}/${delegateAddress}`;
+      const { data } = await apollo.query({
+        query: DELEGATE_QUERY,
+        variables: { indexer: "mainnet", id: delegateId },
+      });
+
+      if (!data?.delegate) return null;
+
+      const delegate = data.delegate;
+      return {
+        id: delegate.id,
+        address: delegate.user.id,
+        votingPower: delegate.voting_power,
+        votingPowerParsed: delegate.voting_power_parsed,
+        delegatorCount: delegate.delegator_count,
+        proposalCount: delegate.user.proposal_count,
+        voteCount: delegate.user.vote_count,
+        created: delegate.created,
+        updated: delegate.updated,
+      };
+    },
+    loadUserDelegation: async (
+      spaceId: string,
+      userAddress: string
+    ): Promise<Delegation | null> => {
+      const delegationId = `${spaceId}/${userAddress}`;
+      const { data } = await apollo.query({
+        query: USER_DELEGATION_QUERY,
+        fetchPolicy: "network-only",
+        variables: { indexer: "mainnet", id: delegationId },
+      });
+
+      if (!data?.delegation) return null;
+
+      const delegation = data.delegation;
+      return {
+        id: delegation.id,
+        delegator: delegation.delegator.id,
+        delegate: delegation.delegate,
+        created: delegation.created,
+        tx: delegation.tx,
+      };
+    },
+    loadSpaceStats: async (spaceId: string): Promise<SpaceStats | null> => {
+      const { data } = await apollo.query({
+        query: SPACE_QUERY,
+        fetchPolicy: "network-only",
+        variables: { indexer: "mainnet", id: spaceId },
+      });
+
+      if (!data?.space) return null;
+
+      const space = data.space;
+      return {
+        id: space.id,
+        name: space.name,
+        symbol: space.symbol,
+        decimals: space.decimals,
+        token: space.token,
+        proposalCount: space.proposal_count,
+        voteCount: space.vote_count,
+        proposerCount: space.proposer_count,
+        voterCount: space.voter_count,
+        delegateCount: space.delegate_count,
+        quorum: space.quorum,
+        proposalThreshold: space.proposal_threshold,
+        votingDelay: space.voting_delay,
+        timelockDelay: space.timelock_delay,
+        created: space.created,
+      };
     },
   };
 }

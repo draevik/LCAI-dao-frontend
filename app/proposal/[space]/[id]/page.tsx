@@ -27,19 +27,6 @@ export default function ProposalDetail() {
     queryKey: ["proposal", `${space}/${id}`],
     queryFn: () =>
       api.loadProposal(`${space}/${id}`, Math.floor(Date.now() / 1000)),
-    enabled: true,
-  });
-
-  const { data: votes } = useQuery({
-    queryKey: ["votes", `${space}/${id}`],
-    queryFn: () =>
-      api.loadProposalVotes(
-        proposal!,
-        { limit: 10, skip: 0 },
-        "any",
-        "vp-desc"
-      ),
-    enabled: Boolean(proposal),
   });
 
   const [isVoteDialogOpen, setIsVoteDialogOpen] = useState(false);
@@ -67,21 +54,28 @@ export default function ProposalDetail() {
           {/* Main Content */}
           <div className="space-y-8">
             <ProposalTitleSection proposal={proposal} />
-            <Tabs defaultValue="overview" className="w-full justify-start">
+            <Tabs defaultValue="description" className="w-full justify-start">
               <TabsList className="bg-transparent border-b border-surface-soft rounded-none w-full flex gap-1">
-                <TabsTrigger className="max-w-fit border-0 rounded-t-2xl rounded-b-none px-6 py-4 text-lg font-semibold -tracking-[0.18px] text-content-primary leading-[1] bg-surface-soft data-[state=active]:bg-[image:var(--gradient-primary)] data-[state=active]:text-white" value="overview">Overview</TabsTrigger>
-                <TabsTrigger className="max-w-fit border-0 rounded-t-2xl rounded-b-none px-6 py-4 text-lg font-semibold -tracking-[0.18px] text-content-primary leading-[1] bg-surface-soft data-[state=active]:bg-[image:var(--gradient-primary)] data-[state=active]:text-white" value="votes">Votes</TabsTrigger>
+                <TabsTrigger
+                  className="max-w-fit border-0 rounded-t-2xl rounded-b-none px-6 py-4 text-lg font-semibold -tracking-[0.18px] text-content-primary leading-[1] bg-surface-soft data-[state=active]:bg-[image:var(--gradient-primary)] data-[state=active]:text-white"
+                  value="description"
+                >
+                  Description
+                </TabsTrigger>
+                <TabsTrigger
+                  className="max-w-fit border-0 rounded-t-2xl rounded-b-none px-6 py-4 text-lg font-semibold -tracking-[0.18px] text-content-primary leading-[1] bg-surface-soft data-[state=active]:bg-[image:var(--gradient-primary)] data-[state=active]:text-white"
+                  value="votes"
+                >
+                  Votes
+                </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="overview" className="space-y-6 mt-6">
+              <TabsContent value="description" className="space-y-6 mt-6">
                 <ProposalOverviewTab content={proposal.metadata?.body} />
               </TabsContent>
 
               <TabsContent value="votes" className="mt-6">
-                <ProposalVotesTab
-                  votes={votes}
-                  choices={proposal.metadata?.choices}
-                />
+                <ProposalVotesTab proposal={proposal} />
               </TabsContent>
             </Tabs>
           </div>

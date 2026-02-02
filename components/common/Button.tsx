@@ -68,9 +68,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const content = (
       <>
-        {LeftIcon ? <FontAwesomeIcon icon={LeftIcon} className="w-4 h-4" aria-hidden /> : null}
-        <span className="truncate">{children}</span>
-        {RightIcon ? <FontAwesomeIcon icon={RightIcon} className="w-4 h-4" aria-hidden /> : null}
+        {LeftIcon ? (
+          <FontAwesomeIcon icon={LeftIcon} className="w-4 h-4" aria-hidden />
+        ) : null}
+        <span className="flex gap-1 items-center truncate">{children}</span>
+        {RightIcon ? (
+          <FontAwesomeIcon icon={RightIcon} className="w-4 h-4" aria-hidden />
+        ) : null}
       </>
     );
 

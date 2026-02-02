@@ -1,4 +1,13 @@
-import { Chain, localhost } from "viem/chains";
+import { Chain, localhost, mainnet } from "viem/chains";
+
+const customMainnet: Chain = {
+  ...mainnet,
+  rpcUrls: {
+    default: {
+      http: ["https://mainnet.infura.io/v3/e4c15472e4824fefae8a9d5b265e8180"],
+    },
+  },
+};
 
 export const lcaiTestnet: Chain = {
   id: 504,
@@ -30,13 +39,13 @@ const hardhat = {
 // lcai counter 0x2CA89a0add8553752e37d2f455937ca739a1069C
 
 const config = {
-  chains: [lcaiTestnet] as [Chain, ...Chain[]],
+  chains: [customMainnet] as [Chain, ...Chain[]],
 
   daoSystem: {
-    proposalThreshold: 0, // 0 LCAI
-    quorumNeeded: 4, // 4 percent
-    proposalDelay: 60 * 60, // 1 hour
-    votingPeriod: 60 * 60 * 24 * 2, // 2 days
+    proposalThreshold: 140_000, // 0 LCAI
+    quorumNeeded: 3, // 3 percent
+    proposalDelay: 60 * 60 * 24, // 1 day
+    votingPeriod: 60 * 60 * 24 * 7, // 7 days
     timelockDelay: 60 * 60 * 24 * 2, // 2 days
   },
 
@@ -56,16 +65,42 @@ const config = {
   } as Record<number, { name: string; address: `0x${string}` }[]>,
 
   timeLock: {
+    [customMainnet.id]: `0xbE1c37F8C4DA77dD06F4A8AC5098Ec70273093d7`,
     [hardhat.id]: `0x5fbdb2315678afecb367f032d93f642f64180aa3`,
     [lcaiTestnet.id]: `0x6FDA6BFfdf8f6ea638D1AdED3d5Bdf337dec7DAc`,
   } as Record<number, `0x${string}`>,
 
   governor: {
+    [customMainnet.id]: `0x6dfa413B5900a1a7947BC75E68AbBA093cB2492d`,
     [hardhat.id]: `0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0`,
     [lcaiTestnet.id]: `0x58Fc79c5DeF257b0DD86ca59b48870E343946Fe5`,
   } as Record<number, `0x${string}`>,
 
+  token: {
+    [customMainnet.id]: {
+      name: "LCAIBallot",
+      symbol: "LCAIB",
+      decimals: 18,
+      governanceToken: "0x75F3D01c4D960FE986A598B7954A3b786B29cE49",
+    },
+    [lcaiTestnet.id]: {
+      name: "LCAIBallot",
+      symbol: "LCAIB",
+      decimals: 18,
+      governanceToken: "0xF1c352E47C3c2498aA809e4d4E19295089aCF360",
+    },
+  } as Record<
+    number,
+    {
+      name: string;
+      symbol: string;
+      decimals: number;
+      governanceToken: `0x${string}`;
+    }
+  >,
+
   presaleVotingPower: {
+    [customMainnet.id]: `0x75F3D01c4D960FE986A598B7954A3b786B29cE49`,
     [hardhat.id]: `0xe7f1725e7734ce288f8367e1bb143e90bb3f0512`,
     [lcaiTestnet.id]: `0xF1c352E47C3c2498aA809e4d4E19295089aCF360`,
   } as Record<number, `0x${string}`>,
