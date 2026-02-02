@@ -11,6 +11,7 @@ import { DaoSidebar } from "@/components/home/dao-sidebar";
 import { ProposalsList } from "@/components/home/proposals-list";
 import { ParticipantsList } from "@/components/home/participants-list";
 import { DelegateModal } from "@/components/delegation/delegate-modal";
+import BallotsLockerModal from "@/components/ballots-locker";
 import useGraphqlApi from "@/hooks/useGraphqlApi";
 import config from "@/config";
 import useCurrentChain from "@/hooks/useCurrentChain";
@@ -22,6 +23,7 @@ export default function HomePage() {
   const chain = useCurrentChain();
   const [activeTab, setActiveTab] = useState("home");
   const [delegateModalOpen, setDelegateModalOpen] = useState(false);
+  const [ballotsLockerOpen, setBallotsLockerOpen] = useState(false);
 
   // Get governor address as space ID
   const spaceId = config.governor[chain.id];
@@ -76,13 +78,6 @@ export default function HomePage() {
 
   return (
     <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-10">
-      <div className="sm:mb-7.5 mb-5">
-        <h1 className="page-title">DAO Governance</h1>
-        <p className="text-content-secondary mt-2">
-          Participate in community governance and vote on important proposals
-        </p>
-      </div>
-
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="mb-6 border-b border-border-default pb-2 w-full">
           <TabsTrigger value="home" className="gap-2">
@@ -139,6 +134,7 @@ export default function HomePage() {
                   spaceStats={spaceStats || null}
                   userDelegation={userDelegation || null}
                   onDelegateClick={() => setDelegateModalOpen(true)}
+                  onBallotsLockerClick={() => setBallotsLockerOpen(true)}
                   isLoading={isLoadingStats}
                 />
               </div>
@@ -161,6 +157,12 @@ export default function HomePage() {
       <DelegateModal
         open={delegateModalOpen}
         onOpenChange={setDelegateModalOpen}
+        onSuccess={handleDelegateSuccess}
+      />
+
+      <BallotsLockerModal
+        open={ballotsLockerOpen}
+        onOpenChange={setBallotsLockerOpen}
         onSuccess={handleDelegateSuccess}
       />
     </div>

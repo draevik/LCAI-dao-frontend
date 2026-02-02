@@ -1,12 +1,11 @@
 import { useMemo } from "react";
 import useCurrentChain from "./useCurrentChain";
 import useWeb3Clients from "./useWeb3Clients";
-import { getContract } from "viem";
+import { erc20Abi, getContract } from "viem";
 import governorAbi from "@/contracts/abi/governorAbi";
 import config from "@/config";
-import presaleVotingPowerAbi from "@/contracts/abi/presaleVotingPowerAbi";
 import timelockAbi from "@/contracts/abi/timelockAbi";
-import { tokenAbi } from "@/contracts/abi/tokenAbi";
+import voteTokenAbi from "@/contracts/abi/voteTokenAbi";
 
 const useContracts = () => {
   const chain = useCurrentChain();
@@ -30,11 +29,11 @@ const useContracts = () => {
     [chain.id, client]
   );
 
-  const presaleVotingPowerContract = useMemo(
+  const voteTokenContract = useMemo(
     () =>
       getContract({
-        address: config.presaleVotingPower[chain.id],
-        abi: presaleVotingPowerAbi,
+        address: config.voteToken[chain.id].address,
+        abi: voteTokenAbi,
         client,
       }),
     [chain.id, client]
@@ -50,22 +49,21 @@ const useContracts = () => {
     [chain.id, client]
   );
 
-  const tokenContract = useMemo(() => {
-    const tokenConfig = config.token?.[chain.id];
-    const tokenAddress = tokenConfig?.governanceToken;
-    if (!tokenAddress) return null;
-    return getContract({
-      address: tokenAddress,
-      abi: tokenAbi,
-      client,
-    });
-  }, [chain.id, client]);
+  const underlyingTokenContract = useMemo(
+    () =>
+      getContract({
+        address: config.underlyingToken[chain.id].address,
+        abi: erc20Abi,
+        client,
+      }),
+    [chain.id, client]
+  );
 
   return {
     governorContract,
-    presaleVotingPowerContract,
+    voteTokenContract,
     timeLockContract,
-    tokenContract,
+    underlyingTokenContract,
   };
 };
 

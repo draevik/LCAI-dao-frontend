@@ -40,14 +40,14 @@ export function ProposalVoteDialog({
 }: ProposalVoteDialogProps) {
   const { address } = useAccount();
   const { castVote } = useGovernance();
-  const { presaleVotingPowerContract } = useContracts();
+  const { voteTokenContract } = useContracts();
   const [voteReason, setVoteReason] = useState("");
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
   const queryClient = useQueryClient();
 
   const userVotingPower = useQuery({
     queryKey: ["votingPower", address],
-    queryFn: async () => presaleVotingPowerContract.read.balanceOf([address!]),
+    queryFn: async () => voteTokenContract.read.balanceOf([address!]),
     select: (votingPower) => +formatEther(votingPower),
     enabled: Boolean(address),
   });

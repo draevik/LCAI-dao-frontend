@@ -1,6 +1,14 @@
 import { ApiProposal, ApiVote } from "@/graphqlApi/types";
 import { AbiFunction } from "viem";
 
+export type Token = {
+  address: `0x${string}`;
+  symbol: string;
+  name: string;
+  decimals: number;
+  logoURI?: string;
+};
+
 export type AbiObjectType = {
   type: string;
   stateMutability: string;

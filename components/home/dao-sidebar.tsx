@@ -8,11 +8,14 @@ import { Separator } from "@/components/ui/separator";
 import useDelegation from "@/hooks/useDelegation";
 import { compactNumber } from "@/lib/utils";
 import type { SpaceStats, Delegation } from "@/types";
+import useCurrentChain from "@/hooks/useCurrentChain";
+import config from "@/config";
 
 interface DaoSidebarProps {
   spaceStats: SpaceStats | null;
   userDelegation: Delegation | null;
   onDelegateClick: () => void;
+  onBallotsLockerClick: () => void;
   isLoading?: boolean;
 }
 
@@ -20,13 +23,18 @@ export function DaoSidebar({
   spaceStats,
   userDelegation,
   onDelegateClick,
+  onBallotsLockerClick,
   isLoading,
 }: DaoSidebarProps) {
+  const chain = useCurrentChain();
   const { address, isConnected } = useAccount();
   const { fetchDelegationState, hasTokenContract } = useDelegation();
   const [votingPower, setVotingPower] = useState<string>("0");
   const [tokenBalance, setTokenBalance] = useState<string>("0");
   const [currentDelegate, setCurrentDelegate] = useState<string | null>(null);
+
+  const voteToken = config.voteToken[chain.id];
+  const underlyingToken = config.underlyingToken[chain.id];
 
   const loadUserData = useCallback(async () => {
     if (!address || !hasTokenContract) return;
@@ -53,8 +61,8 @@ export function DaoSidebar({
   };
 
   return (
-    <Card>
-      <CardHeader className="pb-4">
+    <Card className="gap-4">
+      <CardHeader>
         <CardTitle>{spaceStats?.name || "Lightchain AI DAO"}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -77,12 +85,6 @@ export function DaoSidebar({
                   {compactNumber(spaceStats?.delegateCount || 0)}
                 </span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-content-secondary">Voters</span>
-                <span className="font-medium text-content-primary">
-                  {compactNumber(spaceStats?.voterCount || 0)}
-                </span>
-              </div>
             </div>
 
             {isConnected && (
@@ -95,49 +97,79 @@ export function DaoSidebar({
                   <div className="flex justify-between text-sm">
                     <span className="text-content-secondary">Voting Power</span>
                     <span className="font-medium text-content-primary">
-                      {compactNumber(parseFloat(votingPower))} {spaceStats?.symbol || "LCAI"}
+                      {compactNumber(parseFloat(votingPower))}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-content-secondary">Token Balance</span>
+                    <span className="text-content-secondary">
+                      {voteToken?.symbol} Balance
+                    </span>
                     <span className="font-medium text-content-primary">
-                      {compactNumber(parseFloat(tokenBalance))} {spaceStats?.symbol || "LCAI"}
+                      {compactNumber(parseFloat(tokenBalance))}
                     </span>
                   </div>
-                  {delegateAddress && delegateAddress !== "0x0000000000000000000000000000000000000000" && (
-                    <div className="flex justify-between text-sm">
-                      <span className="text-content-secondary">Delegated to</span>
-                      <span className="font-medium text-content-primary">
-                        {delegateAddress.toLowerCase() === address?.toLowerCase()
-                          ? "Self"
-                          : truncateAddress(delegateAddress)}
-                      </span>
-                    </div>
-                  )}
+                  {delegateAddress &&
+                    delegateAddress !==
+                      "0x0000000000000000000000000000000000000000" && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-content-secondary">
+                          Delegated to
+                        </span>
+                        <span className="font-medium text-content-primary">
+                          {delegateAddress.toLowerCase() ===
+                          address?.toLowerCase()
+                            ? "Self"
+                            : truncateAddress(delegateAddress)}
+                        </span>
+                      </div>
+                    )}
                   {/* Show hint when user has tokens but no voting power */}
-                  {parseFloat(tokenBalance) > 0 && parseFloat(votingPower) === 0 && !hasDelegated && (
-                    <p className="text-xs text-amber-500">
-                      Delegate to yourself to activate your voting power
-                    </p>
-                  )}
+                  {parseFloat(tokenBalance) > 0 &&
+                    parseFloat(votingPower) === 0 &&
+                    !hasDelegated && (
+                      <p className="text-xs text-amber-500">
+                        Delegate to yourself to activate your voting power
+                      </p>
+                    )}
                 </div>
               </>
             )}
 
             <Separator />
 
-            <Button
-              variant="primary"
-              className="w-full"
-              onClick={onDelegateClick}
-              disabled={!isConnected}
-            >
-              {!isConnected
-                ? "Connect Wallet to Delegate"
-                : hasDelegated
-                ? "Update Delegation"
-                : "Delegate"}
-            </Button>
+            {/* Helper text for ballots */}
+            <div className="rounded-lg bg-primary/5 border border-primary/10 p-3">
+              <p className="text-xs text-muted-foreground">
+                <span className="font-medium text-foreground">
+                  Need voting power?
+                </span>{" "}
+                Wrap your {underlyingToken.symbol} tokens into{" "}
+                {voteToken.symbol} to vote on proposals and participate in
+                governance.
+              </p>
+            </div>
+
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={onBallotsLockerClick}
+              >
+                Wrap/Unwrap
+              </Button>
+              <Button
+                variant="primary"
+                className="flex-1"
+                onClick={onDelegateClick}
+                disabled={!isConnected}
+              >
+                {!isConnected
+                  ? "Connect"
+                  : hasDelegated
+                  ? "Delegate"
+                  : "Delegate"}
+              </Button>
+            </div>
           </>
         )}
       </CardContent>

@@ -10,7 +10,7 @@ import useContracts from "./useContracts";
 import useCurrentChain from "./useCurrentChain";
 import config from "@/config";
 import { formatUnits } from "viem";
-import { tokenAbi } from "@/contracts/abi/tokenAbi";
+import voteTokenAbi from "@/contracts/abi/voteTokenAbi";
 
 export type DelegationState = {
   currentDelegate: string | null;
@@ -25,7 +25,7 @@ export type DelegationState = {
 const useDelegation = () => {
   const { address } = useAccount();
   const chain = useCurrentChain();
-  const { tokenContract } = useContracts();
+  const { voteTokenContract } = useContracts();
   const [pendingTxHash, setPendingTxHash] = useState<`0x${string}` | undefined>(
     undefined
   );
@@ -37,15 +37,15 @@ const useDelegation = () => {
       hash: pendingTxHash,
     });
 
-  const tokenConfig = config.token?.[chain.id];
-  const decimals = tokenConfig?.decimals ?? 18;
-  const tokenAddress = tokenConfig?.governanceToken;
+  const tokenConfig = config.voteToken[chain.id];
+  const decimals = tokenConfig.decimals;
+  const tokenAddress = tokenConfig.address;
 
   const getCurrentDelegate = useCallback(
     async (account: `0x${string}`): Promise<string | null> => {
-      if (!tokenContract) return null;
+      if (!voteTokenContract) return null;
       try {
-        const delegate = await tokenContract.read.delegates([account]);
+        const delegate = await voteTokenContract.read.delegates([account]);
         // Zero address means no delegate
         if (delegate === "0x0000000000000000000000000000000000000000") {
           return null;
@@ -56,33 +56,33 @@ const useDelegation = () => {
         return null;
       }
     },
-    [tokenContract]
+    [voteTokenContract]
   );
 
   const getVotingPower = useCallback(
     async (account: `0x${string}`): Promise<bigint> => {
-      if (!tokenContract) return BigInt(0);
+      if (!voteTokenContract) return BigInt(0);
       try {
-        return await tokenContract.read.getVotes([account]);
+        return await voteTokenContract.read.getVotes([account]);
       } catch (error) {
         console.error("Failed to get voting power:", error);
         return BigInt(0);
       }
     },
-    [tokenContract]
+    [voteTokenContract]
   );
 
   const getTokenBalance = useCallback(
     async (account: `0x${string}`): Promise<bigint> => {
-      if (!tokenContract) return BigInt(0);
+      if (!voteTokenContract) return BigInt(0);
       try {
-        return await tokenContract.read.balanceOf([account]);
+        return await voteTokenContract.read.balanceOf([account]);
       } catch (error) {
         console.error("Failed to get token balance:", error);
         return BigInt(0);
       }
     },
-    [tokenContract]
+    [voteTokenContract]
   );
 
   const delegate = useCallback(
@@ -94,7 +94,7 @@ const useDelegation = () => {
       try {
         const hash = await writeContractAsync({
           address: tokenAddress,
-          abi: tokenAbi,
+          abi: voteTokenAbi,
           functionName: "delegate",
           args: [delegatee],
         });
@@ -108,7 +108,9 @@ const useDelegation = () => {
     [tokenAddress, address, writeContractAsync]
   );
 
-  const delegateToSelf = useCallback(async (): Promise<`0x${string}` | null> => {
+  const delegateToSelf = useCallback(async (): Promise<
+    `0x${string}` | null
+  > => {
     if (!address) {
       throw new Error("Wallet not connected");
     }
@@ -154,7 +156,7 @@ const useDelegation = () => {
     isConfirming,
     isConfirmed,
     pendingTxHash,
-    hasTokenContract: !!tokenContract,
+    hasTokenContract: !!voteTokenContract,
   };
 };
 

@@ -1,3 +1,4 @@
+import { Token } from "@/types";
 import { Chain, localhost, mainnet } from "viem/chains";
 
 const customMainnet: Chain = {
@@ -47,6 +48,7 @@ const config = {
     proposalDelay: 60 * 60 * 24, // 1 day
     votingPeriod: 60 * 60 * 24 * 7, // 7 days
     timelockDelay: 60 * 60 * 24 * 2, // 2 days
+    totalSupply: 10_000_000_000,
   },
 
   predefinedContracts: {
@@ -76,34 +78,30 @@ const config = {
     [lcaiTestnet.id]: `0x58Fc79c5DeF257b0DD86ca59b48870E343946Fe5`,
   } as Record<number, `0x${string}`>,
 
-  token: {
+  underlyingToken: {
+    [customMainnet.id]: {
+      address: "0x9ca8530ca349c966fe9ef903df17a75b8a778927",
+      symbol: "LCAI",
+      name: "LCAI",
+      logoURI: "/images/brand/lcai.svg",
+      decimals: 18,
+    },
+  } as Record<number, Token>,
+
+  voteToken: {
     [customMainnet.id]: {
       name: "LCAIBallot",
       symbol: "LCAIB",
       decimals: 18,
-      governanceToken: "0x75F3D01c4D960FE986A598B7954A3b786B29cE49",
+      address: "0x75F3D01c4D960FE986A598B7954A3b786B29cE49",
     },
     [lcaiTestnet.id]: {
       name: "LCAIBallot",
       symbol: "LCAIB",
       decimals: 18,
-      governanceToken: "0xF1c352E47C3c2498aA809e4d4E19295089aCF360",
+      address: "0xF1c352E47C3c2498aA809e4d4E19295089aCF360",
     },
-  } as Record<
-    number,
-    {
-      name: string;
-      symbol: string;
-      decimals: number;
-      governanceToken: `0x${string}`;
-    }
-  >,
-
-  presaleVotingPower: {
-    [customMainnet.id]: `0x75F3D01c4D960FE986A598B7954A3b786B29cE49`,
-    [hardhat.id]: `0xe7f1725e7734ce288f8367e1bb143e90bb3f0512`,
-    [lcaiTestnet.id]: `0xF1c352E47C3c2498aA809e4d4E19295089aCF360`,
-  } as Record<number, `0x${string}`>,
+  } as Record<number, Token>,
 };
 
 export default config;

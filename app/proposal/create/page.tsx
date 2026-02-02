@@ -77,6 +77,7 @@ import {
   faPen,
 } from "@fortawesome/pro-regular-svg-icons";
 import { Button as ButtonUi } from "@/components/ui/button";
+import { compactNumber } from "@/lib/utils";
 
 const choices = [
   {
@@ -534,10 +535,18 @@ export default function CreateProposal() {
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <span className="text-content-secondary text-sm">
+                    Total supply
+                  </span>
+                  <span className="ml-auto text-content-primary text-sm">
+                    {compactNumber(config.daoSystem.totalSupply)} LCAIB
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-content-secondary text-sm">
                     Proposal threshold
                   </span>
                   <span className="ml-auto text-content-primary text-sm">
-                    {config.daoSystem.proposalThreshold} LCAI
+                    {compactNumber(config.daoSystem.proposalThreshold)} LCAIB
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -545,7 +554,13 @@ export default function CreateProposal() {
                     Quorum needed
                   </span>
                   <span className="ml-auto text-content-primary text-sm">
-                    {config.daoSystem.quorumNeeded}%
+                    {config.daoSystem.quorumNeeded}% (
+                    {compactNumber(
+                      (config.daoSystem.totalSupply *
+                        config.daoSystem.quorumNeeded) /
+                        100
+                    )}
+                    )
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
