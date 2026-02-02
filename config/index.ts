@@ -52,18 +52,24 @@ const config = {
   },
 
   predefinedContracts: {
-    [hardhat.id]: [
+    [customMainnet.id]: [
       {
-        name: "Counter (Example)",
-        address: "0x2CA89a0add8553752e37d2f455937ca739a1069C",
+        name: "Lightchain Treasury",
+        address: "0x07A716a551E5f4CA7D6C71Da9dF1cb1429Dba826",
       },
     ],
-    [lcaiTestnet.id]: [
-      {
-        name: "Counter (Example)",
-        address: "0x2CA89a0add8553752e37d2f455937ca739a1069C",
-      },
-    ],
+    // [hardhat.id]: [
+    //   {
+    //     name: "Counter (Example)",
+    //     address: "0x2CA89a0add8553752e37d2f455937ca739a1069C",
+    //   },
+    // ],
+    // [lcaiTestnet.id]: [
+    //   {
+    //     name: "Counter (Example)",
+    //     address: "0x2CA89a0add8553752e37d2f455937ca739a1069C",
+    //   },
+    // ],
   } as Record<number, { name: string; address: `0x${string}` }[]>,
 
   timeLock: {

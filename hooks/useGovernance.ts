@@ -66,8 +66,6 @@ export function useGovernance() {
       hash,
     });
 
-    console.log("Receipt", receipt);
-
     const eventLog = decodeEventLog({
       abi: governorContract.abi,
       eventName: "ProposalCreated",
@@ -75,8 +73,6 @@ export function useGovernance() {
       data: receipt.logs[0].data,
       strict: false,
     });
-
-    console.log({ eventLog });
 
     return eventLog.args.proposalId;
   };
@@ -116,8 +112,6 @@ export function useGovernance() {
       hash,
     });
 
-    console.log("Receipt", receipt);
-
     return receipt;
   };
 
@@ -143,8 +137,6 @@ export function useGovernance() {
     const receipt = await publicClient.waitForTransactionReceipt({
       hash,
     });
-
-    console.log("Receipt", receipt);
 
     return receipt;
   };
@@ -172,8 +164,6 @@ export function useGovernance() {
       hash,
     });
 
-    console.log("Receipt", receipt);
-
     return receipt;
   };
 
@@ -199,8 +189,6 @@ export function useGovernance() {
     const receipt = await publicClient.waitForTransactionReceipt({
       hash,
     });
-
-    console.log("Receipt", receipt);
 
     return receipt;
   };

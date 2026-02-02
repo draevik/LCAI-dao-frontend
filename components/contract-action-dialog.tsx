@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Abi, AbiFunction, erc20Abi, zeroAddress } from "viem";
+import { Abi, AbiFunction, erc20Abi } from "viem";
 import { Separator } from "./ui/separator";
 import { ScrollArea } from "./ui/scroll-area";
 import { ContractAction } from "@/types";
@@ -39,12 +39,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import counterAbi from "@/contracts/abi/counterAbi";
 import useGetAbiContract from "@/hooks/useGetAbiContract";
 import { Loader2Icon, BookUserIcon } from "lucide-react";
 import { ContractPickerDialog } from "./contract-picker-dialog";
 import { Button } from "./common/Button";
 import { Button as ButtonUi } from "@/components/ui/button";
+import treasuryAbi from "@/contracts/abi/treasuryAbi";
 
 const abiOptions = [
   { value: "imported", label: "Use the imported ABI" },
@@ -54,9 +54,9 @@ const abiOptions = [
     abi: erc20Abi as unknown as Abi,
   },
   {
-    value: "counter",
-    label: "Counter (Example)",
-    abi: counterAbi as unknown as Abi,
+    value: "treasury",
+    label: "Lightchain Treasury",
+    abi: treasuryAbi as unknown as Abi,
   },
   { value: "upload", label: "Upload an ABI" },
 ];
@@ -117,7 +117,7 @@ export function ContractActionDialog({
       value === "imported"
         ? autoAbi.data
         : abiOptions.find((i) => i.value === value)?.abi;
-    handleAbiParsed(methods || []);
+    handleAbiParsed((methods as AbiFunction[]) || []);
   };
 
   const handleAbiParsed = (methods: AbiFunction[]) => {
@@ -220,7 +220,9 @@ export function ContractActionDialog({
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="sm:max-w-2xl px-0 outline-none">
           <DialogHeader className="px-6">
-            <DialogTitle className="text-xl sm:text-2xl text-content-primary">Contract Call</DialogTitle>
+            <DialogTitle className="text-xl sm:text-2xl text-content-primary">
+              Contract Call
+            </DialogTitle>
             <DialogDescription className="text-content-secondary">
               Add a contract call to your proposal
             </DialogDescription>
@@ -339,7 +341,8 @@ export function ContractActionDialog({
                               </FormControl>
                               <SelectContent>
                                 {writeContractAbi.map((method) => (
-                                  <SelectItem className="capitalize"
+                                  <SelectItem
+                                    className="capitalize"
                                     key={method.name}
                                     value={method.name}
                                   >
@@ -363,7 +366,9 @@ export function ContractActionDialog({
                         <Separator />
 
                         <div className="space-y-2">
-                          <Label className="text-content-primary">Calldatas</Label>
+                          <Label className="text-content-primary">
+                            Calldatas
+                          </Label>
                           <p className="text-sm text-content-secondary mb-3">
                             The data for the function arguments you wish to send
                             when the action executes

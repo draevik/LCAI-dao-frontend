@@ -65,7 +65,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { useAppKit } from "@reown/appkit/react";
-import { useAccount } from "wagmi";
+import { useAccount, useBalance, useReadContract } from "wagmi";
 import config from "@/config";
 import $dayjs from "@/lib/dayjs";
 import { useTheme } from "next-themes";
@@ -78,6 +78,9 @@ import {
 } from "@fortawesome/pro-regular-svg-icons";
 import { Button as ButtonUi } from "@/components/ui/button";
 import { compactNumber } from "@/lib/utils";
+import useCurrentChain from "@/hooks/useCurrentChain";
+import governorAbi from "@/contracts/abi/governorAbi";
+import { formatEther } from "viem";
 
 const choices = [
   {
@@ -122,7 +125,21 @@ export default function CreateProposal() {
   const [actions, setActions] = useState<ContractAction[]>([]);
   const { open } = useAppKit();
   const { isConnected } = useAccount();
-  const { theme } = useTheme();
+  const chain = useCurrentChain();
+  const { address } = useAccount();
+
+  const voteToken = config.voteToken[chain.id];
+
+  const voteTokenBalance = useBalance({
+    address: address!,
+    token: voteToken.address as `0x${string}` | undefined,
+  });
+
+  const proposalMin = useReadContract({
+    address: config.governor[chain.id],
+    abi: governorAbi,
+    functionName: "proposalThreshold",
+  });
 
   // Initialize React Hook Form with Zod validation
   const form = useForm<ProposalFormValues>({
@@ -181,11 +198,6 @@ export default function CreateProposal() {
   };
 
   const handleSubmit = async (values: ProposalFormValues) => {
-    // if (!canCreateProposal()) {
-    //   toast.error("You don't have enough voting power to create a proposal");
-    //   return;
-    // }
-
     if (!actions.length) {
       toast.error("Please add at least one action");
       return;
@@ -203,6 +215,19 @@ export default function CreateProposal() {
 
     if (simulationStatus === "error") {
       toast.error("Execution simulation failed");
+      return;
+    }
+
+    if (
+      voteTokenBalance.data &&
+      proposalMin.data &&
+      voteTokenBalance.data.value < proposalMin.data
+    ) {
+      toast.error(
+        `You don't have enough voting power to create a proposal. You need at least ${compactNumber(
+          formatEther(proposalMin.data)
+        )} ${voteToken?.symbol} to create a proposal.`
+      );
       return;
     }
 
@@ -420,7 +445,6 @@ export default function CreateProposal() {
                           </div>
                           <div className="flex items-center gap-2">
                             <Button
-                              leftIcon={faPen}
                               variant="outline"
                               size="sm"
                               type="button"
@@ -538,7 +562,8 @@ export default function CreateProposal() {
                     Total supply
                   </span>
                   <span className="ml-auto text-content-primary text-sm">
-                    {compactNumber(config.daoSystem.totalSupply)} LCAIB
+                    {compactNumber(config.daoSystem.totalSupply)}{" "}
+                    {voteToken?.symbol}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -546,7 +571,8 @@ export default function CreateProposal() {
                     Proposal threshold
                   </span>
                   <span className="ml-auto text-content-primary text-sm">
-                    {compactNumber(config.daoSystem.proposalThreshold)} LCAIB
+                    {compactNumber(config.daoSystem.proposalThreshold)}{" "}
+                    {voteToken?.symbol}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
