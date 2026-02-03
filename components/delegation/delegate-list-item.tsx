@@ -4,6 +4,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { compactNumber } from "@/lib/utils";
 import type { Delegate } from "@/types";
+import { toast } from "sonner";
+import { useCopyToClipboard } from "usehooks-ts";
+import { Button } from "../ui/button";
+import { CopyIcon } from "lucide-react";
+import CopyButton from "../CopyButton";
 
 interface DelegateListItemProps {
   delegate: Delegate;
@@ -16,12 +21,19 @@ export function DelegateListItem({
   rank,
   onClick,
 }: DelegateListItemProps) {
+  const [, copy] = useCopyToClipboard();
+
   const truncateAddress = (addr: string) => {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
   const generateAvatarUrl = (address: string) => {
     return `https://effigy.im/a/${address}.png`;
+  };
+
+  const handleCopy = () => {
+    copy(delegate.address);
+    toast.success("Address copied to clipboard");
   };
 
   return (
@@ -52,6 +64,11 @@ export function DelegateListItem({
           <span className="font-medium text-content-primary truncate">
             {truncateAddress(delegate.address)}
           </span>
+
+          <CopyButton
+            text={delegate.address}
+            className="size-6 shrink-0 text-content-muted hover:text-content-primary [&_svg:not([class*='size-'])]:size-3"
+          />
           {delegate.proposalCount > 0 && (
             <Badge variant="outline" className="text-xs shrink-0">
               proposer

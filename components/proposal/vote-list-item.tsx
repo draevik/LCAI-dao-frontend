@@ -7,6 +7,7 @@ import { compactNumber, cn } from "@/lib/utils";
 import { useCopyToClipboard } from "usehooks-ts";
 import { toast } from "sonner";
 import { Copy } from "lucide-react";
+import CopyButton from "../CopyButton";
 
 interface VoteListItemProps {
   vote: Vote;
@@ -50,15 +51,10 @@ export function VoteListItem({ vote, choiceLabel }: VoteListItemProps) {
           <span className="truncate font-medium text-sm text-content-primary">
             {vote.voter.id.slice(0, 6)}...{vote.voter.id.slice(-4)}
           </span>
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            className="size-6 shrink-0 text-content-muted hover:text-content-primary"
-            onClick={handleCopy}
-            aria-label="Copy address"
-          >
-            <Copy className="size-3" />
-          </Button>
+          <CopyButton
+            text={vote.voter.id}
+            className="size-6 shrink-0 text-content-muted hover:text-content-primary [&_svg:not([class*='size-'])]:size-3"
+          />
         </div>
         <div className="shrink-0 flex items-center gap-3 sm:gap-4">
           <span className="font-semibold text-sm tabular-nums text-content-primary whitespace-nowrap">
