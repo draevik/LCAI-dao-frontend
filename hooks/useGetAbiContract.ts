@@ -73,10 +73,7 @@ async function fetchAbiFromSourcify(
 const useGetAbiContract = (address: `0x${string}` | undefined) => {
   const chain = useCurrentChain();
   const chainId = chain?.id ?? 0;
-  const apiKey =
-    typeof process !== "undefined"
-      ? process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
-      : undefined;
+  const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY;
 
   return useQuery({
     queryKey: ["getAbiContract", chainId, address],
@@ -89,7 +86,7 @@ const useGetAbiContract = (address: `0x${string}` | undefined) => {
       if (tryEtherscan) {
         try {
           return await fetchAbiFromEtherscan(chainId, address, apiKey);
-        } catch (e) {
+        } catch {
           // Fall through to Sourcify
         }
       }

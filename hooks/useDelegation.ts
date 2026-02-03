@@ -9,7 +9,7 @@ import {
 import useContracts from "./useContracts";
 import useCurrentChain from "./useCurrentChain";
 import config from "@/config";
-import { formatUnits } from "viem";
+import { formatUnits, zeroAddress } from "viem";
 import voteTokenAbi from "@/contracts/abi/voteTokenAbi";
 
 export type DelegationState = {
@@ -18,8 +18,6 @@ export type DelegationState = {
   votingPowerFormatted: string;
   tokenBalance: bigint;
   tokenBalanceFormatted: string;
-  isLoading: boolean;
-  error: Error | null;
 };
 
 const useDelegation = () => {
@@ -37,53 +35,7 @@ const useDelegation = () => {
       hash: pendingTxHash,
     });
 
-  const tokenConfig = config.voteToken[chain.id];
-  const decimals = tokenConfig.decimals;
-  const tokenAddress = tokenConfig.address;
-
-  const getCurrentDelegate = useCallback(
-    async (account: `0x${string}`): Promise<string | null> => {
-      if (!voteTokenContract) return null;
-      try {
-        const delegate = await voteTokenContract.read.delegates([account]);
-        // Zero address means no delegate
-        if (delegate === "0x0000000000000000000000000000000000000000") {
-          return null;
-        }
-        return delegate;
-      } catch (error) {
-        console.error("Failed to get current delegate:", error);
-        return null;
-      }
-    },
-    [voteTokenContract]
-  );
-
-  const getVotingPower = useCallback(
-    async (account: `0x${string}`): Promise<bigint> => {
-      if (!voteTokenContract) return BigInt(0);
-      try {
-        return await voteTokenContract.read.getVotes([account]);
-      } catch (error) {
-        console.error("Failed to get voting power:", error);
-        return BigInt(0);
-      }
-    },
-    [voteTokenContract]
-  );
-
-  const getTokenBalance = useCallback(
-    async (account: `0x${string}`): Promise<bigint> => {
-      if (!voteTokenContract) return BigInt(0);
-      try {
-        return await voteTokenContract.read.balanceOf([account]);
-      } catch (error) {
-        console.error("Failed to get token balance:", error);
-        return BigInt(0);
-      }
-    },
-    [voteTokenContract]
-  );
+  const { decimals, address: tokenAddress } = config.voteToken[chain.id];
 
   const delegate = useCallback(
     async (delegatee: `0x${string}`): Promise<`0x${string}` | null> => {
@@ -91,19 +43,14 @@ const useDelegation = () => {
         throw new Error("Token contract or wallet not connected");
       }
 
-      try {
-        const hash = await writeContractAsync({
-          address: tokenAddress,
-          abi: voteTokenAbi,
-          functionName: "delegate",
-          args: [delegatee],
-        });
-        setPendingTxHash(hash);
-        return hash;
-      } catch (error) {
-        console.error("Failed to delegate:", error);
-        throw error;
-      }
+      const hash = await writeContractAsync({
+        address: tokenAddress,
+        abi: voteTokenAbi,
+        functionName: "delegate",
+        args: [delegatee],
+      });
+      setPendingTxHash(hash);
+      return hash;
     },
     [tokenAddress, address, writeContractAsync]
   );
@@ -117,45 +64,41 @@ const useDelegation = () => {
     return delegate(address);
   }, [address, delegate]);
 
-  const formatVotingPower = useCallback(
-    (power: bigint): string => {
-      return formatUnits(power, decimals);
-    },
-    [decimals]
-  );
-
   const fetchDelegationState = useCallback(
     async (account: `0x${string}`): Promise<DelegationState> => {
-      const [currentDelegate, votingPower, tokenBalance] = await Promise.all([
-        getCurrentDelegate(account),
-        getVotingPower(account),
-        getTokenBalance(account),
+      if (!voteTokenContract) {
+        return {
+          currentDelegate: null,
+          votingPower: 0n,
+          votingPowerFormatted: "0",
+          tokenBalance: 0n,
+          tokenBalanceFormatted: "0",
+        };
+      }
+
+      const [delegateAddr, votingPower, tokenBalance] = await Promise.all([
+        voteTokenContract.read.delegates([account]),
+        voteTokenContract.read.getVotes([account]),
+        voteTokenContract.read.balanceOf([account]),
       ]);
 
       return {
-        currentDelegate,
+        currentDelegate: delegateAddr === zeroAddress ? null : delegateAddr,
         votingPower,
-        votingPowerFormatted: formatVotingPower(votingPower),
+        votingPowerFormatted: formatUnits(votingPower, decimals),
         tokenBalance,
-        tokenBalanceFormatted: formatVotingPower(tokenBalance),
-        isLoading: false,
-        error: null,
+        tokenBalanceFormatted: formatUnits(tokenBalance, decimals),
       };
     },
-    [getCurrentDelegate, getVotingPower, getTokenBalance, formatVotingPower]
+    [voteTokenContract, decimals]
   );
 
   return {
     delegate,
     delegateToSelf,
-    getCurrentDelegate,
-    getVotingPower,
-    getTokenBalance,
     fetchDelegationState,
-    formatVotingPower,
     isConfirming,
     isConfirmed,
-    pendingTxHash,
     hasTokenContract: !!voteTokenContract,
   };
 };

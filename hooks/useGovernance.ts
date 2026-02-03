@@ -115,7 +115,10 @@ export function useGovernance() {
     return receipt;
   };
 
-  const cancel = async (
+  // cancel, queue, and execute share an identical flow: hash the description,
+  // simulate, write, and wait for the receipt. The only difference is the method name.
+  const executeLifecycleAction = async (
+    action: "cancel" | "queue" | "execute",
     targets: `0x${string}`[],
     values: bigint[],
     calldatas: `0x${string}`[],
@@ -125,73 +128,43 @@ export function useGovernance() {
 
     const descriptionHash = keccak256(encodePacked(["string"], [description]));
 
-    const { request } = await governorContract.simulate.cancel([
+    const { request } = (await governorContract.simulate[action]([
       targets,
       values,
       calldatas,
       descriptionHash,
-    ]);
+    ])) as SimulateContractReturnType<
+      typeof governorContract.abi,
+      typeof action
+    >;
 
     const hash = await walletClient.writeContract(request);
 
-    const receipt = await publicClient.waitForTransactionReceipt({
-      hash,
-    });
-
-    return receipt;
+    return publicClient.waitForTransactionReceipt({ hash });
   };
 
-  const queue = async (
+  const cancel = (
     targets: `0x${string}`[],
     values: bigint[],
     calldatas: `0x${string}`[],
     description: string
-  ) => {
-    if (!address || !walletClient) throw new Error("Wallet not connected");
+  ) =>
+    executeLifecycleAction("cancel", targets, values, calldatas, description);
 
-    const descriptionHash = keccak256(encodePacked(["string"], [description]));
-
-    const { request } = await governorContract.simulate.queue([
-      targets,
-      values,
-      calldatas,
-      descriptionHash,
-    ]);
-
-    const hash = await walletClient.writeContract(request);
-
-    const receipt = await publicClient.waitForTransactionReceipt({
-      hash,
-    });
-
-    return receipt;
-  };
-
-  const execute = async (
+  const queue = (
     targets: `0x${string}`[],
     values: bigint[],
     calldatas: `0x${string}`[],
     description: string
-  ) => {
-    if (!address || !walletClient) throw new Error("Wallet not connected");
+  ) => executeLifecycleAction("queue", targets, values, calldatas, description);
 
-    const descriptionHash = keccak256(encodePacked(["string"], [description]));
-
-    const { request } = await governorContract.simulate.execute([
-      targets,
-      values,
-      calldatas,
-      descriptionHash,
-    ]);
-
-    const hash = await walletClient.writeContract(request);
-
-    const receipt = await publicClient.waitForTransactionReceipt({
-      hash,
-    });
-
-    return receipt;
-  };
+  const execute = (
+    targets: `0x${string}`[],
+    values: bigint[],
+    calldatas: `0x${string}`[],
+    description: string
+  ) =>
+    executeLifecycleAction("execute", targets, values, calldatas, description);
 
   return {
     createProposal,
