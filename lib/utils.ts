@@ -55,3 +55,7 @@ export function convertChoice(choise: number) {
 export function clone<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
+
+export function truncateAddress(address: string) {
+  return address.slice(0, 6) + "..." + address.slice(-4);
+}

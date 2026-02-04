@@ -11,9 +11,29 @@ import {
 } from "viem";
 import useContracts from "./useContracts";
 import useWeb3Clients from "./useWeb3Clients";
-import { ContractAction } from "@/types";
+import { ContractAction, SimulationAction } from "@/types";
 import useCurrentChain from "./useCurrentChain";
 import config from "@/config";
+
+const API_ENDPOINT =
+  process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:3000";
+
+/**
+ * Generate full function signature from ABI and method name.
+ * e.g., "transferERC20(address,address,uint256)"
+ */
+function getFunctionSignature(
+  abi: ContractAction["abi"],
+  methodName: string | undefined
+): string | null {
+  if (!abi || !methodName) return null;
+
+  const fn = abi.find((item) => item.name === methodName);
+  if (!fn || !fn.inputs) return methodName;
+
+  const types = fn.inputs.map((input) => input.type).join(",");
+  return `${methodName}(${types})`;
+}
 
 export function useGovernance() {
   const chain = useCurrentChain();
@@ -21,18 +41,88 @@ export function useGovernance() {
   const { governorContract } = useContracts();
   const { publicClient, walletClient } = useWeb3Clients();
 
-  const simulateActions = async (contractActions: ContractAction[]) => {
-    return Promise.all(
-      contractActions.map((action) => {
-        return publicClient.simulateContract({
-          address: action.target,
-          abi: action.abi || [],
-          functionName: action.method || "",
-          args: Object.values(action.args || {}),
-          account: config.timeLock[chain.id],
-        });
-      })
-    );
+  /**
+   * Simulate actions via Tenderly (GraphQL mutation).
+   * Returns simulation results for display.
+   */
+  const simulateActions = async (
+    contractActions: ContractAction[]
+  ): Promise<SimulationAction[]> => {
+    const timelockAddress = config.timeLock[chain.id];
+    if (!timelockAddress) {
+      throw new Error("Timelock address not configured for this chain");
+    }
+
+    const actions = contractActions.map((action) => ({
+      to: action.target,
+      calldata:
+        action.abi && action.method
+          ? encodeFunctionData({
+              abi: action.abi,
+              functionName: action.method,
+              args: Object.values(action.args || {}),
+            })
+          : "0x",
+      value: action.value || "0",
+    }));
+
+    const decodedExecutions = contractActions.map((action) => {
+      const signature = getFunctionSignature(action.abi, action.method);
+      return {
+        signature,
+      };
+    });
+
+    const res = await fetch(API_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `
+          mutation SimulateTenderly($input: SimulationInput!) {
+            simulateTenderly(input: $input) {
+              results {
+                action_index
+                target
+                function_selector
+                status
+                tenderly_simulation_id
+                tenderly_sandbox_url
+                error_message
+                simulated_at
+              }
+            }
+          }
+        `,
+        variables: {
+          input: {
+            chainId: chain.id,
+            timelockAddress,
+            actions,
+            decodedExecutions,
+          },
+        },
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to simulate actions");
+    }
+
+    const payload = (await res.json()) as {
+      data?: { simulateTenderly?: { results?: SimulationAction[] } };
+      errors?: Array<{ message?: string }>;
+    };
+
+    if (payload.errors?.length) {
+      throw new Error(payload.errors[0]?.message || "Simulation failed");
+    }
+
+    const results = payload.data?.simulateTenderly?.results;
+    if (!results) {
+      throw new Error("No simulation results returned");
+    }
+
+    return results;
   };
 
   const createProposal = async (

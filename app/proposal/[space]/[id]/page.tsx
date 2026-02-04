@@ -15,6 +15,8 @@ import { ProposalVoteDialog } from "@/components/proposal/proposal-vote-dialog";
 import { ProposalActionButton } from "@/components/proposal/proposal-action-button";
 import { ProposalVoteResults } from "@/components/proposal/proposal-vote-results";
 import { ProposalTimeline } from "@/components/proposal/proposal-timeline";
+import { ProposalSimulationReport } from "@/components/proposal/proposal-simulation-report";
+import { ProposalActions } from "@/components/proposal/proposal-actions";
 import { useQuery } from "@tanstack/react-query";
 
 export default function ProposalDetail() {
@@ -68,6 +70,12 @@ export default function ProposalDetail() {
                 >
                   Votes
                 </TabsTrigger>
+                <TabsTrigger
+                  className="max-w-fit border-0 rounded-t-2xl rounded-b-none px-6 py-4 text-lg font-semibold -tracking-[0.18px] text-content-primary leading-[1] bg-surface-soft data-[state=active]:bg-[image:var(--gradient-primary)] data-[state=active]:text-white"
+                  value="actions"
+                >
+                  Actions
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="description" className="space-y-6 mt-6">
@@ -76,6 +84,10 @@ export default function ProposalDetail() {
 
               <TabsContent value="votes" className="mt-6">
                 <ProposalVotesTab proposal={proposal} />
+              </TabsContent>
+
+              <TabsContent value="actions" className="mt-6">
+                <ProposalActions proposal={proposal} />
               </TabsContent>
             </Tabs>
           </div>
@@ -96,6 +108,8 @@ export default function ProposalDetail() {
             />
 
             <ProposalVoteResults proposal={proposal} />
+
+            <ProposalSimulationReport proposal={proposal} />
 
             <ProposalTimeline proposal={proposal} />
           </div>

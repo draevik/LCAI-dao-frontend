@@ -42,7 +42,8 @@ import {
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import { ContractActionDialog } from "@/components/contract-action-dialog";
-import { ContractAction } from "@/types";
+import { ContractAction, SimulationAction } from "@/types";
+import { SimulationResultsTable } from "@/components/proposal/simulation-results-table";
 import {
   ArrowLeft,
   CircleCheckIcon,
@@ -158,6 +159,9 @@ export default function CreateProposal() {
   const [simulationStatus, setSimulationStatus] = useState<
     "idle" | "pending" | "success" | "error"
   >("idle");
+  const [simulationResults, setSimulationResults] = useState<
+    SimulationAction[]
+  >([]);
 
   const openDialog = (type: "send" | "contract", action?: ContractAction) => {
     setDialogType(type);
@@ -167,14 +171,23 @@ export default function CreateProposal() {
 
   const simulateActionsMutation = useMutation({
     mutationFn: simulateActions,
-    onSuccess: () => {
-      toast.success("Execution simulation succeeded");
-      setSimulationStatus("success");
+    onSuccess: (results) => {
+      setSimulationResults(results);
+      const allPassed = results.every((r) => r.status === "passed");
+      if (allPassed) {
+        toast.success("All simulations passed");
+        setSimulationStatus("success");
+      } else {
+        const failedCount = results.filter((r) => r.status === "failed").length;
+        toast.error(`${failedCount} simulation(s) failed`);
+        setSimulationStatus("error");
+      }
     },
     onError: (error) => {
       console.error("Error simulating proposal actions:", error);
       toast.error("Execution simulation failed");
       setSimulationStatus("error");
+      setSimulationResults([]);
     },
   });
 
@@ -189,12 +202,19 @@ export default function CreateProposal() {
       setActions((prev) => [...prev, action]);
     }
 
+    // Reset simulation when actions change
+    setSimulationStatus("idle");
+    setSimulationResults([]);
+
     setIsDialogOpen(false);
     setEditingAction(null);
   };
 
   const deleteAction = (id: string) => {
     setActions((prev) => prev.filter((t) => t.id !== id));
+    // Reset simulation when actions change
+    setSimulationStatus("idle");
+    setSimulationResults([]);
   };
 
   const handleSubmit = async (values: ProposalFormValues) => {
@@ -514,6 +534,16 @@ export default function CreateProposal() {
                       Simulate Execution
                     </ButtonUi>
                   </div>
+
+                  {/* Simulation Results */}
+                  {simulationResults.length > 0 && (
+                    <div className="mt-4 pt-4 border-t">
+                      <SimulationResultsTable
+                        simulations={simulationResults}
+                        defaultExpanded={true}
+                      />
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 

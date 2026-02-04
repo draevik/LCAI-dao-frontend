@@ -7,6 +7,8 @@ import {
   Proposal,
   ProposalsFilter,
   RawTransaction,
+  DecodedExecution,
+  SimulationAction,
   SpaceStats,
   Vote,
   User,
@@ -54,15 +56,39 @@ const getProposalState = (proposal: ApiProposal, current: number) => {
   return ProposalState.Active;
 };
 
-function formatExecution(execution: string): RawTransaction[] {
+function formatExecution(execution: string): (RawTransaction | DecodedExecution)[] {
   if (execution === "") return [];
 
   try {
     const result = JSON.parse(execution);
 
-    return Array.isArray(result) ? result : [];
+    if (!Array.isArray(result)) return [];
+
+    // Handle both old RawTransaction format and new DecodedExecution format
+    return result.map((item) => {
+      // New DecodedExecution format has 'target' instead of 'to'
+      if ('target' in item) {
+        return item as DecodedExecution;
+      }
+      // Old RawTransaction format has 'to'
+      return item as RawTransaction;
+    });
   } catch {
     console.log("Failed to parse execution");
+    return [];
+  }
+}
+
+function formatSimulation(
+  simulation: string | null | undefined
+): SimulationAction[] {
+  if (!simulation) return [];
+
+  try {
+    const result = JSON.parse(simulation);
+    return Array.isArray(result) ? result : [];
+  } catch {
+    console.log("Failed to parse simulation");
     return [];
   }
 }
@@ -86,6 +112,7 @@ function formatProposal(proposal: ApiProposal, current: number): Proposal {
     body: proposal.metadata?.body ?? "",
     discussion: proposal.metadata?.discussion ?? "",
     executions: formatExecution(proposal.metadata?.execution),
+    simulations: formatSimulation(proposal.metadata?.simulation),
     execution_settled: proposal.execution_settled,
     state,
     quorum_parsed: +formatUnits(proposal.quorum, proposal.vp_decimals),

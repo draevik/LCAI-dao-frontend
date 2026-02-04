@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { useCopyToClipboard } from "usehooks-ts";
 import $dayjs from "@/lib/dayjs";
 import { ProposalState } from "@/lib/constents";
-import type { Proposal } from "@/types";
+import type { Proposal, RawTransaction, DecodedExecution } from "@/types";
 import { useGovernance } from "@/hooks/useGovernance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAccount } from "wagmi";
@@ -13,6 +13,11 @@ import { TransactionExecutionError } from "viem";
 import { Button } from "../common/Button";
 import { faCircleMinus, faClone } from "@fortawesome/pro-regular-svg-icons";
 import ProposalDetailsStatusBadge from "./ProposalDetailsStatusBadge";
+
+// Helper to get target address from both old and new execution formats
+function getExecutionTarget(exec: RawTransaction | DecodedExecution): `0x${string}` {
+  return 'target' in exec ? exec.target : exec.to;
+}
 
 interface ProposalTitleSectionProps {
   proposal: Proposal;
@@ -28,9 +33,9 @@ export function ProposalTitleSection({ proposal }: ProposalTitleSectionProps) {
     mutationFn: () => {
       if (!proposal) throw new Error("Proposal not found");
       return cancel(
-        proposal.executions.map((e) => e.to),
+        proposal.executions.map((e) => getExecutionTarget(e)),
         proposal.executions.map((e) => BigInt(e.value)),
-        proposal.executions.map((e) => e.data),
+        proposal.executions.map((e) => e.calldata),
         proposal.metadata?.body ?? ""
       );
     },

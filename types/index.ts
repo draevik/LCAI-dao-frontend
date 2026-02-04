@@ -60,16 +60,13 @@ export type ContractAction = {
 
 export type BaseTransaction = {
   to: `0x${string}`;
-  data: `0x${string}`;
+  calldata: `0x${string}`;
   value: string;
   salt: string;
 };
 
 export type RawTransaction = BaseTransaction & {
   _type: "raw";
-  _form: {
-    recipient: `0x${string}`;
-  };
 };
 
 export type PaginationOpts = { limit: number; skip?: number };
@@ -79,6 +76,38 @@ export type ProposalsFilter = {
   labels?: string[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } & Record<string, any>;
+
+export type SimulationAction = {
+  action_index: number;
+  target: string;
+  function_selector: string | null; // Full signature like "approve(address,uint256)" from indexer
+  status: "passed" | "failed";
+  tenderly_simulation_id: string | null;
+  tenderly_sandbox_url: string | null;
+  error_message: string | null;
+  simulated_at: number;
+};
+
+export type DecodedParameter = {
+  name: string;
+  type: string;
+  value: string;
+};
+
+export type DecodedCalldata = {
+  signature: string;
+  parameters: DecodedParameter[];
+};
+
+export type DecodedExecution = {
+  value: string;
+  target: `0x${string}`;
+  calldata: `0x${string}`;
+  signature: string | null;
+  type: "custom" | "transfer";
+  decodedCalldata: DecodedCalldata | null;
+  offchaindata: unknown | null;
+};
 
 export type Proposal = ApiProposal & {
   author: {
@@ -90,7 +119,8 @@ export type Proposal = ApiProposal & {
   title: string;
   body: string;
   discussion: string;
-  executions: RawTransaction[];
+  executions: (RawTransaction | DecodedExecution)[];
+  simulations: SimulationAction[];
   state: number;
   quorum_parsed: number;
 };

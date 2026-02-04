@@ -32,6 +32,7 @@ gql(`
       body
       discussion
       execution
+      simulation
       choices
       labels
     }

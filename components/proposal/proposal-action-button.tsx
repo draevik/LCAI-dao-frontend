@@ -1,6 +1,6 @@
 import { ProposalState } from "@/lib/constents";
 import $dayjs from "@/lib/dayjs";
-import type { Proposal } from "@/types";
+import type { Proposal, RawTransaction, DecodedExecution } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useContracts from "@/hooks/useContracts";
 import { useAccount } from "wagmi";
@@ -10,6 +10,11 @@ import { TransactionExecutionError } from "viem";
 import { useAppKit } from "@reown/appkit/react";
 import { useMemo } from "react";
 import { Button } from "../common/Button";
+
+// Helper to get target address from both old and new execution formats
+function getExecutionTarget(exec: RawTransaction | DecodedExecution): `0x${string}` {
+  return 'target' in exec ? exec.target : exec.to;
+}
 
 interface ProposalActionButtonProps {
   proposal: Proposal;
@@ -37,9 +42,9 @@ export function ProposalActionButton({
     mutationFn: () => {
       if (!proposal) throw new Error("Proposal not found");
       return queue(
-        proposal.executions.map((e) => e.to),
+        proposal.executions.map((e) => getExecutionTarget(e)),
         proposal.executions.map((e) => BigInt(e.value)),
-        proposal.executions.map((e) => e.data),
+        proposal.executions.map((e) => e.calldata),
         proposal.metadata?.body ?? ""
       );
     },
@@ -57,9 +62,9 @@ export function ProposalActionButton({
     mutationFn: () => {
       if (!proposal) throw new Error("Proposal not found");
       return execute(
-        proposal.executions.map((e) => e.to),
+        proposal.executions.map((e) => getExecutionTarget(e)),
         proposal.executions.map((e) => BigInt(e.value)),
-        proposal.executions.map((e) => e.data),
+        proposal.executions.map((e) => e.calldata),
         proposal.metadata?.body ?? ""
       );
     },

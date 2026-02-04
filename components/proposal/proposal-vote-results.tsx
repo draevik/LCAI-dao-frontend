@@ -12,7 +12,7 @@ export function ProposalVoteResults({proposal}:ProposalVoteResultsProps) {
   return (
     <Card>
       <div className="px-6">
-        <h5 className="leading-[1.7] text-lg -tracking-[0.18px] font-semibold text-content-primary">Vote Results</h5>
+        <h5 className="leading-[1.7] text-lg -tracking-[0.18px] font-semibold text-content-primary">Current Votes</h5>
       </div>
       <CardContent className="space-y-3">
         <div className="text-sm flex items-center justify-between gap-2">
