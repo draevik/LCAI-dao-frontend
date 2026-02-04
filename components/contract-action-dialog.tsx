@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   Dialog,
   DialogContent,
@@ -44,7 +45,6 @@ import { Loader2Icon, BookUserIcon } from "lucide-react";
 import { ContractPickerDialog } from "./contract-picker-dialog";
 import { Button } from "./common/Button";
 import { Button as ButtonUi } from "@/components/ui/button";
-import treasuryAbi from "@/contracts/abi/treasuryAbi";
 
 const abiOptions = [
   { value: "imported", label: "Use the imported ABI" },
@@ -52,11 +52,6 @@ const abiOptions = [
     value: "erc20",
     label: "ERC 20",
     abi: erc20Abi as unknown as Abi,
-  },
-  {
-    value: "treasury",
-    label: "Lightchain Treasury",
-    abi: treasuryAbi as unknown as Abi,
   },
   { value: "upload", label: "Upload an ABI" },
 ];
@@ -79,6 +74,8 @@ export function ContractActionDialog({
   const [writeContractAbi, setWriteContractAbi] = useState<AbiFunction[]>([]);
   const [methodInputs, setMethodInputs] = useState<AbiFunction["inputs"]>([]);
   const [showContractPicker, setShowContractPicker] = useState(false);
+  const [showEthValue, setShowEthValue] = useState(false);
+  const skipAutoAbiRef = useRef(false);
 
   // Create dynamic schema based on method inputs
   const currentSchema =
@@ -92,6 +89,7 @@ export function ContractActionDialog({
       target: "",
       method: "",
       args: {},
+      value: "",
     },
   });
 
@@ -100,6 +98,10 @@ export function ContractActionDialog({
   const autoAbi = useGetAbiContract(watch("target") as `0x${string}`);
 
   useEffect(() => {
+    if (skipAutoAbiRef.current) {
+      skipAutoAbiRef.current = false;
+      return;
+    }
     if (autoAbi.data) {
       handleAbiOptionChange("imported");
     } else {
@@ -157,6 +159,7 @@ export function ContractActionDialog({
       abiOption: data.abiOption,
       abi: writeContractAbi,
       args: data.args as Record<string, string>,
+      value: showEthValue && data.value ? data.value : undefined,
     };
 
     onSave(newAction);
@@ -164,22 +167,26 @@ export function ContractActionDialog({
   };
 
   const resetForm = () => {
-    form.reset({ target: "", method: "", abiOption: "", args: {} });
+    form.reset({ target: "", method: "", abiOption: "", args: {}, value: "" });
     setMethodInputs([]);
     setWriteContractAbi([]);
+    setShowEthValue(false);
   };
 
   // Update form when editing action changes
   useEffect(() => {
     if (!isOpen) return;
     if (editingAction) {
+      skipAutoAbiRef.current = true;
+      setWriteContractAbi(editingAction.abi || []);
       form.reset({
         target: editingAction.target,
         method: editingAction.method || "",
         abiOption: editingAction.abiOption || "",
         args: editingAction.args || {},
+        value: editingAction.value || "",
       });
-      setWriteContractAbi(editingAction.abi || []);
+      setShowEthValue(!!editingAction.value);
       if (editingAction.method) {
         setMethodInputs(
           editingAction.abi?.find((i) => i.name === editingAction.method)
@@ -187,7 +194,7 @@ export function ContractActionDialog({
         );
       }
     } else resetForm();
-  }, [isOpen, editingAction, form]);
+  }, [isOpen]);
 
   // Reset form when method inputs change to apply new validation
   useEffect(() => {
@@ -200,7 +207,7 @@ export function ContractActionDialog({
     });
 
     form.setValue("args", newArgs);
-  }, [methodInputs, form]);
+  }, [methodInputs]);
 
   const handleSelectContract = (address: string) => {
     setValue("target", address);
@@ -401,13 +408,46 @@ export function ContractActionDialog({
                               />
                             ))}
                           </div>
+                        </div>
+                        {/* ETH Value Toggle */}
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <Label
+                              htmlFor="send-ether-toggle"
+                              className="text-sm text-content-secondary cursor-pointer"
+                            >
+                              Also send Ether to the target address? (this is
+                              not common)
+                            </Label>
+                            <Switch
+                              id="send-ether-toggle"
+                              checked={showEthValue}
+                              onCheckedChange={setShowEthValue}
+                            />
+                          </div>
 
-                          {/* <div className="flex items-center gap-2 mt-3">
-                <input type="checkbox" id="send-ether" className="rounded" />
-                <Label htmlFor="send-ether" className="text-sm">
-                  Also send Ether to the target address? (this is not common)
-                </Label>
-              </div> */}
+                          {showEthValue && (
+                            <div className="space-y-2 p-4 border rounded-lg">
+                              <Label className="text-content-primary font-semibold">
+                                Value
+                              </Label>
+                              <p className="text-sm text-content-secondary">
+                                The amount of ETH you wish to send the target
+                                address (External Account or Smart Contract)
+                              </p>
+                              <div className="flex items-center mt-3">
+                                <div className="bg-muted px-4 py-2.5 rounded-l-lg border border-r-0 font-medium text-content-secondary">
+                                  ETH
+                                </div>
+                                <Input
+                                  type="text"
+                                  placeholder="0"
+                                  className="rounded-l-none"
+                                  {...form.register("value")}
+                                />
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </>
                     )}

@@ -470,7 +470,7 @@ export default function CreateProposal() {
                               type="button"
                               onClick={() => openDialog(action.type, action)}
                             >
-                              <PencilIcon />
+                              <PencilIcon className="size-4" />
                             </Button>
                             <Button
                               variant="outline"
@@ -478,7 +478,7 @@ export default function CreateProposal() {
                               type="button"
                               onClick={() => deleteAction(action.id)}
                             >
-                              <Trash2Icon />
+                              <Trash2Icon className="size-4" />
                             </Button>
                           </div>
                         </div>

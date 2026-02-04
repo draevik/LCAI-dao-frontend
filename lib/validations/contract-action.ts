@@ -9,6 +9,7 @@ export const contractActionSchema = z.object({
   abiOption: z.string().min(1, "ABI option is required"),
   method: z.string().min(1, "Contract method is required"),
   args: z.record(z.string(), z.string()).optional(),
+  value: z.string().optional(),
 });
 
 // Dynamic schema creator for method arguments
@@ -36,6 +37,7 @@ export const createContractActionSchemaWithArgs = (
 
   return contractActionSchema.extend({
     args: z.object(argsSchema),
+    value: z.string().optional(),
   });
 };
 
