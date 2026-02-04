@@ -17,6 +17,7 @@ import { ProposalVoteResults } from "@/components/proposal/proposal-vote-results
 import { ProposalTimeline } from "@/components/proposal/proposal-timeline";
 import { ProposalSimulationReport } from "@/components/proposal/proposal-simulation-report";
 import { ProposalActions } from "@/components/proposal/proposal-actions";
+import { ProposalDelegationReminder } from "@/components/proposal/proposal-delegation-reminder";
 import { useQuery } from "@tanstack/react-query";
 
 export default function ProposalDetail() {
@@ -100,6 +101,8 @@ export default function ProposalDetail() {
                 onVoteAction={() => setIsVoteDialogOpen(true)}
               />
             </div>
+
+            <ProposalDelegationReminder proposal={proposal} />
 
             <ProposalVoteDialog
               open={isVoteDialogOpen}

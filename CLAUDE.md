@@ -22,7 +22,7 @@ npm run codegen      # Generate GraphQL types from external schema (requires ../
 
 ## Environment
 
-Required in `.env.local` (see `env.example`):
+Required in `.env.local`:
 - `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` — Reown Cloud project ID (required; `config/wagmi.ts` throws if missing)
 - `NEXT_PUBLIC_API_ENDPOINT` — GraphQL API endpoint (defaults to `http://localhost:3000/graphql`)
 - `NEXT_PUBLIC_ETHERSCAN_API_KEY` — Optional; used by `useGetAbiContract` for Etherscan ABI fetching
@@ -83,7 +83,7 @@ Pending (0) → Active (1) → Succeeded (4) → Queued (5) → Executed (7)
                           → Expired (6)
 ```
 
-State is computed client-side in `getProposalState()` (`graphqlApi/index.ts`) based on timestamps, quorum, and vote counts. The `scores` array on a formatted `Proposal` is `[for, against, abstain]` (1-indexed from the API, mapped to 0-indexed in `formatProposal`).
+State is computed client-side in `getProposalState()` (`graphqlApi/index.ts`) based on timestamps, quorum, and vote counts. The quorum check uses `scoresFor + scoresAbstain >= quorum`. The `scores` array on a formatted `Proposal` is `[for, against, abstain]` (mapped from API fields `scores_1`, `scores_2`, `scores_3`).
 
 ### Vote Choice Mapping — Be Careful
 
@@ -115,3 +115,5 @@ Pages are thin: `app/page.tsx` is the home page (client component, fetches via T
 4. **`underlyingToken` is mainnet-only**: `config.underlyingToken` only has an entry for mainnet. `useBallots` will fail on testnet if it tries to access this.
 5. **GraphQL codegen requires a sibling repo**: The schema file is at `../lcai-dao-api/.checkpoint/schema.gql`. `npm run codegen` will fail if that path doesn't exist.
 6. **MDXEditor is client-only**: It's used directly in the create proposal page, which is already a `"use client"` component. Don't try to render it in a server component.
+7. **API hardcodes "mainnet" indexer**: The GraphQL queries in `graphqlApi/index.ts` pass `indexer: "mainnet"` as a variable. This is the indexer name, not the network — it works across all chains indexed by the API.
+8. **Execution format migration**: `formatExecution()` handles two formats — old `RawTransaction` with `to` field and new `DecodedExecution` with `target` field. Both may exist in stored proposals.
