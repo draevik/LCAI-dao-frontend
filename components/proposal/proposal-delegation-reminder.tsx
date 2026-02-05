@@ -8,7 +8,7 @@ import { ProposalState } from "@/lib/constents";
 import type { Proposal } from "@/types";
 import { Clock, Info, CheckCircle2, AlertCircle } from "lucide-react";
 import BallotsLockerModal from "../ballots-locker";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { useAppKit } from "@reown/appkit/react";
 import useDelegation, { DelegationState } from "@/hooks/useDelegation";
 import { compactNumber, truncateAddress } from "@/lib/utils";
@@ -181,7 +181,7 @@ export function ProposalDelegationReminder({
   const [delegationState, setDelegationState] =
     useState<DelegationState | null>(null);
   const [isLoadingDelegation, setIsLoadingDelegation] = useState(false);
-  const { address, isConnected } = useAccount();
+  const { address, isConnected } = useConnection();
   const { open } = useAppKit();
   const { fetchDelegationState, hasTokenContract } = useDelegation();
 

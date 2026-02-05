@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/common/Button";
 import { Separator } from "@/components/ui/separator";
@@ -27,7 +27,7 @@ export function DaoSidebar({
   isLoading,
 }: DaoSidebarProps) {
   const chain = useCurrentChain();
-  const { address, isConnected } = useAccount();
+  const { address, isConnected } = useConnection();
   const { fetchDelegationState, hasTokenContract } = useDelegation();
   const [votingPower, setVotingPower] = useState<string>("0");
   const [tokenBalance, setTokenBalance] = useState<string>("0");

@@ -3,7 +3,7 @@ import $dayjs from "@/lib/dayjs";
 import type { Proposal, RawTransaction, DecodedExecution } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useContracts from "@/hooks/useContracts";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { useGovernance } from "@/hooks/useGovernance";
 import { toast } from "sonner";
 import { TransactionExecutionError } from "viem";
@@ -12,8 +12,10 @@ import { useMemo } from "react";
 import { Button } from "../common/Button";
 
 // Helper to get target address from both old and new execution formats
-function getExecutionTarget(exec: RawTransaction | DecodedExecution): `0x${string}` {
-  return 'target' in exec ? exec.target : exec.to;
+function getExecutionTarget(
+  exec: RawTransaction | DecodedExecution
+): `0x${string}` {
+  return "target" in exec ? exec.target : exec.to;
 }
 
 interface ProposalActionButtonProps {
@@ -28,7 +30,7 @@ export function ProposalActionButton({
   const { open } = useAppKit();
   const { governorContract } = useContracts();
   const { queue, execute } = useGovernance();
-  const { address } = useAccount();
+  const { address } = useConnection();
   const queryClient = useQueryClient();
 
   const hasVoted = useQuery({

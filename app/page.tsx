@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StatsCard } from "@/components/home/stats-card";
 import { RecentProposals } from "@/components/home/recent-proposals";
@@ -19,7 +19,7 @@ import { FileText, Users, Home } from "lucide-react";
 
 export default function HomePage() {
   const api = useGraphqlApi();
-  const { address } = useAccount();
+  const { address } = useConnection();
   const chain = useCurrentChain();
   const [activeTab, setActiveTab] = useState("home");
   const [delegateModalOpen, setDelegateModalOpen] = useState(false);

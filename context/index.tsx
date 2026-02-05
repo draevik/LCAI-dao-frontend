@@ -20,7 +20,7 @@ if (!projectId) {
 const metadata = {
   name: "LCAI DAO",
   description: "LightchainAI Decentralized Governance",
-  url: "https://lcai-dao.vercel.app", // origin must match your domain & subdomain
+  url: "https://dao.lightchain.ai", // origin must match your domain & subdomain
   icons: ["https://avatars.githubusercontent.com/u/179229932"],
 };
 

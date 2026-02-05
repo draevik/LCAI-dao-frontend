@@ -8,15 +8,17 @@ import { ProposalState } from "@/lib/constents";
 import type { Proposal, RawTransaction, DecodedExecution } from "@/types";
 import { useGovernance } from "@/hooks/useGovernance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { TransactionExecutionError } from "viem";
 import { Button } from "../common/Button";
 import { faCircleMinus, faClone } from "@fortawesome/pro-regular-svg-icons";
 import ProposalDetailsStatusBadge from "./ProposalDetailsStatusBadge";
 
 // Helper to get target address from both old and new execution formats
-function getExecutionTarget(exec: RawTransaction | DecodedExecution): `0x${string}` {
-  return 'target' in exec ? exec.target : exec.to;
+function getExecutionTarget(
+  exec: RawTransaction | DecodedExecution
+): `0x${string}` {
+  return "target" in exec ? exec.target : exec.to;
 }
 
 interface ProposalTitleSectionProps {
@@ -27,7 +29,7 @@ export function ProposalTitleSection({ proposal }: ProposalTitleSectionProps) {
   const [, copy] = useCopyToClipboard();
   const { cancel } = useGovernance();
   const queryClient = useQueryClient();
-  const { address } = useAccount();
+  const { address } = useConnection();
 
   const cancelProposalMutation = useMutation({
     mutationFn: () => {

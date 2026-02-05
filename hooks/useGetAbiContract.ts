@@ -6,37 +6,22 @@ const API_ENDPOINT =
   process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:3000";
 
 /**
- * Fetch contract ABI from GraphQL.
+ * Fetch contract ABI from REST API.
  */
-async function fetchAbiFromGraphql(
+async function fetchAbiFromApi(
   chainId: number,
   address: `0x${string}`
 ): Promise<Abi> {
-  const res = await fetch(API_ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      query:
-        "query Abi($chainId: Int!, $address: String!) { abi(chainId: $chainId, address: $address) { abi } }",
-      variables: { chainId, address },
-    }),
-  });
+  const url = `${API_ENDPOINT}/api/abi/${chainId}/${encodeURIComponent(address)}`;
+  const res = await fetch(url);
 
   if (!res.ok) {
-    const error = await res.json().catch(() => ({ error: "Unknown error" }));
-    throw new Error(error.message || error.error || "Failed to fetch ABI");
+    const body = await res.json().catch(() => ({ error: "Unknown error" }));
+    throw new Error(body.error || "Failed to fetch ABI");
   }
 
-  const payload = (await res.json()) as {
-    data?: { abi?: { abi?: Abi } };
-    errors?: Array<{ message?: string }>;
-  };
-
-  if (payload.errors?.length) {
-    throw new Error(payload.errors[0]?.message || "GraphQL error");
-  }
-
-  const abi = payload.data?.abi?.abi;
+  const payload = (await res.json()) as { abi?: Abi };
+  const abi = payload.abi;
   if (!abi) {
     throw new Error("ABI not found");
   }
@@ -45,7 +30,7 @@ async function fetchAbiFromGraphql(
 }
 
 /**
- * Hook to fetch contract ABI from GraphQL.
+ * Hook to fetch contract ABI from the API.
  */
 const useGetAbiContract = (address: `0x${string}` | undefined) => {
   const chain = useCurrentChain();
@@ -55,7 +40,7 @@ const useGetAbiContract = (address: `0x${string}` | undefined) => {
     queryKey: ["getAbiContract", chainId, address],
     queryFn: async (): Promise<Abi> => {
       if (!address) throw new Error("No contract address");
-      return fetchAbiFromGraphql(chainId, address);
+      return fetchAbiFromApi(chainId, address);
     },
     enabled: !!address && chainId > 0,
     staleTime: 1000 * 60 * 30, // 30 minutes

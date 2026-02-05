@@ -14,7 +14,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "./ui/dialog";
-import { useAccount, useBalance, useReadContract } from "wagmi";
+import { useConnection, useBalance, useReadContract } from "wagmi";
 import { useMemo, useState } from "react";
 import { cn, formatNumber } from "@/lib/utils";
 import useCurrentChain from "@/hooks/useCurrentChain";
@@ -24,6 +24,7 @@ import config from "@/config";
 import useBallots from "@/hooks/useBallots";
 import governorAbi from "@/contracts/abi/governorAbi";
 import TransactionModal from "./transaction-modal";
+import { useTokenBalance } from "@/hooks/useTokenBalance";
 
 type TabType = "deposit" | "withdraw";
 
@@ -39,7 +40,7 @@ export default function BallotsLockerModal({
   onSuccess,
 }: BallotsLockerModalProps) {
   const chain = useCurrentChain();
-  const { address, isConnected } = useAccount();
+  const { address, isConnected } = useConnection();
   const [amount, setAmount] = useState("");
   const [txHash, setTxHash] = useState<`0x${string}` | undefined>("0x0");
   const [openTxModal, setOpenTxModal] = useState(false);
@@ -54,9 +55,9 @@ export default function BallotsLockerModal({
     useBallots();
 
   // Underlying LCAI token balance
-  const tokenBalance = useBalance({
-    address,
-    token: underlyingToken.address as `0x${string}` | undefined,
+  const tokenBalance = useTokenBalance({
+    address: address,
+    token: underlyingToken.address,
   });
 
   const proposalMin = useReadContract({

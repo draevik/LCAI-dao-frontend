@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import {
-  useAccount,
+  useConnection,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
@@ -21,7 +21,7 @@ export type DelegationState = {
 };
 
 const useDelegation = () => {
-  const { address } = useAccount();
+  const { address } = useConnection();
   const chain = useCurrentChain();
   const { voteTokenContract } = useContracts();
   const [pendingTxHash, setPendingTxHash] = useState<`0x${string}` | undefined>(

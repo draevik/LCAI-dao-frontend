@@ -24,7 +24,7 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { formatEther, TransactionExecutionError } from "viem";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import useContracts from "@/hooks/useContracts";
 
 interface ProposalVoteDialogProps {
@@ -38,7 +38,7 @@ export function ProposalVoteDialog({
   proposal,
   onOpenChange,
 }: ProposalVoteDialogProps) {
-  const { address } = useAccount();
+  const { address } = useConnection();
   const { castVote } = useGovernance();
   const { voteTokenContract } = useContracts();
   const [voteReason, setVoteReason] = useState("");

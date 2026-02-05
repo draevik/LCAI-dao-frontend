@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import {
   Dialog,
   DialogContent,
@@ -30,7 +30,7 @@ export function DelegateModal({
   onOpenChange,
   onSuccess,
 }: DelegateModalProps) {
-  const { address } = useAccount();
+  const { address } = useConnection();
   const {
     delegate,
     delegateToSelf,

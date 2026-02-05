@@ -1,7 +1,7 @@
 import config from "@/config";
 import useCurrentChain from "./useCurrentChain";
 import useWeb3Clients from "./useWeb3Clients";
-import { useAccount, useReadContracts } from "wagmi";
+import { useConnection, useReadContracts } from "wagmi";
 import { useMemo } from "react";
 import { erc20Abi, formatUnits, getContract, parseUnits } from "viem";
 import { MAX_UINT256 } from "@/lib/utils";
@@ -20,7 +20,7 @@ function handleTxError(error: unknown, action: string) {
 
 const useBallots = () => {
   const chain = useCurrentChain();
-  const { address } = useAccount();
+  const { address } = useConnection();
   const { publicClient, walletClient } = useWeb3Clients();
 
   const voteTokenAddress = config.voteToken[chain.id]?.address;

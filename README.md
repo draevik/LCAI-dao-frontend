@@ -61,6 +61,7 @@ Visit [http://localhost:3000](http://localhost:3000) to see your DAO interface!
 ### Network Configuration
 
 The app is pre-configured for LCAI Testnet:
+
 - **Chain ID**: 504
 - **RPC**: https://light-testnet-rpc.lightchain.ai
 - **Explorer**: https://testnet.lightscan.app
@@ -116,7 +117,7 @@ const { governorContract, presaleVotingPowerContract } = useContracts();
 const { publicClient } = useWeb3Clients();
 
 // Wallet connection
-const { address, isConnected } = useAccount();
+const { address, isConnected } = useConnection();
 ```
 
 ## Project Structure
@@ -163,8 +164,11 @@ export const lcaiTestnet: Chain = {
   nativeCurrency: { name: "LCAI Testnet", symbol: "LCAI", decimals: 18 },
   rpcUrls: { default: { http: ["https://light-testnet-rpc.lightchain.ai"] } },
   blockExplorers: {
-    default: { name: "LCAI Testnet Explorer", url: "https://testnet.lightscan.app" }
-  }
+    default: {
+      name: "LCAI Testnet Explorer",
+      url: "https://testnet.lightscan.app",
+    },
+  },
 };
 
 const config = {
@@ -173,8 +177,8 @@ const config = {
     proposalThreshold: 0,
     quorumNeeded: 4,
     proposalDelay: 60 * 60,
-    votingPeriod: 60 * 60 * 24 * 2
-  }
+    votingPeriod: 60 * 60 * 24 * 2,
+  },
 };
 ```
 
@@ -194,18 +198,21 @@ The interface handles all OpenZeppelin Governor states:
 ## Key Features
 
 ### Proposal Management
+
 - **Create Proposals**: Rich form with title, description, and discussion links
 - **Contract Actions**: Add multiple contract calls with parameter inputs
 - **Simulation**: Test proposal execution before submission
 - **Status Tracking**: Real-time proposal state monitoring
 
 ### Voting Interface
+
 - **Vote Casting**: For/Against/Abstain with voting power display
 - **Results Visualization**: Progress bars and vote breakdowns
 - **Voter History**: Track individual votes and timestamps
 - **Timeline**: Proposal lifecycle visualization
 
 ### UI Components
+
 - **Modern Design**: Clean, responsive interface with dark/light themes
 - **Form Validation**: Zod schemas with React Hook Form
 - **Loading States**: Skeleton loaders and async state management

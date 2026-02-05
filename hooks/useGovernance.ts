@@ -1,6 +1,6 @@
 "use client";
 
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import {
   decodeEventLog,
   encodeFunctionData,
@@ -17,6 +17,8 @@ import config from "@/config";
 
 const API_ENDPOINT =
   process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:3000";
+
+const SIMULATE_URL = `${API_ENDPOINT}/api/simulate`;
 
 /**
  * Generate full function signature from ABI and method name.
@@ -37,12 +39,12 @@ function getFunctionSignature(
 
 export function useGovernance() {
   const chain = useCurrentChain();
-  const { address } = useAccount();
+  const { address } = useConnection();
   const { governorContract } = useContracts();
   const { publicClient, walletClient } = useWeb3Clients();
 
   /**
-   * Simulate actions via Tenderly (GraphQL mutation).
+   * Simulate actions via Tenderly (REST API).
    * Returns simulation results for display.
    */
   const simulateActions = async (
@@ -73,51 +75,24 @@ export function useGovernance() {
       };
     });
 
-    const res = await fetch(API_ENDPOINT, {
+    const res = await fetch(SIMULATE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        query: `
-          mutation SimulateTenderly($input: SimulationInput!) {
-            simulateTenderly(input: $input) {
-              results {
-                action_index
-                target
-                function_selector
-                status
-                tenderly_simulation_id
-                tenderly_sandbox_url
-                error_message
-                simulated_at
-              }
-            }
-          }
-        `,
-        variables: {
-          input: {
-            chainId: chain.id,
-            timelockAddress,
-            actions,
-            decodedExecutions,
-          },
-        },
+        chainId: chain.id,
+        timelockAddress,
+        actions,
+        decodedExecutions,
       }),
     });
 
     if (!res.ok) {
-      throw new Error("Failed to simulate actions");
+      const body = await res.json().catch(() => ({ error: "Simulation failed" }));
+      throw new Error(body.error || "Failed to simulate actions");
     }
 
-    const payload = (await res.json()) as {
-      data?: { simulateTenderly?: { results?: SimulationAction[] } };
-      errors?: Array<{ message?: string }>;
-    };
-
-    if (payload.errors?.length) {
-      throw new Error(payload.errors[0]?.message || "Simulation failed");
-    }
-
-    const results = payload.data?.simulateTenderly?.results;
+    const payload = (await res.json()) as { results?: SimulationAction[] };
+    const results = payload.results;
     if (!results) {
       throw new Error("No simulation results returned");
     }

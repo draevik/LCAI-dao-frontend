@@ -66,7 +66,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { useAppKit } from "@reown/appkit/react";
-import { useAccount, useBalance, useReadContract } from "wagmi";
+import { useConnection, useBalance, useReadContract } from "wagmi";
 import config from "@/config";
 import $dayjs from "@/lib/dayjs";
 import { useTheme } from "next-themes";
@@ -82,6 +82,7 @@ import { compactNumber } from "@/lib/utils";
 import useCurrentChain from "@/hooks/useCurrentChain";
 import governorAbi from "@/contracts/abi/governorAbi";
 import { formatEther } from "viem";
+import { useTokenBalance } from "@/hooks/useTokenBalance";
 
 const choices = [
   {
@@ -125,13 +126,13 @@ export default function CreateProposal() {
   const { createProposal, simulateActions } = useGovernance();
   const [actions, setActions] = useState<ContractAction[]>([]);
   const { open } = useAppKit();
-  const { isConnected } = useAccount();
+  const { isConnected } = useConnection();
   const chain = useCurrentChain();
-  const { address } = useAccount();
+  const { address } = useConnection();
 
   const voteToken = config.voteToken[chain.id];
 
-  const voteTokenBalance = useBalance({
+  const voteTokenBalance = useTokenBalance({
     address: address!,
     token: voteToken.address as `0x${string}` | undefined,
   });

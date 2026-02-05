@@ -56,7 +56,9 @@ const getProposalState = (proposal: ApiProposal, current: number) => {
   return ProposalState.Active;
 };
 
-function formatExecution(execution: string): (RawTransaction | DecodedExecution)[] {
+function formatExecution(
+  execution: string
+): (RawTransaction | DecodedExecution)[] {
   if (execution === "") return [];
 
   try {
@@ -67,7 +69,7 @@ function formatExecution(execution: string): (RawTransaction | DecodedExecution)
     // Handle both old RawTransaction format and new DecodedExecution format
     return result.map((item) => {
       // New DecodedExecution format has 'target' instead of 'to'
-      if ('target' in item) {
+      if ("target" in item) {
         return item as DecodedExecution;
       }
       // Old RawTransaction format has 'to'
@@ -173,6 +175,7 @@ export function createApi(uri: string) {
     ): Promise<{ [key: string]: Vote }> => {
       const { data } = await apollo.query({
         query: USER_VOTES_QUERY,
+        fetchPolicy: "network-only",
         variables: { indexer: "mainnet", voter, first: limit, skip },
       });
 
@@ -213,6 +216,7 @@ export function createApi(uri: string) {
 
       const { data } = await apollo.query({
         query: PROPOSALS_QUERY,
+        fetchPolicy: "network-only",
         variables: {
           first: limit,
           skip,
@@ -238,6 +242,7 @@ export function createApi(uri: string) {
       const [{ data }] = await Promise.all([
         apollo.query({
           query: PROPOSAL_QUERY,
+          fetchPolicy: "network-only",
           variables: { id: `${proposalId}` },
         }),
       ]);
@@ -250,6 +255,7 @@ export function createApi(uri: string) {
       const [{ data }] = await Promise.all([
         apollo.query({
           query: USER_QUERY,
+          fetchPolicy: "network-only",
           variables: { indexer: "mainnet", id },
         }),
       ]);
@@ -259,6 +265,7 @@ export function createApi(uri: string) {
     async loadLastIndexedBlock(): Promise<number | null> {
       const { data } = await apollo.query({
         query: LAST_INDEXED_BLOCK_QUERY,
+        fetchPolicy: "network-only",
         variables: { indexer: "mainnet" },
       });
       return data?._metadata?.value ? Number(data._metadata.value) : null;
@@ -315,6 +322,7 @@ export function createApi(uri: string) {
       const delegateId = `${spaceId}/${delegateAddress}`;
       const { data } = await apollo.query({
         query: DELEGATE_QUERY,
+        fetchPolicy: "network-only",
         variables: { indexer: "mainnet", id: delegateId },
       });
 
