@@ -26,7 +26,7 @@ export function ProposalListItem({ proposal, isLast }: ProposalListItemProps) {
         isLast ? "" : "border-b border-border-default"
       }`}
     >
-      <h3 className="text-content-primary flex items-baseline font-semibold leading-[1.2] tracking-[-0.24px] md:text-2xl sm:text-xl text-lg capitalize">
+      <h3 className="text-content-primary flex items-baseline font-semibold leading-[1.2] tracking-[-0.24px] sm:text-xl text-lg capitalize">
         <ProposalStatusBadge status={proposal.state} />
         {proposal.metadata?.title}
       </h3>
