@@ -11,10 +11,13 @@ export function ProposalOverviewTab({ content }: ProposalOverviewTabProps) {
     const lines = content.split("\n");
     const firstLine = lines[0]?.trim() ?? "";
     // Strip only the first title (H1 line starting with "# ")
+    let desc = content;
     if (firstLine.startsWith("# ")) {
-      return lines.slice(1).join("\n").trim() || "";
+      desc = lines.slice(1).join("\n").trim() || "";
     }
-    return content;
+    // Remove <u></u> tags from the description
+    desc = desc.replace(/<\/?u>/g, "");
+    return desc;
   }, [content]);
 
   // const discussion = useMemo(() => {
