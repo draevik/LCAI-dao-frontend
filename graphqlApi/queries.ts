@@ -58,7 +58,6 @@ gql(`
     vote_count
     execution_ready
     executed
-    execution_settled
     cancelled
   }
 `);

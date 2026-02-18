@@ -29,15 +29,11 @@ const choiceBadgeClassName = (choice: number): string | undefined => {
   return undefined;
 };
 
-interface DelegateVotingHistoryProps {
-  address: string;
+interface ProfileVotingHistoryProps {
   votes: Record<string, Vote>;
 }
 
-export function DelegateVotingHistory({
-  address,
-  votes,
-}: DelegateVotingHistoryProps) {
+export function ProfileVotingHistory({ votes }: ProfileVotingHistoryProps) {
   const chain = useCurrentChain();
   const spaceId = config.governor[chain.id];
   const voteList = Object.values(votes).sort((a, b) => b.created - a.created);

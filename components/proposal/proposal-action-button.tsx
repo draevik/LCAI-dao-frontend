@@ -92,7 +92,7 @@ export function ProposalActionButton({
     if (proposal.state === ProposalState.Queued)
       return canExecute
         ? "Execute Action"
-        : `Execute Action (${$dayjs.unix(proposal.execution_time).fromNow()})`;
+        : `Execute Action (${$dayjs.unix(proposal.execution_time!).fromNow()})`;
     if (proposal.state === ProposalState.Executed) return "Executed";
     return "";
   }, [proposal.state, hasVoted.data, canExecute, proposal.execution_time]);

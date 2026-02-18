@@ -11,7 +11,6 @@ export default function useTreasury() {
 
   const treasuryAddress = config.treasury?.[chain.id];
   const lcaiToken = config.underlyingToken[chain.id];
-  const lcaibToken = config.voteToken[chain.id];
 
   const { data, isLoading } = useQuery({
     queryKey: ["treasury-balances", chain.id],
@@ -49,16 +48,16 @@ export default function useTreasury() {
           })
         );
       }
-      if (lcaibToken) {
-        tokenBalanceCalls.push(
-          publicClient.readContract({
-            address,
-            abi: treasuryAbi,
-            functionName: "getBalance",
-            args: [getAddress(lcaibToken.address)],
-          })
-        );
-      }
+      // if (lcaibToken) {
+      //   tokenBalanceCalls.push(
+      //     publicClient.readContract({
+      //       address,
+      //       abi: treasuryAbi,
+      //       functionName: "getBalance",
+      //       args: [getAddress(lcaibToken.address)],
+      //     })
+      //   );
+      // }
 
       const [ethBalance, admin, paused] = await Promise.all(calls);
       const tokenBalances = await Promise.all(tokenBalanceCalls);
@@ -83,17 +82,17 @@ export default function useTreasury() {
         });
       }
 
-      if (lcaibToken && tokenBalances[lcaiToken ? 1 : 0] !== undefined) {
-        const idx = lcaiToken ? 1 : 0;
-        balances.push({
-          symbol: lcaibToken.symbol,
-          decimals: lcaibToken.decimals,
-          balance: tokenBalances[idx] as bigint,
-          balanceParsed: parseFloat(
-            formatUnits(tokenBalances[idx] as bigint, lcaibToken.decimals)
-          ),
-        });
-      }
+      // if (lcaibToken && tokenBalances[lcaiToken ? 1 : 0] !== undefined) {
+      //   const idx = lcaiToken ? 1 : 0;
+      //   balances.push({
+      //     symbol: lcaibToken.symbol,
+      //     decimals: lcaibToken.decimals,
+      //     balance: tokenBalances[idx] as bigint,
+      //     balanceParsed: parseFloat(
+      //       formatUnits(tokenBalances[idx] as bigint, lcaibToken.decimals)
+      //     ),
+      //   });
+      // }
 
       return {
         address: treasuryAddress,

@@ -5,21 +5,20 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useConnection } from "wagmi";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LoadingBlock from "@/components/loading-block";
 import useGraphqlApi from "@/hooks/useGraphqlApi";
 import useCurrentChain from "@/hooks/useCurrentChain";
 import config from "@/config";
-import { useDelegateProfile } from "@/hooks/useDelegateProfile";
-import { DelegateProfileHeader } from "@/components/delegate/delegate-profile-header";
-import { DelegateProfileStats } from "@/components/delegate/delegate-profile-stats";
-import { DelegateProfileStatement } from "@/components/delegate/delegate-profile-statement";
-import { DelegateVotingHistory } from "@/components/delegate/delegate-voting-history";
-import { DelegateProfileEdit } from "@/components/delegate/delegate-profile-edit";
+import { useProfile } from "@/hooks/useProfile";
+import { ProfileHeader } from "@/components/profile/profile-header";
+import { ProfileStats } from "@/components/profile/profile-stats";
+import { ProfileStatement } from "@/components/profile/profile-statement";
+import { ProfileVotingHistory } from "@/components/profile/profile-voting-history";
+import { ProfileEdit } from "@/components/profile/profile-edit";
 import { ArrowLeft } from "lucide-react";
 
-export default function DelegateProfilePage() {
+export default function ProfilePage() {
   const api = useGraphqlApi();
   const params = useParams();
   const delegateAddress = (params.address as string).toLowerCase();
@@ -53,7 +52,7 @@ export default function DelegateProfilePage() {
 
   // Load user profile (REST); merge with delegate.user when available
   const { data: profileUser, isLoading: isLoadingProfile } =
-    useDelegateProfile(delegateAddress);
+    useProfile(delegateAddress);
 
   const mergedUser = profileUser ?? delegate?.user ?? user ?? null;
 
@@ -76,7 +75,7 @@ export default function DelegateProfilePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main content */}
           <div className="lg:col-span-2 space-y-8">
-            <DelegateProfileHeader
+            <ProfileHeader
               address={delegateAddress}
               user={mergedUser}
               delegate={delegate || null}
@@ -101,14 +100,11 @@ export default function DelegateProfilePage() {
               </TabsList>
 
               <TabsContent value="statement" className="mt-6">
-                <DelegateProfileStatement user={mergedUser} />
+                <ProfileStatement user={mergedUser} />
               </TabsContent>
 
               <TabsContent value="votes" className="mt-6">
-                <DelegateVotingHistory
-                  address={delegateAddress}
-                  votes={userVotes}
-                />
+                <ProfileVotingHistory votes={userVotes} />
               </TabsContent>
             </Tabs>
           </div>
@@ -116,9 +112,9 @@ export default function DelegateProfilePage() {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <div className="sticky top-6">
-              <DelegateProfileStats
+              <ProfileStats
                 delegate={delegate || null}
-                user={delegate?.user ?? user ?? null}
+                user={mergedUser}
                 votes={userVotes}
               />
             </div>
@@ -126,7 +122,7 @@ export default function DelegateProfilePage() {
         </div>
 
         {isOwnProfile && (
-          <DelegateProfileEdit
+          <ProfileEdit
             open={editOpen}
             onOpenChange={setEditOpen}
             address={delegateAddress}

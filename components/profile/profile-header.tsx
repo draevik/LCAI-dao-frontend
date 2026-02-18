@@ -8,7 +8,7 @@ import { truncateAddress, compactNumber } from "@/lib/utils";
 import type { Delegate, User } from "@/types";
 import { Pencil, Globe, Twitter } from "lucide-react";
 
-interface DelegateProfileHeaderProps {
+interface ProfileHeaderProps {
   address: string;
   user: User | null;
   delegate: Delegate | null;
@@ -16,13 +16,13 @@ interface DelegateProfileHeaderProps {
   onEditClick: () => void;
 }
 
-export function DelegateProfileHeader({
+export function ProfileHeader({
   address,
   user,
   delegate,
   isOwnProfile,
   onEditClick,
-}: DelegateProfileHeaderProps) {
+}: ProfileHeaderProps) {
   const avatarUrl =
     user?.avatarUrl || `https://effigy.im/a/${address}.png`;
   const displayName = user?.displayName || truncateAddress(address);
@@ -70,7 +70,7 @@ export function DelegateProfileHeader({
           <div className="flex items-center gap-3 mt-3">
             {user?.twitter && (
               <a
-                href={`https://x.com/${profile.twitter}`}
+                href={`https://x.com/${user.twitter}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-content-secondary hover:text-content-primary"
@@ -80,7 +80,7 @@ export function DelegateProfileHeader({
             )}
             {user?.github && (
               <a
-                href={`https://github.com/${profile.github}`}
+                href={`https://github.com/${user.github}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-content-secondary hover:text-content-primary"

@@ -51,7 +51,7 @@ export function DelegateListItem({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <Link
-            href={`/delegate/${delegate.address}`}
+            href={`/profile/${delegate.address}`}
             className="font-medium text-content-primary truncate hover:underline"
             onClick={(e) => e.stopPropagation()}
           >

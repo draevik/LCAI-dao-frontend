@@ -32,14 +32,12 @@ function mapProfileResponseToUser(res: {
   };
 }
 
-export function useDelegateProfile(address?: string) {
+export function useProfile(address?: string) {
   return useQuery<User | null>({
-    queryKey: ["delegate-profile", address],
+    queryKey: ["profile", address],
     queryFn: async () => {
       if (!address) return null;
-      const res = await fetch(
-        `${API_ENDPOINT}/api/delegate-profile/${address}`
-      );
+      const res = await fetch(`${API_ENDPOINT}/api/profile/${address}`);
       if (res.status === 404) return null;
       if (!res.ok) throw new Error("Failed to load profile");
       const data = await res.json();
@@ -49,7 +47,7 @@ export function useDelegateProfile(address?: string) {
   });
 }
 
-export function useUpdateDelegateProfile() {
+export function useUpdateProfile() {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -63,17 +61,14 @@ export function useUpdateDelegateProfile() {
       const token = sessionStorage.getItem("siwe-token");
       if (!token) throw new Error("Not authenticated. Please sign in first.");
 
-      const res = await fetch(
-        `${API_ENDPOINT}/api/delegate-profile/${address}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const res = await fetch(`${API_ENDPOINT}/api/profile/${address}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
 
       if (!res.ok) {
         const error = await res.json().catch(() => ({ error: "Update failed" }));
@@ -85,7 +80,7 @@ export function useUpdateDelegateProfile() {
     },
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["delegate-profile", variables.address],
+        queryKey: ["profile", variables.address],
       });
     },
   });

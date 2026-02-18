@@ -60,23 +60,28 @@ export function ProposalListItem({ proposal, isLast }: ProposalListItemProps) {
             {compactNumber(votingPower)})
           </span>
         </div>
-        <span className="hidden sm:block">
-          <FontAwesomeIcon icon={faSparkle} className="size-3.5" />
-        </span>
-        <div className="flex items-center gap-1">
-          <Clock className="h-4 w-4 sm:text-base text-sm" />
-          {proposal.state === ProposalState.Pending ? (
-            <span className="whitespace-nowrap sm:text-base text-sm">
-              Start {$dayjs.unix(Number(proposal.start_time)).fromNow()}
+        {(proposal.state === ProposalState.Pending ||
+          proposal.state === ProposalState.Active) && (
+          <>
+            <span className="hidden sm:block">
+              <FontAwesomeIcon icon={faSparkle} className="size-3.5" />
             </span>
-          ) : (
-            proposal.state === ProposalState.Active && (
-              <span className="whitespace-nowrap sm:text-base text-sm">
-                {$dayjs.unix(Number(proposal.end_time)).fromNow()}
-              </span>
-            )
-          )}
-        </div>
+            <div className="flex items-center gap-1">
+              <Clock className="h-4 w-4 sm:text-base text-sm" />
+              {proposal.state === ProposalState.Pending ? (
+                <span className="whitespace-nowrap sm:text-base text-sm">
+                  Start {$dayjs.unix(Number(proposal.start_time)).fromNow()}
+                </span>
+              ) : (
+                proposal.state === ProposalState.Active && (
+                  <span className="whitespace-nowrap sm:text-base text-sm">
+                    {$dayjs.unix(Number(proposal.end_time)).fromNow()}
+                  </span>
+                )
+              )}
+            </div>
+          </>
+        )}
       </div>
     </Link>
   );

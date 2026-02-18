@@ -4,17 +4,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { compactNumber } from "@/lib/utils";
 import type { Delegate, User, Vote } from "@/types";
 
-interface DelegateProfileStatsProps {
+interface ProfileStatsProps {
   delegate: Delegate | null;
   user: User | null;
   votes: Record<string, Vote>;
 }
 
-export function DelegateProfileStats({
+export function ProfileStats({
   delegate,
   user,
   votes,
-}: DelegateProfileStatsProps) {
+}: ProfileStatsProps) {
   const voteCount = Object.keys(votes).length;
 
   return (
@@ -62,7 +62,7 @@ export function DelegateProfileStats({
           <div className="pt-2 border-t border-border-default">
             <p className="text-xs text-content-secondary">
               Member since{" "}
-              {new Date(user.created * 1000).toLocaleDateString("en-US", {
+              {new Date(user!.created * 1000).toLocaleDateString("en-US", {
                 month: "short",
                 day: "numeric",
                 year: "numeric",

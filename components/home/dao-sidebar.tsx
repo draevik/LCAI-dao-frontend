@@ -149,26 +149,37 @@ export function DaoSidebar({
               </p>
             </div>
 
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={onBallotsLockerClick}
-              >
-                Wrap/Unwrap
-              </Button>
-              <Button
-                variant="primary"
-                className="flex-1"
-                onClick={onDelegateClick}
-                disabled={!isConnected}
-              >
-                {!isConnected
-                  ? "Connect"
-                  : hasDelegated
-                  ? "Delegate"
-                  : "Delegate"}
-              </Button>
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onClick={onBallotsLockerClick}
+                >
+                  Wrap/Unwrap
+                </Button>
+                <Button
+                  variant="primary"
+                  className="flex-1"
+                  onClick={onDelegateClick}
+                  disabled={!isConnected}
+                >
+                  {!isConnected
+                    ? "Connect"
+                    : hasDelegated
+                    ? "Delegate"
+                    : "Delegate"}
+                </Button>
+              </div>
+              {isConnected && address && (
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  href={`/profile/${address}`}
+                >
+                  View profile
+                </Button>
+              )}
             </div>
           </>
         )}

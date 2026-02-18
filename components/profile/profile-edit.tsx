@@ -11,24 +11,24 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useUpdateDelegateProfile } from "@/hooks/useDelegateProfile";
+import { useUpdateProfile } from "@/hooks/useProfile";
 import type { User } from "@/types";
 import { toast } from "sonner";
 
-interface DelegateProfileEditProps {
+interface ProfileEditProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   address: string;
   user: User | null;
 }
 
-export function DelegateProfileEdit({
+export function ProfileEdit({
   open,
   onOpenChange,
   address,
   user,
-}: DelegateProfileEditProps) {
-  const updateProfile = useUpdateDelegateProfile();
+}: ProfileEditProps) {
+  const updateProfile = useUpdateProfile();
 
   const [form, setForm] = useState({
     displayName: user?.displayName || "",
@@ -66,8 +66,8 @@ export function DelegateProfileEdit({
       });
       toast.success("Profile updated successfully");
       onOpenChange(false);
-    } catch (err: any) {
-      toast.error(err.message || "Failed to update profile");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to update profile");
     }
   };
 
@@ -75,7 +75,7 @@ export function DelegateProfileEdit({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[525px] max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edit Delegate Profile</DialogTitle>
+          <DialogTitle>Edit Profile</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4 py-4">

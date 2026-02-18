@@ -3,13 +3,11 @@
 import ReactMarkdown from "react-markdown";
 import type { User } from "@/types";
 
-interface DelegateProfileStatementProps {
+interface ProfileStatementProps {
   user: User | null;
 }
 
-export function DelegateProfileStatement({
-  user,
-}: DelegateProfileStatementProps) {
+export function ProfileStatement({ user }: ProfileStatementProps) {
   const statement = user?.statement ?? null;
   if (!statement) {
     return (

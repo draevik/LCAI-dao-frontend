@@ -48,7 +48,7 @@ export function VoteListItem({ vote, choiceLabel }: VoteListItemProps) {
         />
         <div className="min-w-0 flex-1 flex items-center gap-2 sm:gap-3 flex-wrap">
           <Link
-            href={`/delegate/${vote.voter.id}`}
+            href={`/profile/${vote.voter.id}`}
             className="truncate font-medium text-sm text-content-primary hover:underline"
           >
             {vote.voter.id.slice(0, 6)}...{vote.voter.id.slice(-4)}

@@ -45,10 +45,8 @@ const getProposalState = (proposal: ApiProposal, current: number) => {
   const scoresAbstain = BigInt(proposal.scores_3);
   const currentQuorum = scoresFor + scoresAbstain;
 
-  if (proposal.executed)
-    return proposal.execution_settled
-      ? ProposalState.Executed
-      : ProposalState.Queued;
+  if (proposal.executed) return ProposalState.Executed;
+  if (proposal.execution_ready) return ProposalState.Queued;
 
   if (proposal.end_time <= current) {
     if (currentQuorum < quorum) return ProposalState.Defeated;
@@ -155,7 +153,6 @@ function formatProposal(proposal: ApiProposal, current: number): Proposal {
     discussion: proposal.metadata?.discussion ?? "",
     executions: formatExecution(proposal.metadata?.execution),
     simulations: formatSimulation(proposal.metadata?.simulation),
-    execution_settled: proposal.execution_settled,
     state,
     quorum_parsed: +formatUnits(proposal.quorum, proposal.vp_decimals),
   };

@@ -44,7 +44,6 @@ export function RisingDelegates({
               <DelegateListItem
                 key={delegate.id}
                 delegate={delegate}
-                displayName={delegate.user?.displayName}
                 rank={idx + 1}
               />
             ))}
