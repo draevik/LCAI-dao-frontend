@@ -73,15 +73,15 @@ const NavList = () => {
                   <li>
                     <a
                       className="lcai-nav-card"
-                      href="https://lightchain.ai/blogs"
+                      href="https://docs.lightchain.ai/lightchain-docs/audits"
                     >
                       <span className="icon bg-flashlight-static">
-                        <i className="fa-regular fa-bullhorn"></i>
+                        <i className="fa-regular fa-shield-alt"></i>
                       </span>
                       <span className="content">
-                        <span className="title">Announcements</span>
+                        <span className="title">Audits</span>
                         <span className="description">
-                          Latest updates and news
+                          Security verification reports
                         </span>
                       </span>
                       <span className="right-arrow">
@@ -93,15 +93,15 @@ const NavList = () => {
                   <li>
                     <a
                       className="lcai-nav-card"
-                      href="https://docs.lightchain.ai/lightchain-docs/audits"
+                      href="https://lightchain.ai/brand"
                     >
                       <span className="icon bg-flashlight-static">
-                        <i className="fa-regular fa-shield-alt"></i>
+                        <i className="fa-regular fa-id-badge"></i>
                       </span>
                       <span className="content">
-                        <span className="title">Audits</span>
+                        <span className="title">LCAI Brand Guideline</span>
                         <span className="description">
-                          Security verification reports
+                          Visual assets and brand identity
                         </span>
                       </span>
                       <span className="right-arrow">
@@ -480,7 +480,7 @@ const NavList = () => {
                     </li>
 
                     <li>
-                      <Link className="lcai-nav-card" href="/">
+                      <Link className="lcai-nav-card" href="https://dex-testnet.lightchain.ai/">
                         <span className="icon bg-flashlight-static">
                           <i className="fa-regular fa-sync-alt"></i>
                         </span>
@@ -527,27 +527,6 @@ const NavList = () => {
                     <li>
                       <Link
                         className="lcai-nav-card"
-                        href="https://lightchain.ai/how-to-buy"
-                      >
-                        <span className="icon bg-flashlight-static">
-                          <i className="fa-regular fa-shopping-cart"></i>
-                        </span>
-                        <span className="content">
-                          <span className="title">How to Buy</span>
-                          <span className="description">
-                            Start using Lightchain easily
-                          </span>
-                        </span>
-                        <span className="right-arrow">
-                          <i className="fa-solid fa-arrow-right hover-icon"></i>
-                          <i className="fa-solid fa-chevron-right default-icon"></i>
-                        </span>
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link
-                        className="lcai-nav-card"
                         href="https://lightchain.ai/join"
                       >
                         <span className="icon bg-flashlight-static">
@@ -588,12 +567,12 @@ const NavList = () => {
                     </li>
 
                     <li>
-                      <a className="lcai-nav-card" href="#">
+                      <a className="lcai-nav-card" href="https://deploy.lightchain.ai/" target="_blank">
                         <span className="icon bg-flashlight-static">
                           <i className="fa-regular fa-code"></i>
                         </span>
                         <span className="content">
-                          <span className="title">IDE (soon)</span>
+                          <span className="title">IDE</span>
                           <span className="description">
                             Code directly in browser
                           </span>
@@ -702,7 +681,7 @@ const NavList = () => {
                   <li>
                     <a
                       className="lcai-nav-card"
-                      href="http://lightchain.community/"
+                      href="https://forum.lightchain.ai/"
                     >
                       <span className="icon bg-flashlight-static">
                         <i className="fa-regular fa-comments"></i>
@@ -723,7 +702,7 @@ const NavList = () => {
                   <li>
                     <a
                       className="lcai-nav-card"
-                      href="https://t.me/LightchainProtocol"
+                      href="https://Discord.gg/lightchain"
                       target="_blank"
                     >
                       <span className="icon bg-flashlight-static">
@@ -732,7 +711,7 @@ const NavList = () => {
                       <span className="content">
                         <span className="title">Support</span>
                         <span className="description">
-                          Get help on Telegram
+                          Get help on Discord
                         </span>
                       </span>
                       <span className="right-arrow">
@@ -785,7 +764,7 @@ const NavList = () => {
                   <li>
                     <Link
                       className="lcai-nav-card"
-                      href="https://lightchain.ai/dashboard/voting"
+                      href="/"
                     >
                       <span className="icon bg-flashlight-static">
                         <i className="fa-regular fa-vote-yea"></i>
@@ -852,16 +831,16 @@ const NavList = () => {
                   <li>
                     <a
                       className="lcai-nav-card"
-                      href="https://t.me/LightchainProtocol"
+                      href="https://Discord.gg/lightchain"
                       target="_blank"
                     >
                       <span className="icon bg-flashlight-static">
-                        <i className="fa-brands fa-telegram-plane"></i>
+                        <i className="fa-brands fa-discord"></i>
                       </span>
                       <span className="content">
-                        <span className="title">Telegram</span>
+                        <span className="title">Discord</span>
                         <span className="description">
-                          Join our Telegram community
+                          Join our Discord community
                         </span>
                       </span>
                       <span className="right-arrow">
@@ -945,7 +924,7 @@ const NavList = () => {
                   <li>
                     <a
                       className="lcai-nav-card"
-                      href="http://lightchain.community/"
+                      href="https://forum.lightchain.ai/"
                     >
                       <span className="icon bg-flashlight-static">
                         <i className="fa-regular fa-users"></i>
@@ -962,90 +941,6 @@ const NavList = () => {
                       </span>
                     </a>
                   </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </li>
-
-        {/* Contact */}
-        <li
-          className={`with-megamenu has-menu-child-item position-relative non-hover`}
-        >
-          <a
-            href="#"
-            onClick={() => setActiveMenu((pre) => (pre == 5 ? -1 : 5))}
-            className={`${activeMenu == 5 ? "open" : ""}`}
-          >
-            Contact <i className="fal fa-chevron-down menu-dd-icon "></i>
-          </a>
-          <div
-            className={`lightchain-megamenu right-align with-mega-item-2 small ${
-              activeMenu == 5 ? "d-block" : ""
-            }`}
-          >
-            <div className="wrapper p-0">
-              <div className="single-mega-item">
-                <ul className="mega-menu-item mega-menu-card-item">
-                  <li>
-                    <Link
-                      className="lcai-nav-card"
-                      href="https://lightchain.ai/contact"
-                    >
-                      <span className="icon bg-flashlight-static">
-                        <i className="fa-regular fa-envelope"></i>
-                      </span>
-                      <span className="content">
-                        <span className="title">Contact Form</span>
-                        <span className="description">
-                          Get in touch with us
-                        </span>
-                      </span>
-                      <span className="right-arrow">
-                        <i className="fa-solid fa-arrow-right hover-icon"></i>
-                        <i className="fa-solid fa-chevron-right default-icon"></i>
-                      </span>
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
-                      className="lcai-nav-card"
-                      href="https://lightchain.ai/dashboard/voting"
-                    >
-                      <span className="icon bg-flashlight-static">
-                        <i className="fa-regular fa-users-cog"></i>
-                      </span>
-                      <span className="content">
-                        <span className="title">Team (DAO Only)</span>
-                        <span className="description">
-                          Meet our decentralized team
-                        </span>
-                      </span>
-                      <span className="right-arrow">
-                        <i className="fa-solid fa-arrow-right hover-icon"></i>
-                        <i className="fa-solid fa-chevron-right default-icon"></i>
-                      </span>
-                    </Link>
-                  </li>
-
-                  {/*
-                      <li>
-                        <Link className="lcai-nav-card" href="https://lightchain.ai/partnerships">
-                          <span className="icon bg-flashlight-static">
-                            <i className="fa-regular fa-handshake"></i>
-                          </span>
-                          <span className="content">
-                            <span className="title">Partnerships</span>
-                            <span className="description">Work with Lightchain</span>
-                          </span>
-                          <span className="right-arrow">
-                            <i className="fa-solid fa-arrow-right hover-icon"></i>
-                            <i className="fa-solid fa-chevron-right default-icon"></i>
-                          </span>
-                        </Link>
-                      </li>
-                      */}
                 </ul>
               </div>
             </div>

@@ -18,16 +18,17 @@
               "targetBlank": true
             },
             {
-              "link": "https://lightchain.ai/blogs",
-              "text": "Announcements"
-            },
-            {
               "link": "https://docs.lightchain.ai/lightchain-docs/audits",
               "text": "Audits"
             },
             {
               "link": "https://testnet.lightscan.app/api-docs",
               "text": "API References"
+            },
+            {
+              "link": "https://deploy.lightchain.ai/",
+              "text": "IDE",
+              "targetBlank": true
             },
             {
               "link": "https://lightchain.ai/#faq-setion",
@@ -41,10 +42,6 @@
           "title": "Presale",
           "top": false,
           "innerItem": [
-            {
-              "text": "How to Buy",
-              "link": "https://lightchain.ai/how-to-buy"
-            },
             {
               "text": "Support",
               "link": "https://Discord.gg/lightchain"
@@ -144,22 +141,12 @@
           "innerItem": [
             {
               "text": "Forum",
-              "link": "http://lightchain.community/",
-              "targetBlank": true
-            },
-            {
-              "text": "Developer Support",
-              "link": "https://lightchain.ai/contact",
+              "link": "https://forum.lightchain.ai/",
               "targetBlank": true
             },
             {
               "text": "Governance Voting",
-              "link": "https://lightchain.ai/dashboard/voting",
-              "targetBlank": true
-            },
-            {
-              "text": "Bug Reports",
-              "link": "https://lightchain.ai/contact",
+              "link": "/",
               "targetBlank": true
             }
           ]
