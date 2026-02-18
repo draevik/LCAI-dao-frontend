@@ -3,9 +3,10 @@
 import { wagmiAdapter, projectId } from "@/config/wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createAppKit } from "@reown/appkit/react";
-import React, { type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
 import config from "@/config";
+import { siweConfig } from "@/lib/siwe";
 
 // Set up queryClient
 const queryClient = new QueryClient({
@@ -24,6 +25,8 @@ const metadata = {
   icons: ["https://avatars.githubusercontent.com/u/179229932"],
 };
 
+// SIWE configuration for delegate profile authentication
+
 // Create the modal
 createAppKit({
   adapters: [wagmiAdapter],
@@ -31,6 +34,7 @@ createAppKit({
   networks: config.chains,
   defaultNetwork: config.chains[0],
   metadata: metadata,
+  siweConfig,
   features: {
     analytics: true, // Optional - defaults to your Cloud configuration
   },

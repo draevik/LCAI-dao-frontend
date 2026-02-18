@@ -79,6 +79,10 @@ const config = {
       address: "0x75F3D01c4D960FE986A598B7954A3b786B29cE49",
     },
   } as Record<number, Token>,
+
+  treasury: {
+    [mainnet.id]: "0x07A716a551E5f4CA7D6C71Da9dF1cb1429Dba826",
+  } as Record<number, `0x${string}`>,
 };
 
 export default config;

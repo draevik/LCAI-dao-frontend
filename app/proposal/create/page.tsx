@@ -51,11 +51,13 @@ import {
   CircleXIcon,
   CodeIcon,
   CoinsIcon,
+  EyeIcon,
   Loader2Icon,
   PencilIcon,
   ShieldCheckIcon,
   Trash2Icon,
 } from "lucide-react";
+import Markdown from "react-markdown";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
@@ -78,6 +80,7 @@ import {
   faPen,
 } from "@fortawesome/pro-regular-svg-icons";
 import { Button as ButtonUi } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { compactNumber } from "@/lib/utils";
 import useCurrentChain from "@/hooks/useCurrentChain";
 import governorAbi from "@/contracts/abi/governorAbi";
@@ -153,6 +156,9 @@ export default function CreateProposal() {
     },
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [descriptionView, setDescriptionView] = useState<"edit" | "preview">(
+    "edit"
+  );
   const [editingAction, setEditingAction] = useState<ContractAction | null>(
     null
   );
@@ -327,56 +333,94 @@ export default function CreateProposal() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Description (Markdown){" "}
-                      <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <div className="border rounded-md overflow-hidden">
-                        <MDXEditor
-                          className="mdx_editor_root"
-                          markdown={field.value}
-                          onChange={field.onChange}
-                          placeholder="Propose something..."
-                          plugins={[
-                            headingsPlugin(),
-                            listsPlugin(),
-                            quotePlugin(),
-                            thematicBreakPlugin(),
-                            linkPlugin(),
-                            linkDialogPlugin(),
-                            imagePlugin(),
-                            tablePlugin(),
-                            codeBlockPlugin({
-                              defaultCodeBlockLanguage: "js",
-                            }),
-                            codeMirrorPlugin({
-                              codeBlockLanguages: {
-                                js: "JavaScript",
-                                ts: "TypeScript",
-                                sol: "Solidity",
-                                json: "JSON",
-                              },
-                            }),
-                            markdownShortcutPlugin(),
-                            toolbarPlugin({
-                              toolbarContents: () => (
-                                <>
-                                  <UndoRedo />
-                                  <BoldItalicUnderlineToggles />
-                                  <ListsToggle />
-                                  <CreateLink />
-                                  <InsertImage />
-                                  <InsertTable />
-                                  <InsertThematicBreak />
-                                  <CodeToggle />
-                                </>
-                              ),
-                            }),
-                          ]}
-                          contentEditableClassName="min-h-[200px] prose prose-sm dark:prose-invert max-w-none px-4 py-3"
-                        />
+                    <div className="flex items-center justify-between gap-2">
+                      <FormLabel className="text-sm font-medium">
+                        Description (Markdown){" "}
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <div className="flex rounded-md border border-border-default p-0.5 bg-muted/30">
+                        <button
+                          type="button"
+                          onClick={() => setDescriptionView("edit")}
+                          className={`inline-flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium transition-colors ${
+                            descriptionView === "edit"
+                              ? "bg-background text-content-primary shadow-sm"
+                              : "text-content-secondary hover:text-content-primary"
+                          }`}
+                        >
+                          <PencilIcon className="size-3.5" />
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setDescriptionView("preview")}
+                          className={`inline-flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium transition-colors ${
+                            descriptionView === "preview"
+                              ? "bg-background text-content-primary shadow-sm"
+                              : "text-content-secondary hover:text-content-primary"
+                          }`}
+                        >
+                          <EyeIcon className="size-3.5" />
+                          Preview
+                        </button>
                       </div>
+                    </div>
+                    <FormControl>
+                      {descriptionView === "edit" ? (
+                        <div className="border rounded-md overflow-hidden">
+                          <MDXEditor
+                            className="mdx_editor_root"
+                            markdown={field.value}
+                            onChange={field.onChange}
+                            placeholder="Propose something..."
+                            plugins={[
+                              headingsPlugin(),
+                              listsPlugin(),
+                              quotePlugin(),
+                              thematicBreakPlugin(),
+                              linkPlugin(),
+                              linkDialogPlugin(),
+                              imagePlugin(),
+                              tablePlugin(),
+                              codeBlockPlugin({
+                                defaultCodeBlockLanguage: "js",
+                              }),
+                              codeMirrorPlugin({
+                                codeBlockLanguages: {
+                                  js: "JavaScript",
+                                  ts: "TypeScript",
+                                  sol: "Solidity",
+                                  json: "JSON",
+                                },
+                              }),
+                              markdownShortcutPlugin(),
+                              toolbarPlugin({
+                                toolbarContents: () => (
+                                  <>
+                                    <UndoRedo />
+                                    <BoldItalicUnderlineToggles />
+                                    <ListsToggle />
+                                    <CreateLink />
+                                    <InsertImage />
+                                    <InsertTable />
+                                    <InsertThematicBreak />
+                                    <CodeToggle />
+                                  </>
+                                ),
+                              }),
+                            ]}
+                            contentEditableClassName="min-h-[200px] prose prose-sm dark:prose-invert max-w-none px-4 py-3"
+                          />
+                        </div>
+                      ) : (
+                        <div className="min-h-[200px] rounded-md border border-border-default bg-background px-4 py-3">
+                          <div className="prose prose-sm max-w-none dark:prose-invert">
+                            <Markdown>
+                              {field.value || "*No content yet.*"}
+                            </Markdown>
+                          </div>
+                        </div>
+                      )}
                     </FormControl>
                     <FormMessage />
                   </FormItem>

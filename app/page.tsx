@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useConnection } from "wagmi";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,7 +15,8 @@ import BallotsLockerModal from "@/components/ballots-locker";
 import useGraphqlApi from "@/hooks/useGraphqlApi";
 import config from "@/config";
 import useCurrentChain from "@/hooks/useCurrentChain";
-import { FileText, Users, Home } from "lucide-react";
+import { FileText, Users, Home, Wallet } from "lucide-react";
+import { TreasuryDashboard } from "@/components/treasury/treasury-dashboard";
 
 export default function HomePage() {
   const api = useGraphqlApi();
@@ -36,11 +37,7 @@ export default function HomePage() {
   } = useQuery({
     queryKey: ["proposals"],
     queryFn: () =>
-      api.loadProposals(
-        [],
-        { limit: 20, skip: 0 },
-        Math.floor(Date.now() / 1000)
-      ),
+      api.loadProposals({ limit: 20, skip: 0 }, Math.floor(Date.now() / 1000)),
   });
 
   // Fetch delegates
@@ -91,6 +88,10 @@ export default function HomePage() {
           <TabsTrigger value="participants" className="gap-2">
             <Users className="h-4 w-4" />
             Participants
+          </TabsTrigger>
+          <TabsTrigger value="treasury" className="gap-2">
+            <Wallet className="h-4 w-4" />
+            Treasury
           </TabsTrigger>
         </TabsList>
 
@@ -143,7 +144,7 @@ export default function HomePage() {
         </TabsContent>
 
         <TabsContent value="proposals">
-          <ProposalsList proposals={proposals} isLoading={isLoadingProposals} />
+          <ProposalsList spaceId={spaceId} />
         </TabsContent>
 
         <TabsContent value="participants">
@@ -151,6 +152,10 @@ export default function HomePage() {
             delegates={delegates}
             isLoading={isLoadingDelegates}
           />
+        </TabsContent>
+
+        <TabsContent value="treasury">
+          <TreasuryDashboard />
         </TabsContent>
       </Tabs>
 

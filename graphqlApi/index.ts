@@ -5,15 +5,22 @@ import {
   Delegation,
   PaginationOpts,
   Proposal,
+  ProposalSortOption,
   ProposalsFilter,
   RawTransaction,
   DecodedExecution,
   SimulationAction,
   SpaceStats,
+  TreasuryTransaction,
   Vote,
   User,
 } from "@/types";
 import { ApiProposal } from "./types";
+import type {
+  OrderDirection,
+  Proposal_OrderBy,
+  TreasuryTransaction_OrderBy,
+} from "./gql/graphql";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import {
   DELEGATES_QUERY,
@@ -22,6 +29,7 @@ import {
   PROPOSAL_QUERY,
   PROPOSALS_QUERY,
   SPACE_QUERY,
+  TREASURY_TRANSACTIONS_QUERY,
   USER_DELEGATION_QUERY,
   USER_QUERY,
   USER_VOTES_QUERY,
@@ -93,6 +101,38 @@ function formatSimulation(
     console.log("Failed to parse simulation");
     return [];
   }
+}
+
+function mapGraphQLUser(u: {
+  id: string;
+  proposal_count?: number;
+  vote_count?: number;
+  created?: number;
+  updated?: number;
+  display_name?: string | null;
+  bio?: string | null;
+  statement?: string | null;
+  avatar_url?: string | null;
+  twitter?: string | null;
+  discord?: string | null;
+  github?: string | null;
+  website?: string | null;
+}): User {
+  return {
+    id: u.id,
+    created: u.created ?? 0,
+    proposalCount: u.proposal_count ?? 0,
+    voteCount: u.vote_count ?? 0,
+    updated: u.updated ?? u.created ?? 0,
+    displayName: u.display_name ?? null,
+    bio: u.bio ?? null,
+    statement: u.statement ?? null,
+    avatarUrl: u.avatar_url ?? null,
+    twitter: u.twitter ?? null,
+    discord: u.discord ?? null,
+    github: u.github ?? null,
+    website: u.website ?? null,
+  };
 }
 
 function formatProposal(proposal: ApiProposal, current: number): Proposal {
@@ -176,7 +216,7 @@ export function createApi(uri: string) {
       const { data } = await apollo.query({
         query: USER_VOTES_QUERY,
         fetchPolicy: "network-only",
-        variables: { indexer: "mainnet", voter, first: limit, skip },
+        variables: { indexer: "mainnet", voter: voter.toLowerCase(), first: limit, skip },
       });
 
       return Object.fromEntries(
@@ -184,11 +224,11 @@ export function createApi(uri: string) {
       );
     },
     loadProposals: async (
-      spaceIds: string[],
       { limit, skip = 0 }: PaginationOpts,
       current: number,
       filters?: ProposalsFilter,
-      searchQuery = ""
+      searchQuery = "",
+      sortBy: ProposalSortOption = "created-desc"
     ): Promise<Proposal[]> => {
       const _filters: ProposalsFilter = clone(filters || {});
 
@@ -198,12 +238,12 @@ export function createApi(uri: string) {
       const state = _filters.state;
 
       if (state === "active") {
-        _filters.start_lte = current;
-        _filters.max_end_gte = current;
+        _filters.start_time_lte = current;
+        _filters.end_time_gte = current;
       } else if (state === "pending") {
-        _filters.start_gt = current;
+        _filters.start_time_gt = current;
       } else if (state === "closed") {
-        _filters.max_end_lt = current;
+        _filters.end_time_lt = current;
       }
 
       delete _filters.state;
@@ -214,14 +254,26 @@ export function createApi(uri: string) {
 
       delete _filters.labels;
 
+      // Parse sort option into orderBy + orderDirection
+      const [orderBy, orderDirection] = sortBy.split("-") as [
+        Proposal_OrderBy,
+        OrderDirection
+      ];
+
+      const cancelledFilter =
+        "cancelled" in _filters ? _filters.cancelled : false;
+      delete _filters.cancelled;
+
       const { data } = await apollo.query({
         query: PROPOSALS_QUERY,
         fetchPolicy: "network-only",
         variables: {
           first: limit,
           skip,
+          orderBy,
+          orderDirection,
           where: {
-            cancelled: false,
+            cancelled: cancelledFilter,
             metadata_: Object.keys(metadataFilters).length
               ? metadataFilters
               : undefined,
@@ -231,7 +283,7 @@ export function createApi(uri: string) {
       });
 
       return (
-        data?.proposals.map((proposal) => formatProposal(proposal, current)) ||
+        data?.proposals?.map((proposal) => formatProposal(proposal, current)) ??
         []
       );
     },
@@ -243,7 +295,7 @@ export function createApi(uri: string) {
         apollo.query({
           query: PROPOSAL_QUERY,
           fetchPolicy: "network-only",
-          variables: { id: `${proposalId}` },
+          variables: { id: proposalId.toLowerCase() },
         }),
       ]);
 
@@ -252,15 +304,14 @@ export function createApi(uri: string) {
       return formatProposal(data.proposal, current);
     },
     loadUser: async (id: string): Promise<User | null> => {
-      const [{ data }] = await Promise.all([
-        apollo.query({
-          query: USER_QUERY,
-          fetchPolicy: "network-only",
-          variables: { indexer: "mainnet", id },
-        }),
-      ]);
-
-      return data?.user ?? null;
+      const result = await apollo.query({
+        query: USER_QUERY as import("@apollo/client").DocumentNode,
+        fetchPolicy: "network-only",
+        variables: { indexer: "mainnet", id: id.toLowerCase() },
+      });
+      const data = result.data as { user?: Parameters<typeof mapGraphQLUser>[0] } | null | undefined;
+      if (!data?.user) return null;
+      return mapGraphQLUser(data.user);
     },
     async loadLastIndexedBlock(): Promise<number | null> {
       const { data } = await apollo.query({
@@ -296,7 +347,7 @@ export function createApi(uri: string) {
           orderBy,
           orderDirection,
           where: {
-            space: spaceId,
+            space: spaceId.toLowerCase(),
           },
         },
       });
@@ -304,14 +355,15 @@ export function createApi(uri: string) {
       return (
         data?.delegates?.map((delegate: any) => ({
           id: delegate.id,
-          address: delegate.user.id,
+          address: delegate.user?.id ?? "",
           votingPower: delegate.voting_power,
           votingPowerParsed: delegate.voting_power_parsed,
           delegatorCount: delegate.delegator_count,
-          proposalCount: delegate.user.proposal_count,
-          voteCount: delegate.user.vote_count,
           created: delegate.created,
           updated: delegate.updated,
+          user: delegate.user
+            ? mapGraphQLUser(delegate.user as Parameters<typeof mapGraphQLUser>[0])
+            : null,
         })) || []
       );
     },
@@ -319,7 +371,7 @@ export function createApi(uri: string) {
       spaceId: string,
       delegateAddress: string
     ): Promise<Delegate | null> => {
-      const delegateId = `${spaceId}/${delegateAddress}`;
+      const delegateId = `${spaceId}/${delegateAddress}`.toLowerCase();
       const { data } = await apollo.query({
         query: DELEGATE_QUERY,
         fetchPolicy: "network-only",
@@ -328,24 +380,25 @@ export function createApi(uri: string) {
 
       if (!data?.delegate) return null;
 
-      const delegate = data.delegate;
+      const d = data.delegate;
       return {
-        id: delegate.id,
-        address: delegate.user.id,
-        votingPower: delegate.voting_power,
-        votingPowerParsed: delegate.voting_power_parsed,
-        delegatorCount: delegate.delegator_count,
-        proposalCount: delegate.user.proposal_count,
-        voteCount: delegate.user.vote_count,
-        created: delegate.created,
-        updated: delegate.updated,
+        id: d.id,
+        address: d.user?.id ?? "",
+        votingPower: d.voting_power,
+        votingPowerParsed: d.voting_power_parsed,
+        delegatorCount: d.delegator_count,
+        created: d.created,
+        updated: d.updated,
+        user: d.user
+          ? mapGraphQLUser(d.user as Parameters<typeof mapGraphQLUser>[0])
+          : null,
       };
     },
     loadUserDelegation: async (
       spaceId: string,
       userAddress: string
     ): Promise<Delegation | null> => {
-      const delegationId = `${spaceId}/${userAddress}`;
+      const delegationId = `${spaceId}/${userAddress}`.toLowerCase();
       const { data } = await apollo.query({
         query: USER_DELEGATION_QUERY,
         fetchPolicy: "network-only",
@@ -363,11 +416,47 @@ export function createApi(uri: string) {
         tx: delegation.tx,
       };
     },
+    loadTreasuryTransactions: async (
+      { limit, skip = 0 }: PaginationOpts,
+      sortBy: "created-desc" | "created-asc" = "created-desc"
+    ): Promise<TreasuryTransaction[]> => {
+      const [orderBy, orderDirection] = sortBy.split("-") as [
+        TreasuryTransaction_OrderBy,
+        OrderDirection
+      ];
+
+      const { data } = await apollo.query({
+        query: TREASURY_TRANSACTIONS_QUERY,
+        fetchPolicy: "network-only",
+        variables: {
+          first: limit,
+          skip,
+          orderBy,
+          orderDirection,
+        },
+      });
+
+      return (
+        data?.treasurytransactions?.map((tx) => ({
+          id: tx.id,
+          type: tx.type,
+          token: tx.token,
+          tokenSymbol: tx.token_symbol,
+          tokenDecimals: tx.token_decimals,
+          amount: tx.amount,
+          amountParsed: tx.amount_parsed,
+          fromAddress: tx.from_address,
+          toAddress: tx.to_address,
+          created: tx.created,
+          tx: tx.tx,
+        })) || []
+      );
+    },
     loadSpaceStats: async (spaceId: string): Promise<SpaceStats | null> => {
       const { data } = await apollo.query({
         query: SPACE_QUERY,
         fetchPolicy: "network-only",
-        variables: { indexer: "mainnet", id: spaceId },
+        variables: { indexer: "mainnet", id: spaceId.toLowerCase() },
       });
 
       if (!data?.space) return null;

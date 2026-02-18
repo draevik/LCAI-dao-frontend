@@ -71,6 +71,14 @@ export type RawTransaction = BaseTransaction & {
 
 export type PaginationOpts = { limit: number; skip?: number };
 
+export type ProposalSortOption =
+  | "created-desc"
+  | "created-asc"
+  | "vote_count-desc"
+  | "vote_count-asc"
+  | "scores_total-desc"
+  | "scores_total-asc";
+
 export type ProposalsFilter = {
   state?: "any" | "active" | "pending" | "closed";
   labels?: string[];
@@ -146,7 +154,18 @@ export type Leaderboard = {
 
 export type User = {
   id: string;
-  created: number | null;
+  created: number;
+  proposalCount?: number;
+  voteCount?: number;
+  updated?: number;
+  displayName?: string | null;
+  bio?: string | null;
+  statement?: string | null;
+  avatarUrl?: string | null;
+  twitter?: string | null;
+  discord?: string | null;
+  github?: string | null;
+  website?: string | null;
 };
 
 export type UserActivity = {
@@ -162,16 +181,29 @@ export type Delegate = {
   votingPower: string;
   votingPowerParsed: number;
   delegatorCount: number;
-  proposalCount: number;
-  voteCount: number;
   created: number;
   updated: number;
+  user: User | null;
 };
 
 export type Delegation = {
   id: string;
   delegator: string;
   delegate: string;
+  created: number;
+  tx: string;
+};
+
+export type TreasuryTransaction = {
+  id: string;
+  type: string;
+  token: string;
+  tokenSymbol: string;
+  tokenDecimals: number;
+  amount: string;
+  amountParsed: number;
+  fromAddress: string;
+  toAddress: string;
   created: number;
   tx: string;
 };

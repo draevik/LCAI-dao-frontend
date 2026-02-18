@@ -72,13 +72,19 @@ export const PROPOSAL_QUERY = gql(`
 `);
 
 export const PROPOSALS_QUERY = gql(`
-  query Proposals($first: Int!, $skip: Int!, $where: Proposal_filter) {
+  query Proposals(
+    $first: Int!
+    $skip: Int!
+    $where: Proposal_filter
+    $orderBy: Proposal_orderBy
+    $orderDirection: OrderDirection
+  ) {
     proposals(
       first: $first
       skip: $skip
       where: $where
-      orderBy: created
-      orderDirection: desc
+      orderBy: $orderBy
+      orderDirection: $orderDirection
     ) {
       ...proposalFields
     }
@@ -132,6 +138,15 @@ export const USER_QUERY = gql(`
       proposal_count
       vote_count
       created
+      updated
+      display_name
+      bio
+      statement
+      avatar_url
+      twitter
+      discord
+      github
+      website
     }
   }
 `);
@@ -179,6 +194,16 @@ gql(`
       id
       proposal_count
       vote_count
+      created
+      updated
+      display_name
+      bio
+      statement
+      avatar_url
+      twitter
+      discord
+      github
+      website
     }
     voting_power
     voting_power_parsed
@@ -228,6 +253,40 @@ export const USER_DELEGATION_QUERY = gql(`
       delegate
       created
       tx
+    }
+  }
+`);
+
+gql(`
+  fragment treasuryTransactionFields on TreasuryTransaction {
+    id
+    type
+    token
+    token_symbol
+    token_decimals
+    amount
+    amount_parsed
+    from_address
+    to_address
+    created
+    tx
+  }
+`);
+
+export const TREASURY_TRANSACTIONS_QUERY = gql(`
+  query TreasuryTransactions(
+    $first: Int!
+    $skip: Int!
+    $orderBy: TreasuryTransaction_orderBy
+    $orderDirection: OrderDirection
+  ) {
+    treasurytransactions(
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
+      ...treasuryTransactionFields
     }
   }
 `);

@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -9,29 +9,46 @@ import {
 import { Button } from "../common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faArrowDownWideShort,
+  faBan,
+  faCircleCheck,
   faCircleXmark,
+  faClockRotateLeft,
   faGrid2Plus,
   faHourglassClock,
   faHourglassHalf,
   faMagnifyingGlass,
   faPlus,
   faSignalStream,
+  faSliders,
   faSquareCheck,
-  faUserPen,
-  faUsers,
-  faUsersGear,
 } from "@fortawesome/pro-regular-svg-icons";
+import type { ProposalSortOption } from "@/types";
+
+export interface ProposalFilters {
+  status: string;
+  createdBy: string;
+  search: string;
+  sortBy: ProposalSortOption;
+  hasExecution: string;
+  minVotes: string;
+}
 
 interface ProposalFilterProps {
-  filters: {
-    status: string;
-    createdBy: string;
-    search: string;
-  };
+  filters: ProposalFilters;
   onFilterChange: (name: string, value: string) => void;
 }
 
+const selectTriggerClass =
+  "px-2.5 py-1.5 rounded-full border bg-content-primary-10 border-border-default text-sm sm:text-lg font-semibold leading-[1.3] tracking-[-0.18px] text-content-primary focus-visible:ring-0";
+const selectContentClass =
+  "rounded-2xl border border-border-default bg-surface-soft backdrop-blur-xl py-3 min-w-[224px]";
+const selectItemClass =
+  "py-2.5 px-2 font-semibold leading-[1] tracking-[-0.16px] text-content-secondary cursor-pointer hover:bg-surface-x-soft outline-none";
+
 const ProposalFilter = ({ filters, onFilterChange }: ProposalFilterProps) => {
+  const [showAdvanced, setShowAdvanced] = useState(false);
+
   return (
     <div className="rounded-2xl">
       {/* Search input */}
@@ -49,71 +66,122 @@ const ProposalFilter = ({ filters, onFilterChange }: ProposalFilterProps) => {
       </div>
 
       {/* Filter section */}
-      <div className="flex flex-wrap justify-between gap-x-5 gap-y-3 py-3 px-4 rounded-b-2xl border-x border-b border-border-default">
+      <div className="flex flex-wrap justify-between gap-x-5 gap-y-3 py-3 px-4 border-x border-b border-border-default">
         <div className="flex flex-wrap sm:flex-nowrap items-center gap-x-2 gap-y-4">
           {/* Status Filter */}
           <Select
             onValueChange={(v) => onFilterChange("status", v)}
             value={filters.status}
           >
-            <SelectTrigger className="px-2.5 py-1.5 rounded-full border bg-content-primary-10 border-border-default text-sm sm:text-lg font-semibold leading-[1.3] tracking-[-0.18px] text-content-primary focus-visible:ring-0">
+            <SelectTrigger className={selectTriggerClass}>
               <SelectValue placeholder="Active Proposals" />
             </SelectTrigger>
-            <SelectContent className="rounded-2xl border border-border-default hidden bg-surface-soft backdrop-blur-xl py-3 min-w-[224px]">
-              <SelectItem value="all" className="py-2.5 px-2 font-semibold leading-[1] tracking-[-0.16px] text-content-secondary cursor-pointer hover:bg-surface-x-soft outline-none">
-                <FontAwesomeIcon className="inline-block size-4" icon={faGrid2Plus} />
+            <SelectContent className={selectContentClass}>
+              <SelectItem value="all" className={selectItemClass}>
+                <FontAwesomeIcon
+                  className="inline-block size-4"
+                  icon={faGrid2Plus}
+                />
                 All
               </SelectItem>
-              <SelectItem value="active" className="py-2.5 px-2 font-semibold leading-[1] tracking-[-0.16px] text-content-secondary cursor-pointer hover:bg-surface-x-soft outline-none">
-                <FontAwesomeIcon className="inline-block size-4 text-content-success-strong" icon={faSignalStream} />
+              <SelectItem value="active" className={selectItemClass}>
+                <FontAwesomeIcon
+                  className="inline-block size-4 text-content-success-strong"
+                  icon={faSignalStream}
+                />
                 Active
               </SelectItem>
-              <SelectItem value="passed" className="py-2.5 px-2 font-semibold leading-[1] tracking-[-0.16px] text-content-secondary cursor-pointer hover:bg-surface-x-soft outline-none">
-                <FontAwesomeIcon className="inline-block size-4" icon={faSquareCheck} />
-                Passed
+              <SelectItem value="pending" className={selectItemClass}>
+                <FontAwesomeIcon
+                  className="inline-block size-4"
+                  icon={faHourglassHalf}
+                />
+                Pending
               </SelectItem>
-              <SelectItem value="queued" className="py-2.5 px-2 font-semibold leading-[1] tracking-[-0.16px] text-content-secondary cursor-pointer hover:bg-surface-x-soft outline-none">
-                <FontAwesomeIcon className="inline-block size-4" icon={faHourglassClock} />
+              <SelectItem value="succeeded" className={selectItemClass}>
+                <FontAwesomeIcon
+                  className="inline-block size-4 text-content-success-strong"
+                  icon={faSquareCheck}
+                />
+                Succeeded
+              </SelectItem>
+              <SelectItem value="queued" className={selectItemClass}>
+                <FontAwesomeIcon
+                  className="inline-block size-4"
+                  icon={faHourglassClock}
+                />
                 Queued
               </SelectItem>
-              <SelectItem value="failed" className="py-2.5 px-2 font-semibold leading-[1] tracking-[-0.16px] text-content-secondary cursor-pointer hover:bg-surface-x-soft outline-none">
-                <FontAwesomeIcon className="inline-block size-4" icon={faCircleXmark} />
-                Failed
+              <SelectItem value="defeated" className={selectItemClass}>
+                <FontAwesomeIcon
+                  className="inline-block size-4 text-red-500"
+                  icon={faCircleXmark}
+                />
+                Defeated
               </SelectItem>
-              <SelectItem value="pending" className="py-2.5 px-2 font-semibold leading-[1] tracking-[-0.16px] text-content-secondary cursor-pointer hover:bg-surface-x-soft outline-none">
-                <FontAwesomeIcon className="inline-block size-4" icon={faHourglassHalf} />
-                Pending
+              <SelectItem value="canceled" className={selectItemClass}>
+                <FontAwesomeIcon
+                  className="inline-block size-4"
+                  icon={faBan}
+                />
+                Canceled
+              </SelectItem>
+              <SelectItem value="expired" className={selectItemClass}>
+                <FontAwesomeIcon
+                  className="inline-block size-4"
+                  icon={faClockRotateLeft}
+                />
+                Expired
+              </SelectItem>
+              <SelectItem value="executed" className={selectItemClass}>
+                <FontAwesomeIcon
+                  className="inline-block size-4 text-content-success-strong"
+                  icon={faCircleCheck}
+                />
+                Executed
               </SelectItem>
             </SelectContent>
           </Select>
 
-          {/* Created By Filter */}
+          {/* Sort By */}
           <Select
-            onValueChange={(v) => onFilterChange("createdBy", v)}
-            value={filters.createdBy}
+            onValueChange={(v) => onFilterChange("sortBy", v)}
+            value={filters.sortBy}
           >
-            <SelectTrigger className="px-2.5 py-1.5 rounded-full border bg-content-primary-10 border-border-default text-sm sm:text-lg font-semibold leading-[1.3] tracking-[-0.18px] text-content-primary focus-visible:ring-0">
-              <SelectValue placeholder="By Core Team" />
+            <SelectTrigger className={selectTriggerClass}>
+              <FontAwesomeIcon
+                className="inline-block size-4 mr-1"
+                icon={faArrowDownWideShort}
+              />
+              <SelectValue placeholder="Newest" />
             </SelectTrigger>
-            <SelectContent className="rounded-2xl border border-border-default bg-surface-soft backdrop-blur-xl py-3 min-w-[224px]">
-              <SelectItem value="all" className="py-2.5 px-2 font-semibold leading-[1] tracking-[-0.16px] text-content-secondary cursor-pointer hover:bg-surface-x-soft outline-none">
-                <FontAwesomeIcon className="inline-block size-4" icon={faGrid2Plus} />
-                All Proposals
+            <SelectContent className={selectContentClass}>
+              <SelectItem value="created-desc" className={selectItemClass}>
+                Newest First
               </SelectItem>
-              <SelectItem value="core" className="py-2.5 px-2 font-semibold leading-[1] tracking-[-0.16px] text-content-secondary cursor-pointer hover:bg-surface-x-soft outline-none">
-                <FontAwesomeIcon className="inline-block size-4" icon={faUsersGear} />
-                By Core Team
+              <SelectItem value="created-asc" className={selectItemClass}>
+                Oldest First
               </SelectItem>
-              <SelectItem value="community" className="py-2.5 px-2 font-semibold leading-[1] tracking-[-0.16px] text-content-secondary cursor-pointer hover:bg-surface-x-soft outline-none">
-                <FontAwesomeIcon className="inline-block size-4" icon={faUsers} />
-                By Community
+              <SelectItem value="vote_count-desc" className={selectItemClass}>
+                Most Votes
               </SelectItem>
-              <SelectItem value="me" className="py-2.5 px-2 font-semibold leading-[1] tracking-[-0.16px] text-content-secondary cursor-pointer hover:bg-surface-x-soft outline-none">
-                <FontAwesomeIcon className="inline-block size-4" icon={faUserPen} />
-                Created by Me
+              <SelectItem value="scores_total-desc" className={selectItemClass}>
+                Most Participation
               </SelectItem>
             </SelectContent>
           </Select>
+
+          {/* Advanced toggle */}
+          <button
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className="px-2.5 py-1.5 rounded-full border bg-content-primary-10 border-border-default text-sm sm:text-lg font-semibold leading-[1.3] tracking-[-0.18px] text-content-primary hover:bg-surface-soft transition-colors"
+          >
+            <FontAwesomeIcon
+              className="inline-block size-4 mr-1"
+              icon={faSliders}
+            />
+            Filters
+          </button>
         </div>
 
         <Button
@@ -125,6 +193,28 @@ const ProposalFilter = ({ filters, onFilterChange }: ProposalFilterProps) => {
           Create Proposal
         </Button>
       </div>
+
+      {/* Advanced filters row */}
+      {showAdvanced && (
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-3 py-3 px-4 rounded-b-2xl border-x border-b border-border-default bg-surface-x-soft">
+          {/* Min Votes */}
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-semibold text-content-secondary whitespace-nowrap">
+              Min Votes
+            </label>
+            <input
+              type="number"
+              min="0"
+              className="w-20 px-2.5 py-1.5 rounded-full border bg-content-primary-10 border-border-default text-sm font-semibold text-content-primary outline-none focus:border-primary"
+              placeholder="0"
+              value={filters.minVotes}
+              onChange={(e) => onFilterChange("minVotes", e.target.value)}
+            />
+          </div>
+        </div>
+      )}
+
+      {!showAdvanced && <div className="rounded-b-2xl" />}
     </div>
   );
 };
