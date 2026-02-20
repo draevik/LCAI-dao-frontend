@@ -9,8 +9,10 @@ import DarkSwitch from "./DarkSwitcher";
 import MobileMenu from "./MobileMenu";
 import NavList from "./NavList";
 import WalletConnectButton from "../wallet-connect-button";
+import { fetchNavConfig } from "@/lib/nav/fetchNavConfig";
 
-const Header = () => {
+const Header = async () => {
+  const rawMenus = await fetchNavConfig();
   return (
     <>
       <nav className="swap__navbar hidden lg:flex header-default">
@@ -25,7 +27,7 @@ const Header = () => {
               </Link>
             </div>
             <nav className="mainmenu-nav d-none d-lg-block d-md-to-xl-block link-hover ms-md-to-xl-0">
-              <NavList />
+              <NavList rawMenus={rawMenus} />
             </nav>
             <div className="swap__navbar-right flex items-center">
               <DarkSwitch />
@@ -34,7 +36,7 @@ const Header = () => {
           </div>
         </div>
       </nav>
-      <MobileMenu />
+      <MobileMenu rawMenus={rawMenus} />
     </>
   );
 };
