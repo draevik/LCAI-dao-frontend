@@ -11,7 +11,9 @@ import DarkSwitch from "./DarkSwitcher";
 import NavList from "./NavList";
 import { cn } from "@/lib/utils";
 import WalletConnectButton from "../wallet-connect-button";
-const MobileMenu = () => {
+import type { RawNavConfig } from "@/lib/nav/types";
+
+const MobileMenu = ({ rawMenus }: { rawMenus: RawNavConfig[] }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
@@ -82,7 +84,7 @@ const MobileMenu = () => {
             </button>
           </div>
           <div className="px-4 py-4">
-            <NavList />
+            <NavList rawMenus={rawMenus} />
 
             <WalletConnectButton className="!w-full mt-4" />
             <hr className="block mt-6 mb-5" />
