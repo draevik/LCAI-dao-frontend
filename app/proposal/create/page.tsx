@@ -71,16 +71,13 @@ import { useAppKit } from "@reown/appkit/react";
 import { useConnection, useBalance, useReadContract } from "wagmi";
 import config from "@/config";
 import $dayjs from "@/lib/dayjs";
-import { useTheme } from "next-themes";
 import { Button } from "@/components/common/Button";
 import {
   faCodeSimple,
   faLoader,
   faPaperPlane,
-  faPen,
 } from "@fortawesome/pro-regular-svg-icons";
 import { Button as ButtonUi } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { compactNumber } from "@/lib/utils";
 import useCurrentChain from "@/hooks/useCurrentChain";
 import governorAbi from "@/contracts/abi/governorAbi";
@@ -225,10 +222,10 @@ export default function CreateProposal() {
   };
 
   const handleSubmit = async (values: ProposalFormValues) => {
-    if (!actions.length) {
-      toast.error("Please add at least one action");
-      return;
-    }
+    // if (!actions.length) {
+    //   toast.error("Please add at least one action");
+    //   return;
+    // }
 
     // Validate form data is present
     if (!values.title || !values.description) {
@@ -236,13 +233,15 @@ export default function CreateProposal() {
       return;
     }
 
-    if (simulationStatus === "idle") {
-      await simulateActionsMutation.mutateAsync(actions);
-    }
+    if (actions.length) {
+      if (simulationStatus === "idle") {
+        await simulateActionsMutation.mutateAsync(actions);
+      }
 
-    if (simulationStatus === "error") {
-      toast.error("Execution simulation failed");
-      return;
+      if (simulationStatus === "error") {
+        toast.error("Execution simulation failed");
+        return;
+      }
     }
 
     if (
