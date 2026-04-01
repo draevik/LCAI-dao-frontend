@@ -76,20 +76,20 @@ export default function HomePage() {
   return (
     <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-10">
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="mb-6 border-b border-border-default pb-2 w-full">
-          <TabsTrigger value="home" className="gap-2">
+        <TabsList className="mb-6 border-b border-border-default w-full flex gap-1">
+          <TabsTrigger value="home" className="flex-0 gap-2 text-lg font-medium leading-none tracking-[-0.18px] py-4 px-6 rounded-t-2xl rounded-b-none border-none bg-surface-base-dark data-[state=active]:bg-[image:var(--gradient-primary)] text-content-primary data-[state=active]:text-white">
             <Home className="h-4 w-4" />
             Home
           </TabsTrigger>
-          <TabsTrigger value="proposals" className="gap-2">
+          <TabsTrigger value="proposals" className="flex-0 gap-2 text-lg font-medium leading-none tracking-[-0.18px] py-4 px-6 rounded-t-2xl rounded-b-none border-none bg-surface-base-dark data-[state=active]:bg-[image:var(--gradient-primary)] text-content-primary data-[state=active]:text-white">
             <FileText className="h-4 w-4" />
             Proposals
           </TabsTrigger>
-          <TabsTrigger value="participants" className="gap-2">
+          <TabsTrigger value="participants" className="flex-0 gap-2 text-lg font-medium leading-none tracking-[-0.18px] py-4 px-6 rounded-t-2xl rounded-b-none border-none bg-surface-base-dark data-[state=active]:bg-[image:var(--gradient-primary)] text-content-primary data-[state=active]:text-white">
             <Users className="h-4 w-4" />
             Participants
           </TabsTrigger>
-          <TabsTrigger value="treasury" className="gap-2">
+          <TabsTrigger value="treasury" className="flex-0 gap-2 text-lg font-medium leading-none tracking-[-0.18px] py-4 px-6 rounded-t-2xl rounded-b-none border-none bg-surface-base-dark data-[state=active]:bg-[image:var(--gradient-primary)] text-content-primary data-[state=active]:text-white">
             <Wallet className="h-4 w-4" />
             Treasury
           </TabsTrigger>
@@ -104,12 +104,14 @@ export default function HomePage() {
                 <StatsCard
                   title="Delegates"
                   value={spaceStats?.delegateCount || 0}
-                  icon={<Users className="h-6 w-6 text-primary" />}
+                  icon={<Users className="h-6 w-6 text-content-primary" />}
+                  className="bg-[rgba(204,206,239,0.02)] bg-[linear-gradient(147deg,rgba(255,255,255,0.04)_56.39%,rgba(255,166,13,0.22)_106.26%),url('/images/bg/bg-wave-lines.png')] bg-cover bg-center"
                 />
                 <StatsCard
                   title="Proposals"
                   value={spaceStats?.proposalCount || 0}
-                  icon={<FileText className="h-6 w-6 text-primary" />}
+                  icon={<FileText className="h-6 w-6 text-content-primary" />}
+                  className="bg-[rgba(204,206,239,0.02)] bg-[linear-gradient(143deg,rgba(255,255,255,0.04)_61.49%,rgba(12,166,249,0.16)_106.01%),url('/images/bg/bg-wave-lines.png')] bg-cover bg-center"
                 />
               </div>
 
