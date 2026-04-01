@@ -46,6 +46,7 @@ export function RecentProposals({
                 key={proposal.id}
                 proposal={proposal}
                 isLast={idx === recentProposals.length - 1}
+                isStatusBadge={false}
               />
             ))}
           </div>

@@ -6,7 +6,7 @@ import { Clock, Users } from "lucide-react";
 import { compactNumber } from "@/lib/utils";
 import $dayjs from "@/lib/dayjs";
 import ProposalStatusBadge from "@/components/proposal/proposal-status-badge";
-import { ProposalState } from "@/lib/constents";
+import { ProposalState, ProposalStateLabel } from "@/lib/constents";
 import type { Proposal } from "@/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSparkle } from "@fortawesome/pro-regular-svg-icons";
@@ -14,21 +14,38 @@ import { faSparkle } from "@fortawesome/pro-regular-svg-icons";
 interface ProposalListItemProps {
   proposal: Proposal;
   isLast?: boolean;
+  isStatusBadge?: boolean;
 }
 
-export function ProposalListItem({ proposal, isLast }: ProposalListItemProps) {
+type BadgeVariant = NonNullable<React.ComponentProps<typeof Badge>["variant"]>;
+
+
+export function ProposalListItem({ proposal, isLast, isStatusBadge = true }: ProposalListItemProps) {
   const votingPower = Number(proposal.scores_total_parsed ?? 0);
+  const proposalStateLabel = ProposalStateLabel[proposal.state];
+  const proposalBadgeVariant = ((proposalStateLabel as BadgeVariant) ?? "default").toLowerCase();
 
   return (
     <Link
       href={`/proposal/${proposal.id}`}
-      className={`sm:py-8 py-5 px-6 block transition-all duration-300 hover:bg-surface-soft hover:border-surface-soft/20 ${
-        isLast ? "" : "border-b border-border-default"
-      }`}
+      className={`sm:py-8 py-5 px-6 block transition-all duration-300 hover:bg-surface-soft hover:border-surface-soft/20 ${isLast ? "" : "border-b border-border-default"
+        }`}
     >
-      <h3 className="text-content-primary flex items-baseline font-semibold leading-[1.2] tracking-[-0.24px] sm:text-xl text-lg capitalize">
-        <ProposalStatusBadge status={proposal.state} />
-        {proposal.metadata?.title}
+      <h3 className="text-content-primary flex gap-3 items-baseline justify-between font-semibold leading-[1.2] tracking-[-0.24px] sm:text-xl text-lg capitalize">
+        <span>
+          <ProposalStatusBadge status={proposal.state} />
+          {proposal.metadata?.title}
+        </span>
+        {
+          isStatusBadge && (
+            <Badge
+              variant={proposalBadgeVariant as BadgeVariant}
+              className="text-sm"
+            >
+              <ProposalStatusBadge status={proposal.state} className="mr-0" />
+              {proposalStateLabel}
+            </Badge>
+          )}
       </h3>
 
       <div className="flex flex-wrap sm:flex-nowrap items-center gap-x-4 gap-y-2 mt-4">
@@ -62,26 +79,26 @@ export function ProposalListItem({ proposal, isLast }: ProposalListItemProps) {
         </div>
         {(proposal.state === ProposalState.Pending ||
           proposal.state === ProposalState.Active) && (
-          <>
-            <span className="hidden sm:block">
-              <FontAwesomeIcon icon={faSparkle} className="size-3.5" />
-            </span>
-            <div className="flex items-center gap-1">
-              <Clock className="h-4 w-4 sm:text-base text-sm" />
-              {proposal.state === ProposalState.Pending ? (
-                <span className="whitespace-nowrap sm:text-base text-sm">
-                  Start {$dayjs.unix(Number(proposal.start_time)).fromNow()}
-                </span>
-              ) : (
-                proposal.state === ProposalState.Active && (
+            <>
+              <span className="hidden sm:block">
+                <FontAwesomeIcon icon={faSparkle} className="size-3.5" />
+              </span>
+              <div className="flex items-center gap-1">
+                <Clock className="h-4 w-4 sm:text-base text-sm" />
+                {proposal.state === ProposalState.Pending ? (
                   <span className="whitespace-nowrap sm:text-base text-sm">
-                    {$dayjs.unix(Number(proposal.end_time)).fromNow()}
+                    Start {$dayjs.unix(Number(proposal.start_time)).fromNow()}
                   </span>
-                )
-              )}
-            </div>
-          </>
-        )}
+                ) : (
+                  proposal.state === ProposalState.Active && (
+                    <span className="whitespace-nowrap sm:text-base text-sm">
+                      {$dayjs.unix(Number(proposal.end_time)).fromNow()}
+                    </span>
+                  )
+                )}
+              </div>
+            </>
+          )}
       </div>
     </Link>
   );

@@ -17,6 +17,22 @@ const badgeVariants = cva(
           "border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
+        active:
+          "py-1 pl-2 pr-2.5 gap-1 rounded-lg border-transparent bg-[#CBF6DC] text-[#067647] dark:bg-[#013B24] dark:text-[#0FB46A]",
+        pending:
+          "py-1 pl-2 pr-2.5 gap-1 rounded-lg border-transparent bg-[#FCEACF] text-[#B93815] dark:bg-[#511C10] dark:text-[#EC9B59]",
+        succeed:
+          "py-1 pl-2 pr-2.5 gap-1 rounded-lg border-transparent bg-[#D9ECF9] text-[#026AA2] dark:bg-[#003656] dark:text-[#47B2E4]",
+        queued:
+          "py-1 pl-2 pr-2.5 gap-1 rounded-lg border-transparent bg-[#E8EAF5] text-[#333B75] dark:bg-[#212749] dark:text-[#B3B8DB]",
+        defeated:
+          "py-1 pl-2 pr-2.5 gap-1 rounded-lg border-transparent bg-[rgba(233,53,68,0.20)] text-[#E93544] dark:bg-[#4A050B] dark:text-[#E93544]",
+        canceled:
+          "py-1 pl-2 pr-2.5 gap-1 rounded-lg border-transparent bg-[#E2E9F0] text-[#344054] dark:bg-[#1E2535] dark:text-[#CECFD2]",
+        expired:
+          "py-1 pl-2 pr-2.5 gap-1 rounded-lg border-transparent bg-[#FFF2CE] text-[#B54708] dark:bg-[#4C2D02] dark:text-[#EAB12F]",
+        executed:
+          "py-1 pl-2 pr-2.5 gap-1 rounded-lg border-transparent bg-[#E4E1FF] text-[#5925DC] dark:bg-[#2C1C5F] dark:text-[#D6BBFB]",
       },
     },
     defaultVariants: {
