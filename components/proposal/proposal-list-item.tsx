@@ -31,7 +31,7 @@ export function ProposalListItem({ proposal, isLast, isStatusBadge = true }: Pro
       className={`sm:py-8 py-5 px-6 block transition-all duration-300 hover:bg-surface-soft hover:border-surface-soft/20 ${isLast ? "" : "border-b border-border-default"
         }`}
     >
-      <h3 className="text-content-primary flex gap-3 items-baseline justify-between font-semibold leading-[1.2] tracking-[-0.24px] sm:text-xl text-lg capitalize">
+      <h3 className="text-content-primary flex gap-3 flex-col md:flex-row items-baseline justify-between font-semibold leading-[1.2] tracking-[-0.24px] sm:text-xl text-lg capitalize">
         <span>
           <ProposalStatusBadge status={proposal.state} />
           {proposal.metadata?.title}
@@ -40,7 +40,7 @@ export function ProposalListItem({ proposal, isLast, isStatusBadge = true }: Pro
           isStatusBadge && (
             <Badge
               variant={proposalBadgeVariant as BadgeVariant}
-              className="text-sm"
+              className="text-xs md:text-sm"
             >
               <ProposalStatusBadge status={proposal.state} className="mr-0" />
               {proposalStateLabel}
