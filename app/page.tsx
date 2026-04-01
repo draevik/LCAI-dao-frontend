@@ -3,6 +3,7 @@
 import AiConfig from "@/components/ai-config/ai-config";
 import BallotsLockerModal from "@/components/ballots-locker";
 import { DelegateModal } from "@/components/delegation/delegate-modal";
+import Governance from "@/components/governance/governance";
 import { DaoSidebar } from "@/components/home/dao-sidebar";
 import { ParticipantsList } from "@/components/home/participants-list";
 import { ProposalsList } from "@/components/home/proposals-list";
@@ -93,6 +94,10 @@ export default function HomePage() {
             <Wallet className="h-4 w-4" />
             Treasury
           </TabsTrigger>
+          <TabsTrigger value="governance" className="flex-0 gap-2 text-base lg:text-lg font-medium leading-none tracking-[-0.18px] py-2.5 md:py-3 lg:py-4 px-3 md:px-4 lg:px-6 rounded-md md:rounded-t-2xl rounded-b-none border-none bg-[#f3f3ff] dark:bg-surface-base-dark data-[state=active]:bg-[image:var(--gradient-primary)] text-content-primary data-[state=active]:text-white">
+            <Settings className="h-4 w-4" />
+            Governance
+          </TabsTrigger>
           <TabsTrigger value="ai-config" className="flex-0 gap-2 text-base lg:text-lg font-medium leading-none tracking-[-0.18px] py-2.5 md:py-3 lg:py-4 px-3 md:px-4 lg:px-6 rounded-md md:rounded-t-2xl rounded-b-none border-none bg-[#f3f3ff] dark:bg-surface-base-dark data-[state=active]:bg-[image:var(--gradient-primary)] text-content-primary data-[state=active]:text-white">
             <Settings className="h-4 w-4" />
             AI Config
@@ -162,6 +167,10 @@ export default function HomePage() {
 
         <TabsContent value="treasury">
           <TreasuryDashboard />
+        </TabsContent>
+
+        <TabsContent value="governance">
+          <Governance />
         </TabsContent>
 
         <TabsContent value="ai-config">
