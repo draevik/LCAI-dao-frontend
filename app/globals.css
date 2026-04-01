@@ -62,7 +62,7 @@
   --color-primary: var(--surface-primary);
   --color-content-brand: #7064e9;
   --color-content-medium: var(--content-medium);
-  --color-content-success-light: #1daf61;
+  --color-content-success-light: #067647;
   --color-content-error-light: #e93544;
   --color-blackest: var(--blackest);
   --color-content-default: var(--content-default);
@@ -72,7 +72,7 @@
   --color-surface-base-soft: rgba(204, 206, 239, 0.12);
   --color-content-brand-light: #8c71f6;
   --color-content-warning-light: #f79009;
-  --color-content-success-light: #1daf61;
+  --color-content-success-light: #067647;
   --color-surface-base-dark: var(--surface-base-dark);
 }
 

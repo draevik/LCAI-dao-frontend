@@ -36,17 +36,17 @@ export function TreasuryTransactionList() {
   };
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="py-0 gap-0">
+      <CardHeader className="border-b border-border-soft px-6 pt-4 [.border-b]:pb-4 gap-0">
         <CardTitle className="text-lg">Transaction History</CardTitle>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="p-0 py-6">
         {isLoading ? (
-          <div className="py-8 text-center text-content-secondary">
+          <div className="py-12 lg:py-20 xl:py-30 2xl:py-40 text-center text-content-secondary">
             Loading transactions...
           </div>
         ) : transactions.length === 0 ? (
-          <div className="py-8 text-center text-content-secondary">
+          <div className="py-12 lg:py-20 xl:py-30 2xl:py-40 text-center text-content-secondary">
             No transactions found
           </div>
         ) : (

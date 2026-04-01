@@ -42,7 +42,7 @@ export function ProposalListItem({ proposal, isLast, isStatusBadge = true }: Pro
               variant={proposalBadgeVariant as BadgeVariant}
               className="text-xs md:text-sm"
             >
-              <ProposalStatusBadge status={proposal.state} className="mr-0" />
+              <ProposalStatusBadge status={proposal.state} className="mr-0 text-xs md:text-sm" />
               {proposalStateLabel}
             </Badge>
           )}

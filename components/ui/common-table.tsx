@@ -44,7 +44,7 @@ export function CommonTable({
           >
             <table className="w-full table-fixed border-collapse">
               <thead>
-                <tr className="bg-surface-base-extralight">
+                <tr className="bg-[#a7a7a70f] dark:bg-surface-base-extralight">
                   <th
                     colSpan={columns}
                     className="px-4 lg:px-6 py-3 lg:py-5 text-left border-b border-border-default"

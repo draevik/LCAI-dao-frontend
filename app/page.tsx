@@ -111,16 +111,16 @@ export default function HomePage() {
               {/* Stats cards */}
               <div className="grid grid-cols-2 gap-4">
                 <StatsCard
-                  title="Delegates"
-                  value={spaceStats?.delegateCount || 0}
-                  icon={<Users className="h-6 w-6 text-content-primary" />}
-                  className="bg-[rgba(204,206,239,0.02)] bg-[linear-gradient(147deg,rgba(255,255,255,0.04)_56.39%,rgba(255,166,13,0.22)_106.26%),url('/images/bg/bg-wave-lines.png')] bg-cover bg-center"
-                />
-                <StatsCard
                   title="Proposals"
                   value={spaceStats?.proposalCount || 0}
                   icon={<FileText className="h-6 w-6 text-content-primary" />}
-                  className="bg-[rgba(204,206,239,0.02)] bg-[linear-gradient(143deg,rgba(255,255,255,0.04)_61.49%,rgba(12,166,249,0.16)_106.01%),url('/images/bg/bg-wave-lines.png')] bg-cover bg-center"
+                  className="bg-[rgba(204,206,239,0.02)] bg-[linear-gradient(143deg,rgba(255,255,255,0.04)_61.49%,rgba(12,166,249,0.16)_106.01%),url('/images/bg/bg-wave-lines.png')] bg-cover bg-center bg-no-repeat"
+                />
+                <StatsCard
+                  title="Delegates"
+                  value={spaceStats?.delegateCount || 0}
+                  icon={<Users className="h-6 w-6 text-content-primary" />}
+                  className="bg-[rgba(204,206,239,0.02)] bg-[linear-gradient(147deg,rgba(255,255,255,0.04)_56.39%,rgba(255,166,13,0.22)_106.26%),url('/images/bg/bg-wave-lines.png')] bg-cover bg-center bg-no-repeat"
                 />
               </div>
 
