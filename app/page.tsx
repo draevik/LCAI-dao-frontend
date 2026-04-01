@@ -1,23 +1,23 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useConnection } from "wagmi";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { StatsCard } from "@/components/home/stats-card";
+import AiConfig from "@/components/ai-config/ai-config";
+import BallotsLockerModal from "@/components/ballots-locker";
+import { DelegateModal } from "@/components/delegation/delegate-modal";
+import { DaoSidebar } from "@/components/home/dao-sidebar";
+import { ParticipantsList } from "@/components/home/participants-list";
+import { ProposalsList } from "@/components/home/proposals-list";
 import { RecentProposals } from "@/components/home/recent-proposals";
 import { RisingDelegates } from "@/components/home/rising-delegates";
-import { DaoSidebar } from "@/components/home/dao-sidebar";
-import { ProposalsList } from "@/components/home/proposals-list";
-import { ParticipantsList } from "@/components/home/participants-list";
-import { DelegateModal } from "@/components/delegation/delegate-modal";
-import BallotsLockerModal from "@/components/ballots-locker";
-import useGraphqlApi from "@/hooks/useGraphqlApi";
+import { StatsCard } from "@/components/home/stats-card";
+import { TreasuryDashboard } from "@/components/treasury/treasury-dashboard";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import config from "@/config";
 import useCurrentChain from "@/hooks/useCurrentChain";
-import { FileText, Users, Home, Wallet } from "lucide-react";
-import { TreasuryDashboard } from "@/components/treasury/treasury-dashboard";
-
+import useGraphqlApi from "@/hooks/useGraphqlApi";
+import { useQuery } from "@tanstack/react-query";
+import { FileText, Home, Settings, Users, Wallet } from "lucide-react";
+import { useCallback, useState } from "react";
+import { useConnection } from "wagmi";
 export default function HomePage() {
   const api = useGraphqlApi();
   const { address } = useConnection();
@@ -93,6 +93,10 @@ export default function HomePage() {
             <Wallet className="h-4 w-4" />
             Treasury
           </TabsTrigger>
+          <TabsTrigger value="ai-config" className="flex-0 gap-2 text-base lg:text-lg font-medium leading-none tracking-[-0.18px] py-2.5 md:py-3 lg:py-4 px-3 md:px-4 lg:px-6 rounded-md md:rounded-t-2xl rounded-b-none border-none bg-[#f3f3ff] dark:bg-surface-base-dark data-[state=active]:bg-[image:var(--gradient-primary)] text-content-primary data-[state=active]:text-white">
+            <Settings className="h-4 w-4" />
+            AI Config
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="home">
@@ -158,6 +162,10 @@ export default function HomePage() {
 
         <TabsContent value="treasury">
           <TreasuryDashboard />
+        </TabsContent>
+
+        <TabsContent value="ai-config">
+          <AiConfig />
         </TabsContent>
       </Tabs>
 
