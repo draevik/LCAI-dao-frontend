@@ -13,7 +13,10 @@
     opacity: 0.2;
     width: 100%;
     height: 100%;
-    transition: 0.5s, top 0s, left 0s;
+    transition:
+      0.5s,
+      top 0s,
+      left 0s;
     border-radius: var(--radius);
     transition: all 0.3s ease-in-out;
   }
@@ -362,7 +365,7 @@
             width: 900px;
             margin: inherit;
             @media #{$lg-layout} {
-              width: 800px;
+              width: 750px;
               left: -100px;
             }
           }
@@ -392,10 +395,7 @@
   visibility: visible;
   left: 0px;
 }
-.mainmenu-nav
-  .mainmenu
-  li.with-megamenu
-  .lightchain-megamenu.with-mega-item-3 {
+.mainmenu-nav .mainmenu li.with-megamenu .lightchain-megamenu.with-mega-item-3 {
   @media #{$laptop-device} {
     left: -200px !important;
   }
@@ -786,7 +786,6 @@ html.light {
 //     display: block !important;
 //   }
 // }
-
 
 .link-hover {
   a {
