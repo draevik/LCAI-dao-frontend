@@ -40,7 +40,7 @@ interface ProposalFilterProps {
 }
 
 const selectTriggerClass =
-  "px-2.5 py-1.5 rounded-full border bg-content-primary-10 border-border-default text-sm sm:text-lg font-semibold leading-[1.3] tracking-[-0.18px] text-content-primary focus-visible:ring-0";
+  "px-2.5 py-1.5 rounded-full border bg-surface-x-soft border-border-default text-sm sm:text-lg font-semibold leading-[1.3] tracking-[-0.18px] text-content-primary focus-visible:ring-0 shadow-none";
 const selectContentClass =
   "rounded-2xl border border-border-default bg-surface-soft backdrop-blur-xl py-3 min-w-[224px]";
 const selectItemClass =
@@ -174,7 +174,7 @@ const ProposalFilter = ({ filters, onFilterChange }: ProposalFilterProps) => {
           {/* Advanced toggle */}
           <button
             onClick={() => setShowAdvanced(!showAdvanced)}
-            className="px-2.5 py-1.5 rounded-full border bg-content-primary-10 border-border-default text-sm sm:text-lg font-semibold leading-[1.3] tracking-[-0.18px] text-content-primary hover:bg-surface-soft transition-colors"
+            className="px-2.5 py-1.5 rounded-full border bg-surface-x-soft border-border-default text-sm sm:text-lg font-semibold leading-[1.3] tracking-[-0.18px] text-content-primary hover:bg-surface-soft transition-colors"
           >
             <FontAwesomeIcon
               className="inline-block size-4 mr-1"
@@ -205,7 +205,7 @@ const ProposalFilter = ({ filters, onFilterChange }: ProposalFilterProps) => {
             <input
               type="number"
               min="0"
-              className="w-20 px-2.5 py-1.5 rounded-full border bg-content-primary-10 border-border-default text-sm font-semibold text-content-primary outline-none focus:border-primary"
+              className="w-20 px-2.5 py-1.5 rounded-full border bg-surface-x-soft border-border-default text-sm font-semibold text-content-primary outline-none focus:border-primary"
               placeholder="0"
               value={filters.minVotes}
               onChange={(e) => onFilterChange("minVotes", e.target.value)}
