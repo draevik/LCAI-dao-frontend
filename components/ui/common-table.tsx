@@ -1,4 +1,5 @@
 import * as React from "react";
+import clsx from "clsx";
 
 import { cn } from "@/lib/utils";
 
@@ -80,7 +81,7 @@ export function CommonTable({
                         return (
                           <td
                             key={`${section.id ?? section.title}-${rowIndex}-${colIndex}`}
-                            className={cn(
+                            className={clsx(
                               "align-top min-h-24 p-4 lg:p-6",
                               !isLastRow && "border-b border-border-default",
                               !isLastCol && "border-r border-border-default"

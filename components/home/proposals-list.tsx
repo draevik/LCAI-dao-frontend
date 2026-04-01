@@ -131,13 +131,14 @@ export function ProposalsList({ spaceId }: ProposalsListProps) {
         {isLoading ? (
           <LoadingBlock />
         ) : filteredProposals.length ? (
-          filteredProposals.map((proposal, idx) => (
-            <ProposalListItem
-              key={proposal.id}
-              proposal={proposal}
-              isLast={idx === filteredProposals.length - 1}
-            />
-          ))
+          <div className="divide-y divide-border-default">
+            {filteredProposals.map((proposal) => (
+              <ProposalListItem
+                key={proposal.id}
+                proposal={proposal}
+              />
+            ))}
+          </div>
         ) : (
           <div className="flex flex-col gap-6 items-center pt-15 pb-15">
             <Image
