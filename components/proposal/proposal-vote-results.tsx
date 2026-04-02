@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { compactNumber } from "@/lib/utils";
+import { compactNumber, formatNumber } from "@/lib/utils";
 import ProposalVoteIcon from "./proposal-vote-icon";
 import type { Proposal } from "@/types";
 
@@ -8,11 +8,13 @@ interface ProposalVoteResultsProps {
   proposal: Proposal;
 }
 
-export function ProposalVoteResults({proposal}:ProposalVoteResultsProps) {
+export function ProposalVoteResults({ proposal }: ProposalVoteResultsProps) {
   return (
     <Card>
       <div className="px-6">
-        <h5 className="leading-[1.7] text-lg -tracking-[0.18px] font-semibold text-content-primary">Current Votes</h5>
+        <h5 className="leading-[1.7] text-lg -tracking-[0.18px] font-semibold text-content-primary">
+          Current Votes
+        </h5>
       </div>
       <CardContent className="space-y-3">
         <div className="text-sm flex items-center justify-between gap-2">
@@ -35,15 +37,17 @@ export function ProposalVoteResults({proposal}:ProposalVoteResultsProps) {
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <ProposalVoteIcon vote={index} />
-                      <span className="font-medium text-base text-content-primary">{choice}</span>
+                      <span className="font-medium text-base text-content-primary">
+                        {choice}
+                      </span>
                     </div>
 
                     <span className="text-sm text-content-default">
-                      ({percentage}%) {compactNumber(score)}
+                      ({formatNumber(percentage)}%) {compactNumber(score)}
                     </span>
                   </div>
 
-                    <Progress value={percentage} className="h-1.5" />
+                  <Progress value={percentage} className="h-1.5" />
                 </div>
               </div>
             );

@@ -84,15 +84,17 @@ export function ProposalTimeline({ proposal }: ProposalTimelineProps) {
                 Queue proposal
               </h4>
 
-              {proposal.execution_time ? (
-                <span className="text-label-12 font-semibold text-content-default">
-                  {$dayjs
-                    .unix(
-                      Number(proposal.execution_time - proposal.timelock_delay)
-                    )
-                    .format("MMM D, YYYY · h:mm A")}
-                </span>
-              ) : null}
+              <span className="text-label-12 font-semibold text-content-default">
+                {proposal.execution_time
+                  ? $dayjs
+                      .unix(
+                        Number(
+                          proposal.execution_time - proposal.timelock_delay
+                        )
+                      )
+                      .format("MMM D, YYYY · h:mm A")
+                  : "N/A"}
+              </span>
             </div>
 
             {/* Execute proposal */}
@@ -101,13 +103,13 @@ export function ProposalTimeline({ proposal }: ProposalTimelineProps) {
                 Execute proposal
               </h4>
 
-              {proposal.execution_time ? (
-                <span className="text-label-12 font-semibold text-content-default">
-                  {$dayjs
-                    .unix(Number(proposal.execution_time))
-                    .format("MMM D, YYYY · h:mm A")}
-                </span>
-              ) : null}
+              <span className="text-label-12 font-semibold text-content-default">
+                {proposal.execution_time
+                  ? $dayjs
+                      .unix(Number(proposal.execution_time))
+                      .format("MMM D, YYYY · h:mm A")
+                  : "N/A"}
+              </span>
             </div>
           </div>
 
