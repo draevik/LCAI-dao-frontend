@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import CopyButton from "@/components/CopyButton";
 import { truncateAddress } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignalStream } from "@fortawesome/pro-regular-svg-icons";
 
 interface TreasuryStatsProps {
   address: string;
@@ -14,17 +16,17 @@ interface TreasuryStatsProps {
 
 export function TreasuryStats({ address, admin, paused }: TreasuryStatsProps) {
   return (
-    <Card>
-      <CardHeader>
+    <Card className="py-0 gap-0">
+      <CardHeader className="border-b border-border-soft px-6 pt-4 [.border-b]:pb-4 gap-0">
         <CardTitle className="text-lg">Treasury Info</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 py-4">
         <div>
-          <p className="text-xs font-medium text-content-secondary mb-1">
+          <p className="text-xs md:text-sm text-content-default leading-[1.42] mb-2">
             Contract Address
           </p>
-          <div className="flex items-center gap-1">
-            <span className="text-sm font-medium text-content-primary">
+          <div className="flex items-center gap-1 mt-2">
+            <span className="text-sm md:text-base font-medium leading-normal tracking-[-0.16px] text-content-primary">
               {truncateAddress(address)}
             </span>
             <CopyButton
@@ -43,11 +45,11 @@ export function TreasuryStats({ address, admin, paused }: TreasuryStatsProps) {
         </div>
 
         <div>
-          <p className="text-xs font-medium text-content-secondary mb-1">
+          <p className="text-xs md:text-sm text-content-default leading-[1.42] mb-2">
             Admin
           </p>
-          <div className="flex items-center gap-1">
-            <span className="text-sm font-medium text-content-primary">
+          <div className="flex items-center gap-1 mt-2">
+            <span className="text-sm md:text-base font-medium leading-normal tracking-[-0.16px] text-content-primary">
               {truncateAddress(admin)}
             </span>
             <CopyButton
@@ -57,11 +59,12 @@ export function TreasuryStats({ address, admin, paused }: TreasuryStatsProps) {
           </div>
         </div>
 
-        <div>
-          <p className="text-xs font-medium text-content-secondary mb-1">
+        <div className="mb-5">
+          <p className="text-xs md:text-sm text-content-default leading-[1.42] mb-2">
             Status
           </p>
-          <Badge variant={paused ? "destructive" : "default"}>
+          <Badge variant={paused ? "destructive" : "active"} className="text-xs md:text-sm">
+            {!paused && <FontAwesomeIcon icon={faSignalStream} className="size-3.5" />}
             {paused ? "Paused" : "Active"}
           </Badge>
         </div>

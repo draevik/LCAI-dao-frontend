@@ -57,21 +57,23 @@
   --color-content-secondary: var(--content-secondary);
   --color-surface-soft: var(--surface-soft);
   --color-border-default: var(--border-default);
+  --color-border-soft: var(--border-soft);
   --color-primary-600: #5a4fd8;
   --color-primary: var(--surface-primary);
-  --color-content-brand: #7064E9;
+  --color-content-brand: #7064e9;
   --color-content-medium: var(--content-medium);
-  --color-content-success-light: #1DAF61;
-  --color-content-error-light: #E93544;
+  --color-content-success-light: #067647;
+  --color-content-error-light: #e93544;
   --color-blackest: var(--blackest);
   --color-content-default: var(--content-default);
   --color-surface-base-extralight: var(--surface-base-extralight);
-  --gradient-primary: linear-gradient(270deg, #7064E9 0%, #DD00AC 100%);
+  --gradient-primary: linear-gradient(270deg, #7064e9 0%, #dd00ac 100%);
   --color-base-subtle: rgba(204, 206, 239, 0.02);
   --color-surface-base-soft: rgba(204, 206, 239, 0.12);
-  --color-content-brand-light: #8C71F6;
-  --color-content-warning-light: #F79009;
-  --color-content-success-light: #1DAF61;
+  --color-content-brand-light: #8c71f6;
+  --color-content-warning-light: #f79009;
+  --color-content-success-light: #067647;
+  --color-surface-base-dark: var(--surface-base-dark);
 }
 
 :root {
@@ -106,8 +108,8 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --content-primary: #0F0F14;
-  --content-soft: rgba(100, 100, 100, 0.70);
+  --content-primary: #0f0f14;
+  --content-soft: rgba(100, 100, 100, 0.7);
   --surface-x-soft: rgba(2, 2, 3, 0.02);
   --surface-tolt: #e0e0e0;
   --surface-base-dark: #ffffff;
@@ -115,6 +117,7 @@
   --mdx-tolbar: #ededed;
   --content-default: #373842;
   --border-default: rgba(2, 2, 3, 0.04);
+  --border-soft: rgba(204, 206, 239, 0.12);
   --surface-soft: rgba(2, 2, 3, 0.04);
   --surface-primary: #7064e9;
   --blackest: #f5f5f5;
@@ -153,17 +156,18 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
   --content-primary: #ccceef;
-  --content-soft: rgba(154, 156, 207, 0.40);
+  --content-soft: rgba(154, 156, 207, 0.4);
   --surface-x-soft: rgba(204, 206, 239, 0.04);
-  --surface-tolt: #2D2D3C;
+  --surface-tolt: #2d2d3c;
   --surface-base-dark: #121217;
-  --content-secondary: #9A9CCF;
-  --content-default: #9798B6;
+  --content-secondary: #9a9ccf;
+  --content-default: #9798b6;
   --mdx-tolbar: #1a1a24;
-  --border-default: rgba(115, 118, 170, 0.20);
-  --surface-soft: rgba(204, 206, 239, 0.12);
+  --border-default: rgba(115, 118, 170, 0.2);
+  --border-soft: rgba(204, 206, 239, 0.12);
+  --surface-soft: rgba(255, 255, 255, 0.04);
   --surface-primary: #7064e9;
-  --content-medium: #7E7F94;
+  --content-medium: #7e7f94;
   --blackest: #0f1021;
   --surface-base-extralight: rgba(204, 206, 239, 0.06);
 }
@@ -194,11 +198,11 @@
 
   /* text */
   .text-body-15 {
-    @apply text-[15px] leading-[1.5] -tracking-[0.15px]
+    @apply text-[15px] leading-[1.5] -tracking-[0.15px];
   }
 
   .text-label-12 {
-    @apply text-xs leading-[1.2] -tracking-[0.12px]
+    @apply text-xs leading-[1.2] -tracking-[0.12px];
   }
 }
 
@@ -238,7 +242,8 @@
 }
 
 /* MDX Editor root variable */
-.mdx_editor_root, ._editorRoot_1e2ox_53 {
+.mdx_editor_root,
+._editorRoot_1e2ox_53 {
   --basePageBg: var(--surface-base-dark) !important;
   --baseBase: var(--surface-tolt) !important;
   --baseBg: var(--mdx-tolbar) !important;
@@ -250,15 +255,13 @@
 }
 
 .dark\:prose-invert {
-    &:is(.dark *) {
-      --tw-prose-body: var(--content-default);
-      --tw-prose-headings: var(--content-primary);
-      --tw-prose-links: var(--color-content-brand);
-      --tw-prose-bold: var(--content-primary);
-    }
+  &:is(.dark *) {
+    --tw-prose-body: var(--content-default);
+    --tw-prose-headings: var(--content-primary);
+    --tw-prose-links: var(--color-content-brand);
+    --tw-prose-bold: var(--content-primary);
+  }
 }
-
-
 
 /* Redix ui scrollbar remove problem issue fix */
 html {

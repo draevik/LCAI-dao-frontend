@@ -1,23 +1,24 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useConnection } from "wagmi";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { StatsCard } from "@/components/home/stats-card";
+import AiConfig from "@/components/ai-config/ai-config";
+import BallotsLockerModal from "@/components/ballots-locker";
+import { DelegateModal } from "@/components/delegation/delegate-modal";
+import Governance from "@/components/governance/governance";
+import { DaoSidebar } from "@/components/home/dao-sidebar";
+import { ParticipantsList } from "@/components/home/participants-list";
+import { ProposalsList } from "@/components/home/proposals-list";
 import { RecentProposals } from "@/components/home/recent-proposals";
 import { RisingDelegates } from "@/components/home/rising-delegates";
-import { DaoSidebar } from "@/components/home/dao-sidebar";
-import { ProposalsList } from "@/components/home/proposals-list";
-import { ParticipantsList } from "@/components/home/participants-list";
-import { DelegateModal } from "@/components/delegation/delegate-modal";
-import BallotsLockerModal from "@/components/ballots-locker";
-import useGraphqlApi from "@/hooks/useGraphqlApi";
+import { StatsCard } from "@/components/home/stats-card";
+import { TreasuryDashboard } from "@/components/treasury/treasury-dashboard";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import config from "@/config";
 import useCurrentChain from "@/hooks/useCurrentChain";
-import { FileText, Users, Home, Wallet } from "lucide-react";
-import { TreasuryDashboard } from "@/components/treasury/treasury-dashboard";
-
+import useGraphqlApi from "@/hooks/useGraphqlApi";
+import { useQuery } from "@tanstack/react-query";
+import { FileText, Home, Settings, Users, Wallet } from "lucide-react";
+import { useCallback, useState } from "react";
+import { useConnection } from "wagmi";
 export default function HomePage() {
   const api = useGraphqlApi();
   const { address } = useConnection();
@@ -72,27 +73,37 @@ export default function HomePage() {
 
   const handleViewAllProposals = () => setActiveTab("proposals");
   const handleViewAllParticipants = () => setActiveTab("participants");
+  const tabTriggerClassName =
+    "flex-0 gap-2 text-base lg:text-lg font-medium leading-none tracking-[-0.18px] py-2.5 md:py-3 lg:py-4 px-3 md:px-4 lg:px-6 rounded-md md:rounded-t-2xl rounded-b-none border-none bg-[#ededf96b] dark:bg-surface-base-dark data-[state=active]:bg-[image:var(--gradient-primary)] text-content-primary data-[state=active]:text-white";
 
   return (
     <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-10">
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="mb-6 border-b border-border-default pb-2 w-full">
-          <TabsTrigger value="home" className="gap-2">
+        <TabsList className="mb-6 border-b border-border-default w-full flex gap-1 overflow-x-auto">
+          <TabsTrigger value="home" className={tabTriggerClassName}>
             <Home className="h-4 w-4" />
             Home
           </TabsTrigger>
-          <TabsTrigger value="proposals" className="gap-2">
+          <TabsTrigger value="proposals" className={tabTriggerClassName}>
             <FileText className="h-4 w-4" />
             Proposals
           </TabsTrigger>
-          <TabsTrigger value="participants" className="gap-2">
+          <TabsTrigger value="participants" className={tabTriggerClassName}>
             <Users className="h-4 w-4" />
             Participants
           </TabsTrigger>
-          <TabsTrigger value="treasury" className="gap-2">
+          <TabsTrigger value="treasury" className={tabTriggerClassName}>
             <Wallet className="h-4 w-4" />
             Treasury
           </TabsTrigger>
+          {/* <TabsTrigger value="governance" className={tabTriggerClassName}>
+            <Settings className="h-4 w-4" />
+            Governance
+          </TabsTrigger>
+          <TabsTrigger value="ai-config" className={tabTriggerClassName}>
+            <Settings className="h-4 w-4" />
+            AI Config
+          </TabsTrigger> */}
         </TabsList>
 
         <TabsContent value="home">
@@ -102,14 +113,16 @@ export default function HomePage() {
               {/* Stats cards */}
               <div className="grid grid-cols-2 gap-4">
                 <StatsCard
-                  title="Delegates"
-                  value={spaceStats?.delegateCount || 0}
-                  icon={<Users className="h-6 w-6 text-primary" />}
-                />
-                <StatsCard
                   title="Proposals"
                   value={spaceStats?.proposalCount || 0}
-                  icon={<FileText className="h-6 w-6 text-primary" />}
+                  icon={<FileText className="h-6 w-6 text-content-primary" />}
+                  className="bg-[rgba(204,206,239,0.02)] bg-[linear-gradient(143deg,rgba(255,255,255,0.04)_61.49%,rgba(12,166,249,0.16)_106.01%),url('/images/bg/bg-wave-lines.png')] bg-cover bg-center bg-no-repeat"
+                />
+                <StatsCard
+                  title="Delegates"
+                  value={spaceStats?.delegateCount || 0}
+                  icon={<Users className="h-6 w-6 text-content-primary" />}
+                  className="bg-[rgba(204,206,239,0.02)] bg-[linear-gradient(147deg,rgba(255,255,255,0.04)_56.39%,rgba(255,166,13,0.22)_106.26%),url('/images/bg/bg-wave-lines.png')] bg-cover bg-center bg-no-repeat"
                 />
               </div>
 
@@ -157,6 +170,14 @@ export default function HomePage() {
         <TabsContent value="treasury">
           <TreasuryDashboard />
         </TabsContent>
+
+        {/* <TabsContent value="governance">
+          <Governance />
+        </TabsContent>
+
+        <TabsContent value="ai-config">
+          <AiConfig />
+        </TabsContent> */}
       </Tabs>
 
       <DelegateModal

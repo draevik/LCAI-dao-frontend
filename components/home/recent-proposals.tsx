@@ -41,11 +41,11 @@ export function RecentProposals({
           </div>
         ) : recentProposals.length > 0 ? (
           <div className="divide-y divide-border-default">
-            {recentProposals.map((proposal, idx) => (
+            {recentProposals.map((proposal) => (
               <ProposalListItem
                 key={proposal.id}
                 proposal={proposal}
-                isLast={idx === recentProposals.length - 1}
+                isStatusBadge={false}
               />
             ))}
           </div>

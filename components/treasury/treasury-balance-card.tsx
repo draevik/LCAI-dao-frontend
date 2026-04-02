@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { compactNumber } from "@/lib/utils";
+import clsx from "clsx";
 
 interface TreasuryBalanceCardProps {
   balances: {
@@ -15,18 +16,26 @@ interface TreasuryBalanceCardProps {
 export function TreasuryBalanceCard({ balances }: TreasuryBalanceCardProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {balances.map((token) => (
-        <Card key={token.symbol}>
-          <CardHeader className="pb-2">
+      {balances.map((token, index) => (
+        <Card
+          key={token.symbol}
+          className={clsx(
+            "gap-8 py-5 px-5 bg-[rgba(204,206,239,0.02)] bg-contain bg-center bg-no-repeat",
+            index === 0
+              ? 'bg-[linear-gradient(129deg,rgba(255,255,255,0.04)_51.29%,rgba(255,107,226,0.24)_101.18%),url("/images/bg/bg-wave-lines.png")]'
+              : 'bg-[linear-gradient(143deg,rgba(255,255,255,0.04)_61.49%,rgba(98,126,234,0.24)_106.01%),url("/images/bg/bg-wave-lines.png")]'
+          )}
+        >
+          <CardHeader className="px-0 gap-0">
             <CardTitle className="text-sm font-medium text-content-secondary">
               {token.symbol}
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-content-primary">
+          <CardContent className="px-0">
+            <p className="text-2xl lg:text-[28px] font-semibold leading-[1.2] tracking-[-0.28px] text-content-primary">
               {compactNumber(token.balanceParsed)}
             </p>
-            <p className="text-xs text-content-secondary mt-1">
+            <p className="text-xs md:text-sm leading-[1.42] text-content-secondary mt-2">
               {token.balanceParsed.toLocaleString("en-US", {
                 maximumFractionDigits: 4,
               })}{" "}
