@@ -5,9 +5,10 @@ import LoadingBlock from "@/components/loading-block";
 import { TreasuryBalanceCard } from "./treasury-balance-card";
 import { TreasuryTransactionList } from "./treasury-transaction-list";
 import { TreasuryStats } from "./treasury-stats";
+import { parseEther } from "viem";
 
 export function TreasuryDashboard() {
-  const { treasury, isLoading } = useTreasury();
+  const { treasury, totalBalanceUSD, isLoading } = useTreasury();
 
   if (isLoading) return <LoadingBlock />;
 
@@ -23,7 +24,21 @@ export function TreasuryDashboard() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Main content */}
       <div className="lg:col-span-2 space-y-6">
-        <TreasuryBalanceCard balances={treasury.balances} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <TreasuryBalanceCard
+            className="sm:col-span-2"
+            token={{
+              symbol: "USD",
+              decimals: 18,
+              balance: parseEther(`${totalBalanceUSD || 0}`),
+              balanceParsed: totalBalanceUSD || 0,
+            }}
+          />
+
+          {treasury.balances.map((token, index) => (
+            <TreasuryBalanceCard key={index + 1} token={token} />
+          ))}
+        </div>
         <TreasuryTransactionList />
       </div>
 
