@@ -83,6 +83,18 @@ const config = {
   treasury: {
     [mainnet.id]: "0x07A716a551E5f4CA7D6C71Da9dF1cb1429Dba826",
   } as Record<number, `0x${string}`>,
+
+  lcaiEthPair: {
+    [mainnet.id]: "0x0D047a370611437a1B8e6c2a95eA36f69fdDa3Be",
+  } as Record<number, `0x${string}`>,
+
+  wETH: {
+    [mainnet.id]: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  } as Record<number, `0x${string}`>,
+
+  chainlinkAggregator: {
+    [mainnet.id]: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419",
+  } as Record<number, `0x${string}`>,
 };
 
 export default config;

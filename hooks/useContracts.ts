@@ -6,6 +6,8 @@ import governorAbi from "@/contracts/abi/governorAbi";
 import config from "@/config";
 import timelockAbi from "@/contracts/abi/timelockAbi";
 import voteTokenAbi from "@/contracts/abi/voteTokenAbi";
+import uniswapV3Pair from "@/contracts/abi/uniswapV3Pair";
+import chainlinkAggregatorAbi from "@/contracts/abi/chainlinkAggregatorAbi";
 
 const useContracts = () => {
   const chain = useCurrentChain();
@@ -59,11 +61,33 @@ const useContracts = () => {
     [chain.id, client]
   );
 
+  const uniswapV3PairContract = useMemo(
+    () =>
+      getContract({
+        address: config.lcaiEthPair[chain.id],
+        abi: uniswapV3Pair,
+        client,
+      }),
+    [chain.id, client]
+  );
+
+  const chainlinkAggregatorContract = useMemo(
+    () =>
+      getContract({
+        address: config.chainlinkAggregator[chain.id],
+        abi: chainlinkAggregatorAbi,
+        client,
+      }),
+    [chain.id, client]
+  );
+
   return {
     governorContract,
     voteTokenContract,
     timeLockContract,
     underlyingTokenContract,
+    uniswapV3PairContract,
+    chainlinkAggregatorContract,
   };
 };
 
