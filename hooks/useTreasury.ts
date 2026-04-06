@@ -4,10 +4,15 @@ import useCurrentChain from "./useCurrentChain";
 import config from "@/config";
 import treasuryAbi from "@/contracts/abi/treasuryAbi";
 import { formatUnits, getAddress } from "viem";
+import { useMemo } from "react";
+import useDexPrice from "./useDexPrice";
+import useETHPrice from "./useETHPrice";
 
 export default function useTreasury() {
   const { publicClient } = useWeb3Clients();
   const chain = useCurrentChain();
+  const { data: dexPrice } = useDexPrice();
+  const { data: ethPrice } = useETHPrice();
 
   const treasuryAddress = config.treasury?.[chain.id];
   const lcaiToken = config.underlyingToken[chain.id];
@@ -105,5 +110,19 @@ export default function useTreasury() {
     refetchInterval: 60_000,
   });
 
-  return { treasury: data, isLoading };
+  const totalBalanceUSD = useMemo(() => {
+    if (!dexPrice?.lcaiPrice) return 0;
+
+    return data?.balances.reduce((acc, balance) => {
+      if (balance.symbol === "ETH") {
+        return acc + balance.balanceParsed * (ethPrice || 1);
+      }
+      if (balance.symbol === "LCAI") {
+        return acc + balance.balanceParsed * dexPrice.lcaiPrice;
+      }
+      return acc + balance.balanceParsed;
+    }, 0);
+  }, [data, dexPrice]);
+
+  return { treasury: data, totalBalanceUSD, isLoading };
 }

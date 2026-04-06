@@ -16,7 +16,6 @@ import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer2";
-import { BetaBanner } from "@/components/beta-banner";
 
 export const metadata: Metadata = {
   title: "LCAI DAO - Decentralized Governance",
@@ -44,7 +43,7 @@ export default async function RootLayout({
         >
           <ContextProvider cookies={cookies}>
             <main className="flex flex-col min-h-dvh">
-              <BetaBanner />
+              {/* <BetaBanner /> */}
               <Header />
               <div className="flex-1">{children}</div>
               <Footer />

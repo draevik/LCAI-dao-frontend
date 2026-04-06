@@ -1,15 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useConnection } from "wagmi";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/common/Button";
 import { Separator } from "@/components/ui/separator";
 import useDelegation from "@/hooks/useDelegation";
-import { compactNumber } from "@/lib/utils";
+import { compactNumber, formatNumber } from "@/lib/utils";
 import type { SpaceStats, Delegation } from "@/types";
 import useCurrentChain from "@/hooks/useCurrentChain";
 import config from "@/config";
+import useTreasury from "@/hooks/useTreasury";
+import useDexPrice from "@/hooks/useDexPrice";
 
 interface DaoSidebarProps {
   spaceStats: SpaceStats | null;
@@ -32,6 +34,8 @@ export function DaoSidebar({
   const [votingPower, setVotingPower] = useState<string>("0");
   const [tokenBalance, setTokenBalance] = useState<string>("0");
   const [currentDelegate, setCurrentDelegate] = useState<string | null>(null);
+  const { totalBalanceUSD: treasuryTotalBalanceUSD } = useTreasury();
+  const { data: dexPrice } = useDexPrice();
 
   const voteToken = config.voteToken[chain.id];
   const underlyingToken = config.underlyingToken[chain.id];
@@ -83,6 +87,20 @@ export function DaoSidebar({
                 <span className="text-content-secondary">Delegates</span>
                 <span className="font-medium text-content-primary">
                   {compactNumber(spaceStats?.delegateCount || 0)}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-content-secondary">Treasury</span>
+                <span className="font-medium text-content-primary">
+                  ~${formatNumber(treasuryTotalBalanceUSD)}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-content-secondary">LCAI Price</span>
+                <span className="font-medium text-content-primary">
+                  {dexPrice?.lcaiPrice
+                    ? `~$${formatNumber(dexPrice.lcaiPrice, 6)}`
+                    : "-"}
                 </span>
               </div>
             </div>

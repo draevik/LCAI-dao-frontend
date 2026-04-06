@@ -21,11 +21,11 @@ export function rmMarkdown(text: string) {
     .replace(/\#|\*\*|\*|\`\`|\`|\_\_|\_|\~\~/g, "");
 }
 
-export function formatNumber(num?: string | number) {
+export function formatNumber(num?: string | number, fractionDigits?: number) {
   if (!num) return 0;
 
   return Number(num).toLocaleString("en-US", {
-    maximumFractionDigits: 2,
+    maximumFractionDigits: fractionDigits || 2,
   });
 }
 
