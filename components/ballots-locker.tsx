@@ -105,7 +105,7 @@ export default function BallotsLockerModal({
 
   const setMaxAmount = () => {
     if (activeTab === "deposit") {
-      setAmount(tokenBalance.data?.formatted || "0");
+      setAmount(String(tokenBalance.data?.formatted || 0));
     } else {
       setAmount(ballotBalance);
     }
