@@ -36,7 +36,7 @@ const PARAM_FUNCTIONS = [
 const chain = lcaiDevnet;
 
 export function useAIConfigParams() {
-  const { publicClient } = useWeb3Clients();
+  const { publicClient } = useWeb3Clients({ chain });
   const aiConfigAddress = config.aiConfig[chain.id];
 
   return useQuery({

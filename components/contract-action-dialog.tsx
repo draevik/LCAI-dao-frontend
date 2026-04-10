@@ -45,11 +45,9 @@ import { Loader2Icon, BookUserIcon } from "lucide-react";
 import { ContractPickerDialog } from "./contract-picker-dialog";
 import { Button } from "./common/Button";
 import { Button as ButtonUi } from "@/components/ui/button";
-import governorAbi from "@/contracts/abi/governorAbi";
 
 const abiOptions = [
   { value: "imported", label: "Use the imported ABI" },
-  { value: "governor", label: "Lightchain Governor", abi: governorAbi as Abi },
   {
     value: "erc20",
     label: "ERC 20",

@@ -86,6 +86,10 @@ const config = {
         name: "Lightchain Governor",
         address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
       },
+      {
+        name: "Lightchain AI Config",
+        address: "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
+      },
     ],
   } as Record<number, { name: string; address: `0x${string}` }[]>,
 
