@@ -59,3 +59,19 @@ export function clone<T>(obj: T): T {
 export function truncateAddress(address: string) {
   return address.slice(0, 6) + "..." + address.slice(-4);
 }
+
+export function secondsToTime(seconds: bigint | number): string {
+  const totalSeconds = Number(seconds);
+  if (totalSeconds < 120) return `~${totalSeconds} seconds`;
+  const minutes = Math.floor(totalSeconds / 60);
+  if (minutes < 120) return `~${minutes} minutes`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 48) return `~${hours} hours`;
+  const days = Math.floor(hours / 24);
+  return `~${days} days`;
+}
+
+export function formatBps(bps: bigint | number): string {
+  const percent = Number(bps) / 100;
+  return `${percent}% (${bps.toString()} bps)`;
+}

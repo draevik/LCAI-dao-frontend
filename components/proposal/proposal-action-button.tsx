@@ -3,13 +3,15 @@ import $dayjs from "@/lib/dayjs";
 import type { Proposal, RawTransaction, DecodedExecution } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useContracts from "@/hooks/useContracts";
-import { useConnection } from "wagmi";
+import { useConnection, useSwitchChain } from "wagmi";
 import { useGovernance } from "@/hooks/useGovernance";
 import { toast } from "sonner";
 import { TransactionExecutionError } from "viem";
 import { useAppKit } from "@reown/appkit/react";
 import { useMemo } from "react";
 import { Button } from "../common/Button";
+import useCurrentChain from "@/hooks/useCurrentChain";
+import { mainnet } from "viem/chains";
 
 // Helper to get target address from both old and new execution formats
 function getExecutionTarget(
@@ -32,6 +34,8 @@ export function ProposalActionButton({
   const { queue, execute } = useGovernance();
   const { address } = useConnection();
   const queryClient = useQueryClient();
+  const switchChain = useSwitchChain();
+  const chain = useCurrentChain();
 
   const hasVoted = useQuery({
     queryKey: ["hasVoted", proposal.proposal_id, address],
@@ -98,6 +102,7 @@ export function ProposalActionButton({
   }, [proposal.state, hasVoted.data, canExecute, proposal.execution_time]);
 
   const disabled = useMemo(() => {
+    if (proposal.state === ProposalState.Executed) return true;
     if (!address) return false;
     if (proposal.state === ProposalState.Active) return hasVoted.data;
     if (proposal.state === ProposalState.Succeeded)
@@ -105,7 +110,6 @@ export function ProposalActionButton({
     if (proposal.state === ProposalState.Queued) {
       return !canExecute || executeProposalMutation.isPending;
     }
-    if (proposal.state === ProposalState.Executed) return true;
     return false;
   }, [
     proposal.state,
@@ -119,6 +123,10 @@ export function ProposalActionButton({
   const submitAction = () => {
     if (!address) {
       open();
+      return;
+    }
+    if (proposal.indexer === "mainnet" && chain.id !== mainnet.id) {
+      switchChain.mutate({ chainId: mainnet.id });
       return;
     }
     if (proposal.state === ProposalState.Active) {

@@ -1,52 +1,59 @@
-import {
-  CommonTable,
-  type CommonTableSection,
-} from "@/components/ui/common-table";
+"use client";
+
+import { CommonTable } from "@/components/ui/common-table";
 import config from "@/config";
-import { compactNumber } from "@/lib/utils";
+import { useGovernanceParams } from "@/hooks/useGovernanceParams";
+import { compactNumber, secondsToTime } from "@/lib/utils";
 import { Settings } from "lucide-react";
+import { useMemo } from "react";
 import { mainnet } from "viem/chains";
-
-const DAY = 60 * 60 * 24;
-
-const governanceTableData: CommonTableSection[] = [
-  {
-    title: "Governance Parameters",
-    icon: <Settings className="size-6" />,
-    items: [
-      {
-        label: "Voting Delay",
-        value: `${compactNumber(
-          config.daoSystem.proposalDelay / 12
-        )} blocks (~${config.daoSystem.proposalDelay / DAY} days)`,
-      },
-      {
-        label: "Voting Period",
-        value: `${compactNumber(config.daoSystem.votingPeriod / 12)} blocks (~${
-          config.daoSystem.votingPeriod / DAY
-        } days)`,
-      },
-      {
-        label: "Proposal Threshold",
-        value: `${compactNumber(config.daoSystem.proposalThreshold)} ${
-          config.underlyingToken[mainnet.id].symbol
-        }`,
-      },
-      {
-        label: "Quorum",
-        value: `${config.daoSystem.quorumNeeded}% (${compactNumber(
-          (config.daoSystem.totalSupply * config.daoSystem.quorumNeeded) / 100
-        )} ${config.underlyingToken[mainnet.id].symbol})`,
-      },
-      {
-        label: "Timelock Delay",
-        value: `${config.daoSystem.timelockDelay / DAY} days`,
-      },
-    ],
-  },
-];
+import LoadingBlock from "@/components/loading-block";
 
 const Governance = () => {
+  const { data: governanceParams, isLoading } = useGovernanceParams();
+
+  const governanceTableData = useMemo(() => {
+    if (!governanceParams) return [];
+    return [
+      {
+        title: "Governance Parameters",
+        icon: <Settings className="size-6" />,
+        items: [
+          {
+            label: "Voting Delay",
+            value: `${compactNumber(
+              governanceParams.votingDelayInBlocks
+            )} blocks (${secondsToTime(governanceParams.votingDelay)})`,
+          },
+          {
+            label: "Voting Period",
+            value: `${compactNumber(
+              governanceParams.votingPeriodInBlocks
+            )} blocks (${secondsToTime(governanceParams.votingPeriod)})`,
+          },
+          {
+            label: "Proposal Threshold",
+            value: `${compactNumber(governanceParams.proposalThreshold)} ${
+              config.underlyingToken[mainnet.id].symbol
+            }`,
+          },
+          {
+            label: "Quorum",
+            value: `${governanceParams.quorumNumerator}% (${compactNumber(
+              (governanceParams.totalSupply *
+                governanceParams.quorumNumerator) /
+                100
+            )} ${config.underlyingToken[mainnet.id].symbol})`,
+          },
+          {
+            label: "Timelock Delay",
+            value: `${secondsToTime(governanceParams.timelockDelay)}`,
+          },
+        ],
+      },
+    ];
+  }, [governanceParams]);
+
   return (
     <div>
       <div className="pt-2 pb-10 gap-3">
@@ -58,7 +65,11 @@ const Governance = () => {
         </p>
       </div>
 
-      <CommonTable sections={governanceTableData} columns={4} />
+      {isLoading ? (
+        <LoadingBlock className="max-w-full py-16" />
+      ) : (
+        <CommonTable sections={governanceTableData} columns={4} />
+      )}
     </div>
   );
 };

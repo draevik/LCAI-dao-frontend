@@ -18,11 +18,15 @@ interface ProposalListItemProps {
 
 type BadgeVariant = NonNullable<React.ComponentProps<typeof Badge>["variant"]>;
 
-
-export function ProposalListItem({ proposal, isStatusBadge = true }: ProposalListItemProps) {
+export function ProposalListItem({
+  proposal,
+  isStatusBadge = true,
+}: ProposalListItemProps) {
   const votingPower = Number(proposal.scores_total_parsed ?? 0);
   const proposalStateLabel = ProposalStateLabel[proposal.state];
-  const proposalBadgeVariant = ((proposalStateLabel as BadgeVariant) ?? "default").toLowerCase();
+  const proposalBadgeVariant = (
+    (proposalStateLabel as BadgeVariant) ?? "default"
+  ).toLowerCase();
 
   return (
     <Link
@@ -34,16 +38,18 @@ export function ProposalListItem({ proposal, isStatusBadge = true }: ProposalLis
           <ProposalStatusBadge status={proposal.state} />
           {proposal.metadata?.title}
         </span>
-        {
-          isStatusBadge && (
-            <Badge
-              variant={proposalBadgeVariant as BadgeVariant}
-              className="text-xs md:text-sm"
-            >
-              <ProposalStatusBadge status={proposal.state} className="mr-0 text-xs md:text-sm" />
-              {proposalStateLabel}
-            </Badge>
-          )}
+        {isStatusBadge && (
+          <Badge
+            variant={proposalBadgeVariant as BadgeVariant}
+            className="text-xs md:text-sm"
+          >
+            <ProposalStatusBadge
+              status={proposal.state}
+              className="mr-0 text-xs md:text-sm"
+            />
+            {proposalStateLabel}
+          </Badge>
+        )}
       </h3>
 
       <div className="flex flex-wrap sm:flex-nowrap items-center gap-x-4 gap-y-2 mt-4">
@@ -77,26 +83,26 @@ export function ProposalListItem({ proposal, isStatusBadge = true }: ProposalLis
         </div>
         {(proposal.state === ProposalState.Pending ||
           proposal.state === ProposalState.Active) && (
-            <>
-              <span className="hidden sm:block">
-                <FontAwesomeIcon icon={faSparkle} className="size-3.5" />
-              </span>
-              <div className="flex items-center gap-1">
-                <Clock className="h-4 w-4 sm:text-base text-sm" />
-                {proposal.state === ProposalState.Pending ? (
+          <>
+            <span className="hidden sm:block">
+              <FontAwesomeIcon icon={faSparkle} className="size-3.5" />
+            </span>
+            <div className="flex items-center gap-1">
+              <Clock className="h-4 w-4 sm:text-base text-sm" />
+              {proposal.state === ProposalState.Pending ? (
+                <span className="whitespace-nowrap sm:text-base text-sm">
+                  Start {$dayjs.unix(Number(proposal.start_time)).fromNow()}
+                </span>
+              ) : (
+                proposal.state === ProposalState.Active && (
                   <span className="whitespace-nowrap sm:text-base text-sm">
-                    Start {$dayjs.unix(Number(proposal.start_time)).fromNow()}
+                    {$dayjs.unix(Number(proposal.end_time)).fromNow()}
                   </span>
-                ) : (
-                  proposal.state === ProposalState.Active && (
-                    <span className="whitespace-nowrap sm:text-base text-sm">
-                      {$dayjs.unix(Number(proposal.end_time)).fromNow()}
-                    </span>
-                  )
-                )}
-              </div>
-            </>
-          )}
+                )
+              )}
+            </div>
+          </>
+        )}
       </div>
     </Link>
   );

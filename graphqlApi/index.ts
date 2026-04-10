@@ -37,6 +37,9 @@ import {
 } from "./queries";
 import { clone } from "@/lib/utils";
 import { formatUnits } from "viem";
+import config, { lcaiDevnet } from "@/config";
+
+const indexer = config.indexerName[lcaiDevnet.id];
 
 const getProposalState = (proposal: ApiProposal, current: number) => {
   const quorum = BigInt(proposal.quorum);
@@ -138,6 +141,7 @@ function formatProposal(proposal: ApiProposal, current: number): Proposal {
 
   return {
     ...proposal,
+    indexer: proposal._indexer,
     author: {
       id: proposal.author.id,
     },
@@ -192,7 +196,7 @@ export function createApi(uri: string) {
         query: VOTES_QUERY,
         fetchPolicy: "network-only",
         variables: {
-          indexer: "mainnet",
+          indexer,
           first: limit,
           skip,
           orderBy,
@@ -213,7 +217,12 @@ export function createApi(uri: string) {
       const { data } = await apollo.query({
         query: USER_VOTES_QUERY,
         fetchPolicy: "network-only",
-        variables: { indexer: "mainnet", voter: voter.toLowerCase(), first: limit, skip },
+        variables: {
+          indexer,
+          voter: voter.toLowerCase(),
+          first: limit,
+          skip,
+        },
       });
 
       return Object.fromEntries(
@@ -304,9 +313,12 @@ export function createApi(uri: string) {
       const result = await apollo.query({
         query: USER_QUERY as import("@apollo/client").DocumentNode,
         fetchPolicy: "network-only",
-        variables: { indexer: "mainnet", id: id.toLowerCase() },
+        variables: { indexer, id: id.toLowerCase() },
       });
-      const data = result.data as { user?: Parameters<typeof mapGraphQLUser>[0] } | null | undefined;
+      const data = result.data as
+        | { user?: Parameters<typeof mapGraphQLUser>[0] }
+        | null
+        | undefined;
       if (!data?.user) return null;
       return mapGraphQLUser(data.user);
     },
@@ -314,7 +326,7 @@ export function createApi(uri: string) {
       const { data } = await apollo.query({
         query: LAST_INDEXED_BLOCK_QUERY,
         fetchPolicy: "network-only",
-        variables: { indexer: "mainnet" },
+        variables: { indexer },
       });
       return data?._metadata?.value ? Number(data._metadata.value) : null;
     },
@@ -338,7 +350,7 @@ export function createApi(uri: string) {
         query: DELEGATES_QUERY,
         fetchPolicy: "network-only",
         variables: {
-          indexer: "mainnet",
+          indexer,
           first: limit,
           skip,
           orderBy,
@@ -359,7 +371,9 @@ export function createApi(uri: string) {
           created: delegate.created,
           updated: delegate.updated,
           user: delegate.user
-            ? mapGraphQLUser(delegate.user as Parameters<typeof mapGraphQLUser>[0])
+            ? mapGraphQLUser(
+                delegate.user as Parameters<typeof mapGraphQLUser>[0]
+              )
             : null,
         })) || []
       );
@@ -372,7 +386,7 @@ export function createApi(uri: string) {
       const { data } = await apollo.query({
         query: DELEGATE_QUERY,
         fetchPolicy: "network-only",
-        variables: { indexer: "mainnet", id: delegateId },
+        variables: { indexer, id: delegateId },
       });
 
       if (!data?.delegate) return null;
@@ -399,7 +413,7 @@ export function createApi(uri: string) {
       const { data } = await apollo.query({
         query: USER_DELEGATION_QUERY,
         fetchPolicy: "network-only",
-        variables: { indexer: "mainnet", id: delegationId },
+        variables: { indexer, id: delegationId },
       });
 
       if (!data?.delegation) return null;
@@ -453,7 +467,7 @@ export function createApi(uri: string) {
       const { data } = await apollo.query({
         query: SPACE_QUERY,
         fetchPolicy: "network-only",
-        variables: { indexer: "mainnet", id: spaceId.toLowerCase() },
+        variables: { indexer, id: spaceId.toLowerCase() },
       });
 
       if (!data?.space) return null;

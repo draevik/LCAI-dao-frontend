@@ -26,6 +26,9 @@ import { toast } from "sonner";
 import { formatEther, TransactionExecutionError } from "viem";
 import { useConnection } from "wagmi";
 import useContracts from "@/hooks/useContracts";
+import { lcaiDevnet } from "@/config";
+import useCurrentChain from "@/hooks/useCurrentChain";
+import useWeb3Clients from "@/hooks/useWeb3Clients";
 
 interface ProposalVoteDialogProps {
   open: boolean;
@@ -38,6 +41,8 @@ export function ProposalVoteDialog({
   proposal,
   onOpenChange,
 }: ProposalVoteDialogProps) {
+  const chain = useCurrentChain();
+  const { publicClient } = useWeb3Clients();
   const { address } = useConnection();
   const { castVote } = useGovernance();
   const { voteTokenContract } = useContracts();
@@ -47,7 +52,10 @@ export function ProposalVoteDialog({
 
   const userVotingPower = useQuery({
     queryKey: ["votingPower", address],
-    queryFn: async () => voteTokenContract.read.balanceOf([address!]),
+    queryFn: async () =>
+      chain.id === lcaiDevnet.id
+        ? publicClient.getBalance({ address: address! })
+        : voteTokenContract.read.balanceOf([address!]),
     select: (votingPower) => +formatEther(votingPower),
     enabled: Boolean(address),
   });

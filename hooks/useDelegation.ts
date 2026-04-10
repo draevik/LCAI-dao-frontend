@@ -8,9 +8,10 @@ import {
 } from "wagmi";
 import useContracts from "./useContracts";
 import useCurrentChain from "./useCurrentChain";
-import config from "@/config";
+import config, { lcaiDevnet } from "@/config";
 import { formatUnits, zeroAddress } from "viem";
 import voteTokenAbi from "@/contracts/abi/voteTokenAbi";
+import useWeb3Clients from "./useWeb3Clients";
 
 export type DelegationState = {
   currentDelegate: string | null;
@@ -23,12 +24,11 @@ export type DelegationState = {
 const useDelegation = () => {
   const { address } = useConnection();
   const chain = useCurrentChain();
+  const { publicClient, walletClient } = useWeb3Clients();
   const { voteTokenContract } = useContracts();
   const [pendingTxHash, setPendingTxHash] = useState<`0x${string}` | undefined>(
     undefined
   );
-
-  const { writeContractAsync } = useWriteContract();
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
@@ -39,20 +39,23 @@ const useDelegation = () => {
 
   const delegate = useCallback(
     async (delegatee: `0x${string}`): Promise<`0x${string}` | null> => {
-      if (!tokenAddress || !address) {
+      if (!tokenAddress || !address || !walletClient) {
         throw new Error("Token contract or wallet not connected");
       }
 
-      const hash = await writeContractAsync({
+      const { request } = await publicClient.simulateContract({
         address: tokenAddress,
         abi: voteTokenAbi,
         functionName: "delegate",
         args: [delegatee],
       });
+
+      const hash = await walletClient.writeContract(request);
+
       setPendingTxHash(hash);
       return hash;
     },
-    [tokenAddress, address, writeContractAsync]
+    [tokenAddress, address, publicClient]
   );
 
   const delegateToSelf = useCallback(async (): Promise<
@@ -62,7 +65,7 @@ const useDelegation = () => {
       throw new Error("Wallet not connected");
     }
     return delegate(address);
-  }, [address, delegate]);
+  }, [address, delegate, publicClient, walletClient]);
 
   const fetchDelegationState = useCallback(
     async (account: `0x${string}`): Promise<DelegationState> => {
@@ -79,7 +82,7 @@ const useDelegation = () => {
       const [delegateAddr, votingPower, tokenBalance] = await Promise.all([
         voteTokenContract.read.delegates([account]),
         voteTokenContract.read.getVotes([account]),
-        voteTokenContract.read.balanceOf([account]),
+        chain.id === lcaiDevnet.id ? publicClient.getBalance({ address: account }) : voteTokenContract.read.balanceOf([account]),
       ]);
 
       return {

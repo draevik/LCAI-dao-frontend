@@ -12,6 +12,8 @@ import { useConnection } from "wagmi";
 import { useAppKit } from "@reown/appkit/react";
 import useDelegation, { DelegationState } from "@/hooks/useDelegation";
 import { compactNumber, truncateAddress } from "@/lib/utils";
+import useCurrentChain from "@/hooks/useCurrentChain";
+import { mainnet } from "viem/chains";
 
 interface ProposalDelegationReminderProps {
   proposal: Proposal;
@@ -181,6 +183,7 @@ export function ProposalDelegationReminder({
   const [delegationState, setDelegationState] =
     useState<DelegationState | null>(null);
   const [isLoadingDelegation, setIsLoadingDelegation] = useState(false);
+  const chain = useCurrentChain();
   const { address, isConnected } = useConnection();
   const { open } = useAppKit();
   const { fetchDelegationState, hasTokenContract } = useDelegation();
@@ -253,13 +256,15 @@ export function ProposalDelegationReminder({
               <div className="flex gap-2 pt-2">
                 {isConnected ? (
                   <>
-                    <Button
-                      variant="outline"
-                      className="flex-1"
-                      onClick={() => setIsBallotsLockerOpen(true)}
-                    >
-                      Wrap/Unwrap
-                    </Button>
+                    {chain.id === mainnet.id && (
+                      <Button
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => setIsBallotsLockerOpen(true)}
+                      >
+                        Wrap/Unwrap
+                      </Button>
+                    )}
                     <Button
                       variant="default"
                       className="flex-1"

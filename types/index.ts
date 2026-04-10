@@ -118,6 +118,7 @@ export type DecodedExecution = {
 };
 
 export type Proposal = ApiProposal & {
+  indexer: string;
   author: {
     id: string;
   };

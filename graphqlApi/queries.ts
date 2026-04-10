@@ -59,6 +59,7 @@ gql(`
     execution_ready
     executed
     cancelled
+    _indexer
   }
 `);
 

@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import useWeb3Clients from "./useWeb3Clients";
-import useCurrentChain from "./useCurrentChain";
-import config from "@/config";
+import config, { mainnet } from "@/config";
 import treasuryAbi from "@/contracts/abi/treasuryAbi";
 import { formatUnits, getAddress } from "viem";
 import { useMemo } from "react";
@@ -9,16 +8,15 @@ import useDexPrice from "./useDexPrice";
 import useETHPrice from "./useETHPrice";
 
 export default function useTreasury() {
-  const { publicClient } = useWeb3Clients();
-  const chain = useCurrentChain();
+  const { publicClient } = useWeb3Clients({ chain: mainnet });
   const { data: dexPrice } = useDexPrice();
   const { data: ethPrice } = useETHPrice();
 
-  const treasuryAddress = config.treasury?.[chain.id];
-  const lcaiToken = config.underlyingToken[chain.id];
+  const treasuryAddress = config.treasury[mainnet.id];
+  const lcaiToken = config.underlyingToken[mainnet.id];
 
   const { data, isLoading } = useQuery({
-    queryKey: ["treasury-balances", chain.id],
+    queryKey: ["treasury-balances", mainnet.id],
     queryFn: async () => {
       if (!treasuryAddress) return null;
 
@@ -53,16 +51,6 @@ export default function useTreasury() {
           })
         );
       }
-      // if (lcaibToken) {
-      //   tokenBalanceCalls.push(
-      //     publicClient.readContract({
-      //       address,
-      //       abi: treasuryAbi,
-      //       functionName: "getBalance",
-      //       args: [getAddress(lcaibToken.address)],
-      //     })
-      //   );
-      // }
 
       const [ethBalance, admin, paused] = await Promise.all(calls);
       const tokenBalances = await Promise.all(tokenBalanceCalls);
@@ -86,18 +74,6 @@ export default function useTreasury() {
           ),
         });
       }
-
-      // if (lcaibToken && tokenBalances[lcaiToken ? 1 : 0] !== undefined) {
-      //   const idx = lcaiToken ? 1 : 0;
-      //   balances.push({
-      //     symbol: lcaibToken.symbol,
-      //     decimals: lcaibToken.decimals,
-      //     balance: tokenBalances[idx] as bigint,
-      //     balanceParsed: parseFloat(
-      //       formatUnits(tokenBalances[idx] as bigint, lcaibToken.decimals)
-      //     ),
-      //   });
-      // }
 
       return {
         address: treasuryAddress,

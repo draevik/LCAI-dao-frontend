@@ -10,6 +10,16 @@ export const ProposalState = {
   Executed: 7,
 } as const;
 
+export type ProposalState = (typeof ProposalState)[keyof typeof ProposalState];
+
+export const Support = {
+  Against: 0,
+  For: 1,
+  Abstain: 2,
+} as const;
+
+export type Support = (typeof Support)[keyof typeof Support];
+
 export const ProposalStateLabel = {
   0: "Pending",
   1: "Active",

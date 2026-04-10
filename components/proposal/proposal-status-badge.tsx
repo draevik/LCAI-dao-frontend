@@ -1,7 +1,14 @@
 import { ProposalState, ProposalStateLabel } from "@/lib/constents";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark, faHourglassClock, faHourglassHalf, faSignalStream, faSquareCheck } from "@fortawesome/pro-regular-svg-icons";
+import {
+  faCircleCheck,
+  faCircleXmark,
+  faHourglassClock,
+  faHourglassHalf,
+  faSignalStream,
+  faSquareCheck,
+} from "@fortawesome/pro-regular-svg-icons";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -10,14 +17,16 @@ type Props = {
 };
 
 export default function ProposalStatusBadge({ status, className }: Props) {
-
   switch (status) {
     case ProposalState.Pending:
       return (
         <Tooltip>
           <TooltipTrigger asChild>
             <FontAwesomeIcon
-              className={cn("inline-block mr-2 md:text-lg sm:text-base text-sm text-content-medium", className)}
+              className={cn(
+                "inline-block mr-2 md:text-lg sm:text-base text-sm text-content-medium",
+                className
+              )}
               icon={faHourglassHalf}
             />
           </TooltipTrigger>
@@ -31,7 +40,10 @@ export default function ProposalStatusBadge({ status, className }: Props) {
         <Tooltip>
           <TooltipTrigger asChild>
             <FontAwesomeIcon
-              className={cn("inline-block mr-2 md:text-lg sm:text-base text-sm text-content-success-light", className)}
+              className={cn(
+                "inline-block mr-2 md:text-lg sm:text-base text-sm text-content-success-light",
+                className
+              )}
               icon={faSignalStream}
             />
           </TooltipTrigger>
@@ -45,12 +57,32 @@ export default function ProposalStatusBadge({ status, className }: Props) {
         <Tooltip>
           <TooltipTrigger asChild>
             <FontAwesomeIcon
-              className={cn("inline-block mr-2 md:text-lg sm:text-base text-sm text-content-success-light", className)}
+              className={cn(
+                "inline-block mr-2 md:text-lg sm:text-base text-sm text-content-success-light",
+                className
+              )}
               icon={faSquareCheck}
             />
           </TooltipTrigger>
           <TooltipContent>
             <p className="text-xs">Passed</p>
+          </TooltipContent>
+        </Tooltip>
+      );
+    case ProposalState.Executed:
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <FontAwesomeIcon
+              className={cn(
+                "inline-block mr-2 md:text-lg sm:text-base text-sm text-content-success-light",
+                className
+              )}
+              icon={faCircleCheck}
+            />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="text-xs">Executed</p>
           </TooltipContent>
         </Tooltip>
       );
@@ -60,7 +92,10 @@ export default function ProposalStatusBadge({ status, className }: Props) {
         <Tooltip>
           <TooltipTrigger asChild>
             <FontAwesomeIcon
-              className={cn("inline-block mr-2 md:text-lg sm:text-base text-sm text-content-error-light", className)}
+              className={cn(
+                "inline-block mr-2 md:text-lg sm:text-base text-sm text-content-error-light",
+                className
+              )}
               icon={faCircleXmark}
             />
           </TooltipTrigger>
@@ -70,16 +105,21 @@ export default function ProposalStatusBadge({ status, className }: Props) {
         </Tooltip>
       );
     default:
-      return (<Tooltip>
-        <TooltipTrigger asChild>
-          <FontAwesomeIcon
-            className={cn("inline-block mr-2 md:text-lg sm:text-base text-sm text-content-medium", className)}
-            icon={faHourglassClock}
-          />
-        </TooltipTrigger>
-        <TooltipContent>
-          <p className="text-xs">{ProposalStateLabel[status]}</p>
-        </TooltipContent>
-      </Tooltip>)
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <FontAwesomeIcon
+              className={cn(
+                "inline-block mr-2 md:text-lg sm:text-base text-sm text-content-medium",
+                className
+              )}
+              icon={faHourglassClock}
+            />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="text-xs">{ProposalStateLabel[status]}</p>
+          </TooltipContent>
+        </Tooltip>
+      );
   }
 }

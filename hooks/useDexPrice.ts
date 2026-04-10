@@ -1,29 +1,42 @@
 import { useQuery } from "@tanstack/react-query";
-import config from "@/config";
+import config, { mainnet } from "@/config";
 import { getAddress } from "viem";
-import useContracts from "./useContracts";
-import useCurrentChain from "./useCurrentChain";
 import useETHPrice from "./useETHPrice";
+import uniswapV3Pair from "@/contracts/abi/uniswapV3Pair";
+import useWeb3Clients from "./useWeb3Clients";
+
+const uniswapV3PairConfig = {
+    address: config.lcaiEthPair[mainnet.id],
+    abi: uniswapV3Pair,
+}
 
 export default function useDexPrice() {
-    const chain = useCurrentChain();
-    const { uniswapV3PairContract } = useContracts();
+    const { publicClient } = useWeb3Clients({ chain: mainnet });
     const { data: ethPrice } = useETHPrice();
 
-    const lcai = config.underlyingToken[chain.id];
-    const wethAddress = config.wETH[chain.id];
+    const lcai = config.underlyingToken[mainnet.id];
+    const wethAddress = config.wETH[mainnet.id];
 
     return useQuery({
-        queryKey: ["dexPrice", chain.id],
+        queryKey: ["dexPrice", mainnet.id],
         queryFn: async () => {
             if (!lcai || !wethAddress) {
                 return null;
             }
 
             const [slot0, token0Address, token1Address] = await Promise.all([
-                uniswapV3PairContract.read.slot0(),
-                uniswapV3PairContract.read.token0(),
-                uniswapV3PairContract.read.token1(),
+                publicClient.readContract({
+                    ...uniswapV3PairConfig,
+                    functionName: "slot0",
+                }),
+                publicClient.readContract({
+                    ...uniswapV3PairConfig,
+                    functionName: "token0",
+                }),
+                publicClient.readContract({
+                    ...uniswapV3PairConfig,
+                    functionName: "token1",
+                }),
             ]);
 
             const token0 = getAddress(token0Address).toLowerCase();

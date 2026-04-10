@@ -1,12 +1,36 @@
 import { Token } from "@/types";
-import { Chain, mainnet } from "viem/chains";
+import { Chain, mainnet as viemMainnet } from "viem/chains";
 
 const infuraApiKey = process.env.NEXT_PUBLIC_INFURA_API_KEY;
-const customMainnet: Chain = {
-  ...mainnet,
+
+export const mainnet: Chain = {
+  ...viemMainnet,
   rpcUrls: {
     default: {
       http: [`https://mainnet.infura.io/v3/${infuraApiKey}`],
+      webSocket: [`wss://mainnet.infura.io/ws/v3/${infuraApiKey}`],
+    },
+  },
+};
+
+export const lcaiDevnet: Chain = {
+  id: 31337,
+  name: "Lightchain AI Devnet",
+  nativeCurrency: {
+    name: "Lightchain AI Devnet",
+    symbol: "LCAI",
+    decimals: 18,
+  },
+  blockExplorers: {
+    default: {
+      name: "Lightchain AI Devnet Explorer",
+      url: "http://localhost",
+    },
+  },
+  rpcUrls: {
+    default: {
+      http: ["http://localhost:8545"],
+      webSocket: ["ws://localhost:8546"],
     },
   },
 };
@@ -33,16 +57,22 @@ const customMainnet: Chain = {
 // };
 
 const config = {
-  chains: [customMainnet] as [Chain, ...Chain[]],
+  chains: [lcaiDevnet] as [Chain, ...Chain[]],
 
-  daoSystem: {
-    proposalThreshold: 140_000, // 0 LCAI
-    quorumNeeded: 3, // 3 percent
-    proposalDelay: 60 * 60 * 24, // 1 day
-    votingPeriod: 60 * 60 * 24 * 14, // 14 days
-    timelockDelay: 60 * 60 * 24 * 2, // 2 days
-    totalSupply: 10_000_000_000,
+  indexerName: {
+    [mainnet.id]: "mainnet",
+    [lcaiDevnet.id]: "lcaiDevnet",
   },
+
+  blockTimeSeconds: {
+    [mainnet.id]: 12,
+    [lcaiDevnet.id]: 2,
+  } as Record<number, number>,
+
+  totalSupply: {
+    [mainnet.id]: 10e9,
+    [lcaiDevnet.id]: 95_000,
+  } as Record<number, number>,
 
   predefinedContracts: {
     [mainnet.id]: [
@@ -51,19 +81,37 @@ const config = {
         address: "0x07A716a551E5f4CA7D6C71Da9dF1cb1429Dba826",
       },
     ],
+    [lcaiDevnet.id]: [
+      {
+        name: "Lightchain Governor",
+        address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      },
+    ],
   } as Record<number, { name: string; address: `0x${string}` }[]>,
 
   timeLock: {
     [mainnet.id]: `0xbE1c37F8C4DA77dD06F4A8AC5098Ec70273093d7`,
+    [lcaiDevnet.id]: `0x5FbDB2315678afecb367f032d93F642f64180aa3`,
   } as Record<number, `0x${string}`>,
 
   governor: {
     [mainnet.id]: `0x6dfa413B5900a1a7947BC75E68AbBA093cB2492d`,
+    [lcaiDevnet.id]: `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0`,
+  } as Record<number, `0x${string}`>,
+
+  aiConfig: {
+    [lcaiDevnet.id]: `0x8A791620dd6260079BF849Dc5567aDC3F2FdC318`,
   } as Record<number, `0x${string}`>,
 
   underlyingToken: {
     [mainnet.id]: {
       address: "0x9ca8530ca349c966fe9ef903df17a75b8a778927",
+      symbol: "LCAI",
+      name: "LCAI",
+      logoURI: "/images/brand/lcai.svg",
+      decimals: 18,
+    },
+    [lcaiDevnet.id]: {
       symbol: "LCAI",
       name: "LCAI",
       logoURI: "/images/brand/lcai.svg",
@@ -77,6 +125,12 @@ const config = {
       symbol: "LCAIB",
       decimals: 18,
       address: "0x75F3D01c4D960FE986A598B7954A3b786B29cE49",
+    },
+    [lcaiDevnet.id]: {
+      name: "LCAI",
+      symbol: "LCAI",
+      decimals: 18,
+      address: `0x0000000000000000000000000000000000001001`,
     },
   } as Record<number, Token>,
 

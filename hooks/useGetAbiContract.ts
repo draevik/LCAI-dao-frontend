@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { type Abi } from "viem";
 import useCurrentChain from "./useCurrentChain";
+import { mainnet } from "viem/chains";
 
 const API_ENDPOINT =
   process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:3000";
@@ -40,6 +41,7 @@ const useGetAbiContract = (address: `0x${string}` | undefined) => {
     queryKey: ["getAbiContract", chainId, address],
     queryFn: async (): Promise<Abi> => {
       if (!address) throw new Error("No contract address");
+      if (chainId !== mainnet.id) return [];
       return fetchAbiFromApi(chainId, address);
     },
     enabled: !!address && chainId > 0,
