@@ -213,7 +213,12 @@ export function createApi(uri: string) {
       const { data } = await apollo.query({
         query: USER_VOTES_QUERY,
         fetchPolicy: "network-only",
-        variables: { indexer: "mainnet", voter: voter.toLowerCase(), first: limit, skip },
+        variables: {
+          indexer: "mainnet",
+          voter: voter.toLowerCase(),
+          first: limit,
+          skip,
+        },
       });
 
       return Object.fromEntries(
@@ -261,6 +266,8 @@ export function createApi(uri: string) {
         "cancelled" in _filters ? _filters.cancelled : false;
       delete _filters.cancelled;
 
+      if (cancelledFilter) delete _filters.end_time_lt;
+
       const { data } = await apollo.query({
         query: PROPOSALS_QUERY,
         fetchPolicy: "network-only",
@@ -306,7 +313,10 @@ export function createApi(uri: string) {
         fetchPolicy: "network-only",
         variables: { indexer: "mainnet", id: id.toLowerCase() },
       });
-      const data = result.data as { user?: Parameters<typeof mapGraphQLUser>[0] } | null | undefined;
+      const data = result.data as
+        | { user?: Parameters<typeof mapGraphQLUser>[0] }
+        | null
+        | undefined;
       if (!data?.user) return null;
       return mapGraphQLUser(data.user);
     },
@@ -359,7 +369,9 @@ export function createApi(uri: string) {
           created: delegate.created,
           updated: delegate.updated,
           user: delegate.user
-            ? mapGraphQLUser(delegate.user as Parameters<typeof mapGraphQLUser>[0])
+            ? mapGraphQLUser(
+                delegate.user as Parameters<typeof mapGraphQLUser>[0]
+              )
             : null,
         })) || []
       );
