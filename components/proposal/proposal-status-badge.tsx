@@ -87,6 +87,22 @@ export default function ProposalStatusBadge({ status, className }: Props) {
         </Tooltip>
       );
     case ProposalState.Canceled:
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <FontAwesomeIcon
+              className={cn(
+                "inline-block mr-2 md:text-lg sm:text-base text-sm text-content-error-light",
+                className
+              )}
+              icon={faCircleXmark}
+            />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="text-xs">Canceled</p>
+          </TooltipContent>
+        </Tooltip>
+      );
     case ProposalState.Defeated:
       return (
         <Tooltip>

@@ -270,6 +270,8 @@ export function createApi(uri: string) {
         "cancelled" in _filters ? _filters.cancelled : false;
       delete _filters.cancelled;
 
+      if (cancelledFilter) delete _filters.end_time_lt;
+
       const { data } = await apollo.query({
         query: PROPOSALS_QUERY,
         fetchPolicy: "network-only",
