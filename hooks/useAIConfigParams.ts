@@ -1,4 +1,4 @@
-import config, { lcaiDevnet } from "@/config";
+import config, { lcaiTestnet } from "@/config";
 import useWeb3Clients from "./useWeb3Clients";
 import { useQuery } from "@tanstack/react-query";
 import aiConfigAbi from "@/contracts/abi/aiConfigAbi";
@@ -6,7 +6,6 @@ import aiConfigAbi from "@/contracts/abi/aiConfigAbi";
 const PARAM_FUNCTIONS = [
   "getAckTimeout",
   "getBlobRetentionPeriod",
-  "getBurnFeeBps",
   "getCanarySimilarityThreshold",
   "getCompletionTimeout",
   "getCompletionTimeoutSlashBps",
@@ -15,7 +14,7 @@ const PARAM_FUNCTIONS = [
   "getDisputeSlashBps",
   "getDisputeWindow",
   "getDisputerAddress",
-  "getMaxBlobsPerJob",
+  "getFeePoolBps",
   "getMaxReassignments",
   "getMaxSlashBps",
   "getMinAckTimeout",
@@ -33,7 +32,7 @@ const PARAM_FUNCTIONS = [
   "getWorkerFeeBps",
 ] as const;
 
-const chain = lcaiDevnet;
+const chain = lcaiTestnet;
 
 export function useAIConfigParams() {
   const { publicClient } = useWeb3Clients({ chain });
@@ -56,31 +55,30 @@ export function useAIConfigParams() {
       return {
         ackTimeout: data[0] as bigint,
         blobRetentionPeriod: data[1] as bigint,
-        burnFeeBps: data[2] as bigint,
-        canarySimilarityThreshold: data[3] as bigint,
-        completionTimeout: data[4] as bigint,
-        completionTimeoutSlashBps: data[5] as bigint,
-        dispatcherAddress: data[6] as `0x${string}`,
-        disputeBondMultiplier: data[7] as bigint,
-        disputeSlashBps: data[8] as bigint,
-        disputeWindow: data[9] as bigint,
-        disputerAddress: data[10] as `0x${string}`,
-        maxBlobsPerJob: data[11] as bigint,
-        maxReassignments: data[12] as bigint,
-        maxSlashBps: data[13] as bigint,
-        minAckTimeout: data[14] as bigint,
-        minDisputeWindow: data[15] as bigint,
-        minResolutionTimeout: data[16] as bigint,
-        minWorkerStake: data[17] as bigint,
-        protocolFeeBps: data[18] as bigint,
-        resolutionTimeout: data[19] as bigint,
-        samplingRateBps: data[20] as bigint,
-        sessionInactivityTimeout: data[21] as bigint,
-        similarityThreshold: data[22] as bigint,
-        suspensionCooldown: data[23] as bigint,
-        suspensionThreshold: data[24] as bigint,
-        timeoutSlashBps: data[25] as bigint,
-        workerFeeBps: data[26] as bigint,
+        canarySimilarityThreshold: data[2] as bigint,
+        completionTimeout: data[3] as bigint,
+        completionTimeoutSlashBps: data[4] as bigint,
+        dispatcherAddress: data[5] as `0x${string}`,
+        disputeBondMultiplier: data[6] as bigint,
+        disputeSlashBps: data[7] as bigint,
+        disputeWindow: data[8] as bigint,
+        disputerAddress: data[9] as `0x${string}`,
+        feePoolBps: data[10] as bigint,
+        maxReassignments: data[11] as bigint,
+        maxSlashBps: data[12] as bigint,
+        minAckTimeout: data[13] as bigint,
+        minDisputeWindow: data[14] as bigint,
+        minResolutionTimeout: data[15] as bigint,
+        minWorkerStake: data[16] as bigint,
+        protocolFeeBps: data[17] as bigint,
+        resolutionTimeout: data[18] as bigint,
+        samplingRateBps: data[19] as bigint,
+        sessionInactivityTimeout: data[20] as bigint,
+        similarityThreshold: data[21] as bigint,
+        suspensionCooldown: data[22] as bigint,
+        suspensionThreshold: data[23] as bigint,
+        timeoutSlashBps: data[24] as bigint,
+        workerFeeBps: data[25] as bigint,
       };
     },
   });

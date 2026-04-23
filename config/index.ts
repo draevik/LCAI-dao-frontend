@@ -13,65 +13,43 @@ export const mainnet: Chain = {
   },
 };
 
-export const lcaiDevnet: Chain = {
-  id: 31337,
-  name: "Lightchain AI Devnet",
+export const lcaiTestnet: Chain = {
+  id: 8200,
+  name: "Lightchain AI Testnet",
   nativeCurrency: {
-    name: "Lightchain AI Devnet",
+    name: "LightchainAI",
     symbol: "LCAI",
     decimals: 18,
   },
-  blockExplorers: {
-    default: {
-      name: "Lightchain AI Devnet Explorer",
-      url: "http://localhost",
-    },
-  },
   rpcUrls: {
     default: {
-      http: ["http://localhost:8545"],
-      webSocket: ["ws://localhost:8546"],
+      http: ["https://rpc.testnet.lightchain.ai"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "LCAI Testnet Explorer",
+      url: "https://testnet-explorer.lightscan.app",
     },
   },
 };
 
-// export const lcaiTestnet: Chain = {
-//   id: 504,
-//   name: "LCAI Testnet",
-//   nativeCurrency: {
-//     name: "LCAI Testnet",
-//     symbol: "LCAI",
-//     decimals: 18,
-//   },
-//   rpcUrls: {
-//     default: {
-//       http: ["https://light-testnet-rpc.lightchain.ai"],
-//     },
-//   },
-//   blockExplorers: {
-//     default: {
-//       name: "LCAI Testnet Explorer",
-//       url: "https://testnet.lightscan.app",
-//     },
-//   },
-// };
-
 const config = {
-  chains: [lcaiDevnet] as [Chain, ...Chain[]],
+  chains: [lcaiTestnet] as [Chain, ...Chain[]],
 
   indexerName: {
     [mainnet.id]: "mainnet",
-    [lcaiDevnet.id]: "lcaiDevnet",
+    [lcaiTestnet.id]: "lcai",
   },
 
   blockTimeSeconds: {
     [mainnet.id]: 12,
-    [lcaiDevnet.id]: 2,
+    [lcaiTestnet.id]: 6,
   } as Record<number, number>,
 
   totalSupply: {
     [mainnet.id]: 10e9,
-    [lcaiDevnet.id]: 95_000,
+    [lcaiTestnet.id]: 10e9,
   } as Record<number, number>,
 
   predefinedContracts: {
@@ -81,30 +59,30 @@ const config = {
         address: "0x07A716a551E5f4CA7D6C71Da9dF1cb1429Dba826",
       },
     ],
-    [lcaiDevnet.id]: [
+    [lcaiTestnet.id]: [
       {
         name: "Lightchain Governor",
-        address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+        address: "0xb18ef7bc408EE7136DdD9901Bc51695eE661Cd56",
       },
       {
         name: "Lightchain AI Config",
-        address: "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
+        address: "0xeCF4Ca5Ba6D97ae586993e170764a1E92231b67e",
       },
     ],
   } as Record<number, { name: string; address: `0x${string}` }[]>,
 
   timeLock: {
     [mainnet.id]: `0xbE1c37F8C4DA77dD06F4A8AC5098Ec70273093d7`,
-    [lcaiDevnet.id]: `0x5FbDB2315678afecb367f032d93F642f64180aa3`,
+    [lcaiTestnet.id]: `0x096A0231cFbA8fc3e29E4D0CdfD03ac14c612979`,
   } as Record<number, `0x${string}`>,
 
   governor: {
     [mainnet.id]: `0x6dfa413B5900a1a7947BC75E68AbBA093cB2492d`,
-    [lcaiDevnet.id]: `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0`,
+    [lcaiTestnet.id]: `0xb18ef7bc408EE7136DdD9901Bc51695eE661Cd56`,
   } as Record<number, `0x${string}`>,
 
   aiConfig: {
-    [lcaiDevnet.id]: `0x8A791620dd6260079BF849Dc5567aDC3F2FdC318`,
+    [lcaiTestnet.id]: `0xeCF4Ca5Ba6D97ae586993e170764a1E92231b67e`,
   } as Record<number, `0x${string}`>,
 
   underlyingToken: {
@@ -115,7 +93,7 @@ const config = {
       logoURI: "/images/brand/lcai.svg",
       decimals: 18,
     },
-    [lcaiDevnet.id]: {
+    [lcaiTestnet.id]: {
       symbol: "LCAI",
       name: "LCAI",
       logoURI: "/images/brand/lcai.svg",
@@ -130,7 +108,7 @@ const config = {
       decimals: 18,
       address: "0x75F3D01c4D960FE986A598B7954A3b786B29cE49",
     },
-    [lcaiDevnet.id]: {
+    [lcaiTestnet.id]: {
       name: "LCAI",
       symbol: "LCAI",
       decimals: 18,

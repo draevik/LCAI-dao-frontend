@@ -9,10 +9,7 @@ export default [
   {
     type: "function",
     name: "calculateJobFee",
-    inputs: [
-      { name: "modelId", type: "bytes32", internalType: "bytes32" },
-      { name: "inputBytes", type: "uint256", internalType: "uint256" },
-    ],
+    inputs: [{ name: "modelId", type: "bytes32", internalType: "bytes32" }],
     outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     stateMutability: "view",
   },
@@ -40,13 +37,6 @@ export default [
   {
     type: "function",
     name: "getBlobRetentionPeriod",
-    inputs: [],
-    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "getBurnFeeBps",
     inputs: [],
     outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     stateMutability: "view",
@@ -109,7 +99,7 @@ export default [
   },
   {
     type: "function",
-    name: "getMaxBlobsPerJob",
+    name: "getFeePoolBps",
     inputs: [],
     outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     stateMutability: "view",
@@ -158,7 +148,7 @@ export default [
   },
   {
     type: "function",
-    name: "getModelBaseFee",
+    name: "getModelFee",
     inputs: [{ name: "modelId", type: "bytes32", internalType: "bytes32" }],
     outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     stateMutability: "view",
@@ -166,13 +156,6 @@ export default [
   {
     type: "function",
     name: "getModelMaxOutputTokens",
-    inputs: [{ name: "modelId", type: "bytes32", internalType: "bytes32" }],
-    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "getModelPerByteRate",
     inputs: [{ name: "modelId", type: "bytes32", internalType: "bytes32" }],
     outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     stateMutability: "view",
@@ -277,8 +260,7 @@ export default [
     name: "registerModel",
     inputs: [
       { name: "modelId", type: "bytes32", internalType: "bytes32" },
-      { name: "baseFee", type: "uint256", internalType: "uint256" },
-      { name: "perByteRate", type: "uint256", internalType: "uint256" },
+      { name: "fee", type: "uint256", internalType: "uint256" },
       { name: "maxOutputTokens", type: "uint256", internalType: "uint256" },
     ],
     outputs: [],
@@ -367,15 +349,8 @@ export default [
     inputs: [
       { name: "workerBps", type: "uint256", internalType: "uint256" },
       { name: "protocolBps", type: "uint256", internalType: "uint256" },
-      { name: "burnBps", type: "uint256", internalType: "uint256" },
+      { name: "feePoolBps", type: "uint256", internalType: "uint256" },
     ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "setMaxBlobsPerJob",
-    inputs: [{ name: "max", type: "uint256", internalType: "uint256" }],
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -423,7 +398,7 @@ export default [
   },
   {
     type: "function",
-    name: "setModelBaseFee",
+    name: "setModelFee",
     inputs: [
       { name: "modelId", type: "bytes32", internalType: "bytes32" },
       { name: "fee", type: "uint256", internalType: "uint256" },
@@ -437,16 +412,6 @@ export default [
     inputs: [
       { name: "modelId", type: "bytes32", internalType: "bytes32" },
       { name: "tokens", type: "uint256", internalType: "uint256" },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "setModelPerByteRate",
-    inputs: [
-      { name: "modelId", type: "bytes32", internalType: "bytes32" },
-      { name: "rate", type: "uint256", internalType: "uint256" },
     ],
     outputs: [],
     stateMutability: "nonpayable",
@@ -524,7 +489,7 @@ export default [
       {
         name: "newDispatcher",
         type: "address",
-        indexed: false,
+        indexed: true,
         internalType: "address",
       },
     ],
@@ -562,7 +527,7 @@ export default [
       {
         name: "newDisputer",
         type: "address",
-        indexed: false,
+        indexed: true,
         internalType: "address",
       },
     ],
@@ -585,7 +550,7 @@ export default [
         internalType: "uint256",
       },
       {
-        name: "burnBps",
+        name: "feePoolBps",
         type: "uint256",
         indexed: false,
         internalType: "uint256",
@@ -597,12 +562,7 @@ export default [
     type: "event",
     name: "InfraParamsUpdated",
     inputs: [
-      {
-        name: "param",
-        type: "string",
-        indexed: false,
-        internalType: "string",
-      },
+      { name: "param", type: "string", indexed: false, internalType: "string" },
       {
         name: "value",
         type: "uint256",
@@ -648,18 +608,7 @@ export default [
         indexed: true,
         internalType: "bytes32",
       },
-      {
-        name: "baseFee",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256",
-      },
-      {
-        name: "perByteRate",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256",
-      },
+      { name: "fee", type: "uint256", indexed: false, internalType: "uint256" },
       {
         name: "maxOutputTokens",
         type: "uint256",
@@ -705,18 +654,7 @@ export default [
         indexed: true,
         internalType: "bytes32",
       },
-      {
-        name: "baseFee",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256",
-      },
-      {
-        name: "perByteRate",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256",
-      },
+      { name: "fee", type: "uint256", indexed: false, internalType: "uint256" },
       {
         name: "maxOutputTokens",
         type: "uint256",

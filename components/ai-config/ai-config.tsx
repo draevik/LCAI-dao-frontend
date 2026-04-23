@@ -93,10 +93,6 @@ const AiConfig = () => {
             label: "Worker Fee",
             value: `${formatBps(aiConfigParams.workerFeeBps)}`,
           },
-          {
-            label: "Burn Fee",
-            value: `${formatBps(aiConfigParams.burnFeeBps)}`,
-          },
         ],
       },
       {
@@ -156,8 +152,8 @@ const AiConfig = () => {
             value: `${aiConfigParams.maxReassignments}`,
           },
           {
-            label: "Max Blobs Per Job",
-            value: `${aiConfigParams.maxBlobsPerJob}`,
+            label: "Fee Pool",
+            value: `${formatBps(aiConfigParams.feePoolBps)}`,
           },
           {
             label: "Suspension Threshold",

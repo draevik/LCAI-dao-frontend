@@ -37,9 +37,9 @@ import {
 } from "./queries";
 import { clone } from "@/lib/utils";
 import { formatUnits } from "viem";
-import config, { lcaiDevnet } from "@/config";
+import config, { lcaiTestnet } from "@/config";
 
-const indexer = config.indexerName[lcaiDevnet.id];
+const indexer = config.indexerName[lcaiTestnet.id];
 
 const getProposalState = (proposal: ApiProposal, current: number) => {
   const quorum = BigInt(proposal.quorum);

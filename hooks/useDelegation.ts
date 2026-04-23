@@ -8,7 +8,7 @@ import {
 } from "wagmi";
 import useContracts from "./useContracts";
 import useCurrentChain from "./useCurrentChain";
-import config, { lcaiDevnet } from "@/config";
+import config, { lcaiTestnet } from "@/config";
 import { formatUnits, zeroAddress } from "viem";
 import voteTokenAbi from "@/contracts/abi/voteTokenAbi";
 import useWeb3Clients from "./useWeb3Clients";
@@ -82,7 +82,9 @@ const useDelegation = () => {
       const [delegateAddr, votingPower, tokenBalance] = await Promise.all([
         voteTokenContract.read.delegates([account]),
         voteTokenContract.read.getVotes([account]),
-        chain.id === lcaiDevnet.id ? publicClient.getBalance({ address: account }) : voteTokenContract.read.balanceOf([account]),
+        chain.id === lcaiTestnet.id
+          ? publicClient.getBalance({ address: account })
+          : voteTokenContract.read.balanceOf([account]),
       ]);
 
       return {
