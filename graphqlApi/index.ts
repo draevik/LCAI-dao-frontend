@@ -477,6 +477,7 @@ export function createApi(uri: string) {
         symbol: space.symbol,
         decimals: space.decimals,
         token: space.token,
+        totalSupply: space.total_supply,
         proposalCount: space.proposal_count,
         voteCount: space.vote_count,
         proposerCount: space.proposer_count,
@@ -485,6 +486,7 @@ export function createApi(uri: string) {
         quorum: space.quorum,
         proposalThreshold: space.proposal_threshold,
         votingDelay: space.voting_delay,
+        votingPeriod: space.voting_period,
         timelockDelay: space.timelock_delay,
         created: space.created,
       };

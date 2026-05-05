@@ -1,52 +1,77 @@
+"use client";
+
 import {
   CommonTable,
   type CommonTableSection,
 } from "@/components/ui/common-table";
 import config from "@/config";
+import useCurrentChain from "@/hooks/useCurrentChain";
+import useGraphqlApi from "@/hooks/useGraphqlApi";
 import { compactNumber } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import { Settings } from "lucide-react";
-import { mainnet } from "viem/chains";
+import { formatUnits } from "viem";
 
 const DAY = 60 * 60 * 24;
-
-const governanceTableData: CommonTableSection[] = [
-  {
-    title: "Governance Parameters",
-    icon: <Settings className="size-6" />,
-    items: [
-      {
-        label: "Voting Delay",
-        value: `${compactNumber(
-          config.daoSystem.proposalDelay / 12
-        )} blocks (~${config.daoSystem.proposalDelay / DAY} days)`,
-      },
-      {
-        label: "Voting Period",
-        value: `${compactNumber(config.daoSystem.votingPeriod / 12)} blocks (~${
-          config.daoSystem.votingPeriod / DAY
-        } days)`,
-      },
-      {
-        label: "Proposal Threshold",
-        value: `${compactNumber(config.daoSystem.proposalThreshold)} ${
-          config.underlyingToken[mainnet.id].symbol
-        }`,
-      },
-      {
-        label: "Quorum",
-        value: `${config.daoSystem.quorumNeeded}% (${compactNumber(
-          (config.daoSystem.totalSupply * config.daoSystem.quorumNeeded) / 100
-        )} ${config.underlyingToken[mainnet.id].symbol})`,
-      },
-      {
-        label: "Timelock Delay",
-        value: `${config.daoSystem.timelockDelay / DAY} days`,
-      },
-    ],
-  },
-];
+const BLOCK_TIME_SECONDS = 12;
 
 const Governance = () => {
+  const api = useGraphqlApi();
+  const chain = useCurrentChain();
+  const spaceId = config.governor[chain.id];
+  const voteToken = config.voteToken[chain.id];
+
+  const { data: spaceStats } = useQuery({
+    queryKey: ["spaceStats", spaceId],
+    queryFn: () => api.loadSpaceStats(spaceId),
+    enabled: !!spaceId,
+  });
+
+  const quorumParsed = spaceStats
+    ? Number(formatUnits(BigInt(spaceStats.quorum), voteToken.decimals))
+    : 0;
+  const proposalThresholdParsed = spaceStats
+    ? Number(
+        formatUnits(BigInt(spaceStats.proposalThreshold), voteToken.decimals)
+      )
+    : 0;
+  const votingDelayBlocks = spaceStats?.votingDelay ?? 0;
+  const votingPeriodBlocks = spaceStats?.votingPeriod ?? 0;
+  const timelockDelaySeconds = Number(spaceStats?.timelockDelay ?? 0);
+
+  const governanceTableData: CommonTableSection[] = [
+    {
+      title: "Governance Parameters",
+      icon: <Settings className="size-6" />,
+      items: [
+        {
+          label: "Voting Delay",
+          value: `${compactNumber(votingDelayBlocks)} blocks (~${compactNumber(
+            (votingDelayBlocks * BLOCK_TIME_SECONDS) / DAY
+          )} days)`,
+        },
+        {
+          label: "Voting Period",
+          value: `${compactNumber(votingPeriodBlocks)} blocks (~${compactNumber(
+            (votingPeriodBlocks * BLOCK_TIME_SECONDS) / DAY
+          )} days)`,
+        },
+        {
+          label: "Proposal Threshold",
+          value: `${compactNumber(proposalThresholdParsed)} ${voteToken.symbol}`,
+        },
+        {
+          label: "Quorum",
+          value: `${compactNumber(quorumParsed)} ${voteToken.symbol}`,
+        },
+        {
+          label: "Timelock Delay",
+          value: `${compactNumber(timelockDelaySeconds / DAY)} days`,
+        },
+      ],
+    },
+  ];
+
   return (
     <div>
       <div className="pt-2 pb-10 gap-3">

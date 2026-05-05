@@ -35,15 +35,6 @@ const customMainnet: Chain = {
 const config = {
   chains: [customMainnet] as [Chain, ...Chain[]],
 
-  daoSystem: {
-    proposalThreshold: 140_000, // 0 LCAI
-    quorumNeeded: 3, // 3 percent
-    proposalDelay: 60 * 60 * 24, // 1 day
-    votingPeriod: 60 * 60 * 24 * 14, // 14 days
-    timelockDelay: 60 * 60 * 24 * 2, // 2 days
-    totalSupply: 10_000_000_000,
-  },
-
   predefinedContracts: {
     [mainnet.id]: [
       {

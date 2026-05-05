@@ -214,6 +214,7 @@ export type SpaceStats = {
   symbol: string;
   decimals: number;
   token: string | null;
+  totalSupply: string;
   proposalCount: number;
   voteCount: number;
   proposerCount: number;
@@ -222,6 +223,7 @@ export type SpaceStats = {
   quorum: string;
   proposalThreshold: string;
   votingDelay: number;
+  votingPeriod: number;
   timelockDelay: string;
   created: number;
 };

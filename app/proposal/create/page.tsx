@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useGovernance } from "@/hooks/useGovernance";
+import useGraphqlApi from "@/hooks/useGraphqlApi";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
@@ -58,7 +59,7 @@ import {
   Trash2Icon,
 } from "lucide-react";
 import Markdown from "react-markdown";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   Empty,
@@ -81,7 +82,7 @@ import { Button as ButtonUi } from "@/components/ui/button";
 import { compactNumber } from "@/lib/utils";
 import useCurrentChain from "@/hooks/useCurrentChain";
 import governorAbi from "@/contracts/abi/governorAbi";
-import { formatEther } from "viem";
+import { formatEther, formatUnits } from "viem";
 import { useTokenBalance } from "@/hooks/useTokenBalance";
 
 const choices = [
@@ -129,8 +130,28 @@ export default function CreateProposal() {
   const { isConnected } = useConnection();
   const chain = useCurrentChain();
   const { address } = useConnection();
+  const api = useGraphqlApi();
 
   const voteToken = config.voteToken[chain.id];
+  const spaceId = config.governor[chain.id];
+
+  const { data: spaceStats } = useQuery({
+    queryKey: ["spaceStats", spaceId],
+    queryFn: () => api.loadSpaceStats(spaceId),
+    enabled: !!spaceId,
+  });
+
+  const proposalThreshold = spaceStats
+    ? Number(
+        formatUnits(BigInt(spaceStats.proposalThreshold), voteToken.decimals)
+      )
+    : 0;
+  const quorumNeeded = spaceStats
+    ? Number(formatUnits(BigInt(spaceStats.quorum), voteToken.decimals))
+    : 0;
+  const totalSupply = spaceStats
+    ? Number(formatUnits(BigInt(spaceStats.totalSupply), voteToken.decimals))
+    : 0;
 
   const voteTokenBalance = useTokenBalance({
     address: address!,
@@ -636,8 +657,7 @@ export default function CreateProposal() {
                     Total supply
                   </span>
                   <span className="ml-auto text-content-primary text-sm">
-                    {compactNumber(config.daoSystem.totalSupply)}{" "}
-                    {voteToken?.symbol}
+                    {compactNumber(totalSupply)} {voteToken?.symbol}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -645,8 +665,7 @@ export default function CreateProposal() {
                     Proposal threshold
                   </span>
                   <span className="ml-auto text-content-primary text-sm">
-                    {compactNumber(config.daoSystem.proposalThreshold)}{" "}
-                    {voteToken?.symbol}
+                    {compactNumber(proposalThreshold)} {voteToken?.symbol}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -654,13 +673,7 @@ export default function CreateProposal() {
                     Quorum needed
                   </span>
                   <span className="ml-auto text-content-primary text-sm">
-                    {config.daoSystem.quorumNeeded}% (
-                    {compactNumber(
-                      (config.daoSystem.totalSupply *
-                        config.daoSystem.quorumNeeded) /
-                        100
-                    )}
-                    )
+                    {compactNumber(quorumNeeded)} {voteToken?.symbol}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -669,7 +682,7 @@ export default function CreateProposal() {
                   </span>
                   <span className="ml-auto text-content-primary text-sm">
                     {$dayjs
-                      .duration(config.daoSystem.proposalDelay, "seconds")
+                      .duration((spaceStats?.votingDelay ?? 0) * 12, "seconds")
                       .humanize()}
                   </span>
                 </div>
@@ -679,7 +692,7 @@ export default function CreateProposal() {
                   </span>
                   <span className="ml-auto text-content-primary text-sm">
                     {$dayjs
-                      .duration(config.daoSystem.votingPeriod, "seconds")
+                      .duration((spaceStats?.votingPeriod ?? 0) * 12, "seconds")
                       .humanize()}
                   </span>
                 </div>
