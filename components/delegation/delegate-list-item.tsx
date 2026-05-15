@@ -26,7 +26,8 @@ export function DelegateListItem({
     return `https://effigy.im/a/${address}.png`;
   };
 
-  const label = delegate.user?.displayName ?? truncateAddress(delegate.address);
+  // const label = delegate.user?.displayName ?? truncateAddress(delegate.address);
+  const label = truncateAddress(delegate.address);
 
   return (
     <div
