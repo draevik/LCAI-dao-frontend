@@ -27,7 +27,7 @@ export function ProposalOverviewTab({ content }: ProposalOverviewTabProps) {
   // }, [content]);
 
   return (
-    <div className="prose prose-sm max-w-none dark:prose-invert">
+    <div className="prose prose-sm max-w-none dark:prose-invert break-words">
       <Markdown>{description}</Markdown>
 
       {/* {discussion && (
