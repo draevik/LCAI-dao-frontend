@@ -55,7 +55,7 @@ export default function ProposalDetail() {
       <div className="container mx-auto py-8 sm:py-15 px-4">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_355px] gap-8">
           {/* Main Content */}
-          <div className="space-y-8 min-w-0">
+          <div className="space-y-8">
             <ProposalTitleSection proposal={proposal} />
             <Tabs defaultValue="description" className="w-full justify-start">
               <TabsList className="bg-transparent border-b border-surface-soft rounded-none w-full flex gap-1">
