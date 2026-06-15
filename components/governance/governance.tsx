@@ -1,58 +1,77 @@
 "use client";
 
-import { CommonTable } from "@/components/ui/common-table";
+import {
+  CommonTable,
+  type CommonTableSection,
+} from "@/components/ui/common-table";
 import config from "@/config";
-import { useGovernanceParams } from "@/hooks/useGovernanceParams";
-import { compactNumber, secondsToTime } from "@/lib/utils";
+import useCurrentChain from "@/hooks/useCurrentChain";
+import useGraphqlApi from "@/hooks/useGraphqlApi";
+import { compactNumber } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import { Settings } from "lucide-react";
-import { useMemo } from "react";
-import { mainnet } from "viem/chains";
-import LoadingBlock from "@/components/loading-block";
+import { formatUnits } from "viem";
+import LoadingBlock from "../loading-block";
+
+const DAY = 60 * 60 * 24;
+const BLOCK_TIME_SECONDS = 12;
 
 const Governance = () => {
-  const { data: governanceParams, isLoading } = useGovernanceParams();
+  const api = useGraphqlApi();
+  const chain = useCurrentChain();
+  const spaceId = config.governor[chain.id];
+  const voteToken = config.voteToken[chain.id];
 
-  const governanceTableData = useMemo(() => {
-    if (!governanceParams) return [];
-    return [
-      {
-        title: "Governance Parameters",
-        icon: <Settings className="size-6" />,
-        items: [
-          {
-            label: "Voting Delay",
-            value: `${compactNumber(
-              governanceParams.votingDelayInBlocks
-            )} blocks (${secondsToTime(governanceParams.votingDelay)})`,
-          },
-          {
-            label: "Voting Period",
-            value: `${compactNumber(
-              governanceParams.votingPeriodInBlocks
-            )} blocks (${secondsToTime(governanceParams.votingPeriod)})`,
-          },
-          {
-            label: "Proposal Threshold",
-            value: `${compactNumber(governanceParams.proposalThreshold)} ${
-              config.underlyingToken[mainnet.id].symbol
-            }`,
-          },
-          {
-            label: "Quorum",
-            value: `${governanceParams.quorumNumerator}% (${compactNumber(
-              (governanceParams.totalSupply *
-                governanceParams.quorumNumerator) /
-                100
-            )} ${config.underlyingToken[mainnet.id].symbol})`,
-          },
-          {
-            label: "Timelock Delay",
-            value: `${secondsToTime(governanceParams.timelockDelay)}`,
-          },
-        ],
-      },
-    ];
-  }, [governanceParams]);
+  const { data: spaceStats, isLoading } = useQuery({
+    queryKey: ["spaceStats", spaceId],
+    queryFn: () => api.loadSpaceStats(spaceId),
+    enabled: !!spaceId,
+  });
+
+  const quorumParsed = spaceStats
+    ? Number(formatUnits(BigInt(spaceStats.quorum), voteToken.decimals))
+    : 0;
+  const proposalThresholdParsed = spaceStats
+    ? Number(
+        formatUnits(BigInt(spaceStats.proposalThreshold), voteToken.decimals),
+      )
+    : 0;
+  const votingDelayBlocks = spaceStats?.votingDelay ?? 0;
+  const votingPeriodBlocks = spaceStats?.votingPeriod ?? 0;
+  const timelockDelaySeconds = Number(spaceStats?.timelockDelay ?? 0);
+
+  const governanceTableData: CommonTableSection[] = [
+    {
+      title: "Governance Parameters",
+      icon: <Settings className="size-6" />,
+      items: [
+        {
+          label: "Voting Delay",
+          value: `${compactNumber(votingDelayBlocks)} blocks (~${compactNumber(
+            (votingDelayBlocks * BLOCK_TIME_SECONDS) / DAY,
+          )} days)`,
+        },
+        {
+          label: "Voting Period",
+          value: `${compactNumber(votingPeriodBlocks)} blocks (~${compactNumber(
+            (votingPeriodBlocks * BLOCK_TIME_SECONDS) / DAY,
+          )} days)`,
+        },
+        {
+          label: "Proposal Threshold",
+          value: `${compactNumber(proposalThresholdParsed)} ${voteToken.symbol}`,
+        },
+        {
+          label: "Quorum",
+          value: `${compactNumber(quorumParsed)} ${voteToken.symbol}`,
+        },
+        {
+          label: "Timelock Delay",
+          value: `${compactNumber(timelockDelaySeconds / DAY)} days`,
+        },
+      ],
+    },
+  ];
 
   return (
     <div>

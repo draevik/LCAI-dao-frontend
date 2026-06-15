@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useGovernance } from "@/hooks/useGovernance";
+import useGraphqlApi from "@/hooks/useGraphqlApi";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
@@ -58,7 +59,7 @@ import {
   Trash2Icon,
 } from "lucide-react";
 import Markdown from "react-markdown";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   Empty,
@@ -81,7 +82,7 @@ import { Button as ButtonUi } from "@/components/ui/button";
 import { compactNumber } from "@/lib/utils";
 import useCurrentChain from "@/hooks/useCurrentChain";
 import governorAbi from "@/contracts/abi/governorAbi";
-import { formatEther } from "viem";
+import { formatEther, formatUnits } from "viem";
 import { useTokenBalance } from "@/hooks/useTokenBalance";
 import { useGovernanceParams } from "@/hooks/useGovernanceParams";
 import { mainnet } from "viem/chains";
@@ -132,8 +133,28 @@ export default function CreateProposal() {
   const { isConnected } = useConnection();
   const chain = useCurrentChain();
   const { address } = useConnection();
+  const api = useGraphqlApi();
 
   const voteToken = config.voteToken[chain.id];
+  const spaceId = config.governor[chain.id];
+
+  const { data: spaceStats } = useQuery({
+    queryKey: ["spaceStats", spaceId],
+    queryFn: () => api.loadSpaceStats(spaceId),
+    enabled: !!spaceId,
+  });
+
+  const proposalThreshold = spaceStats
+    ? Number(
+        formatUnits(BigInt(spaceStats.proposalThreshold), voteToken.decimals),
+      )
+    : 0;
+  const quorumNeeded = spaceStats
+    ? Number(formatUnits(BigInt(spaceStats.quorum), voteToken.decimals))
+    : 0;
+  const totalSupply = spaceStats
+    ? Number(formatUnits(BigInt(spaceStats.totalSupply), voteToken.decimals))
+    : 0;
 
   const voteTokenBalance = useTokenBalance({
     address: address!,
@@ -154,10 +175,10 @@ export default function CreateProposal() {
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [descriptionView, setDescriptionView] = useState<"edit" | "preview">(
-    "edit"
+    "edit",
   );
   const [editingAction, setEditingAction] = useState<ContractAction | null>(
-    null
+    null,
   );
   const [dialogType, setDialogType] = useState<"send" | "contract">("contract");
   const [simulationStatus, setSimulationStatus] = useState<
@@ -199,7 +220,7 @@ export default function CreateProposal() {
     if (editingAction) {
       // Update existing action
       setActions((prev) =>
-        prev.map((t) => (t.id === editingAction.id ? action : t))
+        prev.map((t) => (t.id === editingAction.id ? action : t)),
       );
     } else {
       // Add new action
@@ -252,8 +273,8 @@ export default function CreateProposal() {
     ) {
       toast.error(
         `You don't have enough voting power to create a proposal. You need at least ${compactNumber(
-          governanceParams.proposalThreshold
-        )} ${voteToken?.symbol} to create a proposal.`
+          governanceParams.proposalThreshold,
+        )} ${voteToken?.symbol} to create a proposal.`,
       );
       return;
     }
@@ -560,8 +581,8 @@ export default function CreateProposal() {
                           simulationStatus === "idle"
                             ? "outline"
                             : simulationStatus === "success"
-                            ? "success"
-                            : "error"
+                              ? "success"
+                              : "error"
                         }
                         size="sm"
                         className="h-8"
@@ -625,89 +646,80 @@ export default function CreateProposal() {
           </Form>
 
           {/* Sidebar */}
-          {governanceParams && (
-            <div className="lg:sticky top-10 space-y-10 rounded-2xl h-max border border-border-default bg-surface-x-soft p-6">
-              {/* LCAI Governor */}
-              <div>
-                <div className="border-b border-border-default mb-3.5">
-                  <h6 className="font-medium text-content-primary text-sm mb-2.5">
-                    LCAI Governor
-                  </h6>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-content-secondary text-sm">
-                      Total supply
-                    </span>
-                    <span className="ml-auto text-content-primary text-sm">
-                      {compactNumber(governanceParams.totalSupply)}{" "}
-                      {voteToken?.symbol}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-content-secondary text-sm">
-                      Proposal threshold
-                    </span>
-                    <span className="ml-auto text-content-primary text-sm">
-                      {compactNumber(governanceParams.proposalThreshold)}{" "}
-                      {voteToken?.symbol}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-content-secondary text-sm">
-                      Quorum needed
-                    </span>
-                    <span className="ml-auto text-content-primary text-sm">
-                      {governanceParams.quorumNumerator}% (
-                      {compactNumber(
-                        (governanceParams.totalSupply *
-                          governanceParams.quorumNumerator) /
-                          100
-                      )}
-                      )
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-content-secondary text-sm">
-                      Proposal delay
-                    </span>
-                    <span className="ml-auto text-content-primary text-sm">
-                      {$dayjs
-                        .duration(governanceParams.votingDelay, "seconds")
-                        .humanize()}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-content-secondary text-sm">
-                      Voting period
-                    </span>
-                    <span className="ml-auto text-content-primary text-sm">
-                      {$dayjs
-                        .duration(governanceParams.votingPeriod, "seconds")
-                        .humanize()}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              {/* Choices */}
-              <div>
+          <div className="lg:sticky top-10 space-y-10 rounded-2xl h-max border border-border-default bg-surface-x-soft p-6">
+            {/* LCAI Governor */}
+            <div>
+              <div className="border-b border-border-default mb-3.5">
                 <h6 className="font-medium text-content-primary text-sm mb-2.5">
-                  Choices
+                  LCAI Governor
                 </h6>
-                <div className="space-y-3">
-                  {choices.map((choice) => (
-                    <div
-                      key={choice.id}
-                      className="flex items-center gap-2 bg-border rounded-lg px-2 py-2"
-                    >
-                      {choice.icon}
-                      <span>{choice.label}</span>
-                    </div>
-                  ))}
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-content-secondary text-sm">
+                    Total supply
+                  </span>
+                  <span className="ml-auto text-content-primary text-sm">
+                    {compactNumber(totalSupply)} {voteToken?.symbol}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-content-secondary text-sm">
+                    Proposal threshold
+                  </span>
+                  <span className="ml-auto text-content-primary text-sm">
+                    {compactNumber(proposalThreshold)} {voteToken?.symbol}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-content-secondary text-sm">
+                    Quorum needed
+                  </span>
+                  <span className="ml-auto text-content-primary text-sm">
+                    {compactNumber(quorumNeeded)} {voteToken?.symbol}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-content-secondary text-sm">
+                    Proposal delay
+                  </span>
+                  <span className="ml-auto text-content-primary text-sm">
+                    {$dayjs
+                      .duration((spaceStats?.votingDelay ?? 0) * 12, "seconds")
+                      .humanize()}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-content-secondary text-sm">
+                    Voting period
+                  </span>
+                  <span className="ml-auto text-content-primary text-sm">
+                    {$dayjs
+                      .duration((spaceStats?.votingPeriod ?? 0) * 12, "seconds")
+                      .humanize()}
+                  </span>
                 </div>
               </div>
-              {/* Timeline */}
-              {/* <Card>
+            </div>
+            {/* Choices */}
+            <div>
+              <h6 className="font-medium text-content-primary text-sm mb-2.5">
+                Choices
+              </h6>
+              <div className="space-y-3">
+                {choices.map((choice) => (
+                  <div
+                    key={choice.id}
+                    className="flex items-center gap-2 bg-border rounded-lg px-2 py-2"
+                  >
+                    {choice.icon}
+                    <span>{choice.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Timeline */}
+            {/* <Card>
             <CardHeader>
               <CardTitle className="font-bold">TIMELINE</CardTitle>
             </CardHeader>
@@ -762,8 +774,7 @@ export default function CreateProposal() {
               </div>
             </CardContent>
           </Card> */}
-            </div>
-          )}
+          </div>
         </div>
 
         {/* Contract Action Dialog */}

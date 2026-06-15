@@ -41,6 +41,9 @@ gql(`
     end_time
     end_block_number
     snapshot
+    voting_delay
+    voting_period
+    proposal_threshold
     vp_decimals
     scores_1
     scores_2
@@ -299,6 +302,7 @@ export const SPACE_QUERY = gql(`
       symbol
       decimals
       token
+      total_supply
       proposal_count
       vote_count
       proposer_count
@@ -307,6 +311,7 @@ export const SPACE_QUERY = gql(`
       quorum
       proposal_threshold
       voting_delay
+      voting_period
       timelock_delay
       created
     }
