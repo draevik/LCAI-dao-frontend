@@ -130,14 +130,6 @@ export type Delegate_Space_Filter = {
   _indexer_not_contains?: InputMaybe<Scalars['String']['input']>;
   _indexer_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   _indexer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  chain_id?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_gt?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_gte?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  chain_id_lt?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_lte?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_not?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   created?: InputMaybe<Scalars['Int']['input']>;
   created_gt?: InputMaybe<Scalars['Int']['input']>;
   created_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -242,6 +234,14 @@ export type Delegate_Space_Filter = {
   token_not_contains?: InputMaybe<Scalars['String']['input']>;
   token_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   token_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  total_supply?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  total_supply_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
   tx?: InputMaybe<Scalars['String']['input']>;
   tx_contains?: InputMaybe<Scalars['String']['input']>;
   tx_contains_nocase?: InputMaybe<Scalars['String']['input']>;
@@ -274,6 +274,14 @@ export type Delegate_Space_Filter = {
   voting_delay_lte?: InputMaybe<Scalars['Int']['input']>;
   voting_delay_not?: InputMaybe<Scalars['Int']['input']>;
   voting_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_period?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_gt?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_gte?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_period_lt?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_lte?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_not?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
 };
 
 export type Delegate_User_Filter = {
@@ -469,14 +477,6 @@ export type Delegation_Space_Filter = {
   _indexer_not_contains?: InputMaybe<Scalars['String']['input']>;
   _indexer_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   _indexer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  chain_id?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_gt?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_gte?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  chain_id_lt?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_lte?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_not?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   created?: InputMaybe<Scalars['Int']['input']>;
   created_gt?: InputMaybe<Scalars['Int']['input']>;
   created_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -581,6 +581,14 @@ export type Delegation_Space_Filter = {
   token_not_contains?: InputMaybe<Scalars['String']['input']>;
   token_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   token_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  total_supply?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  total_supply_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
   tx?: InputMaybe<Scalars['String']['input']>;
   tx_contains?: InputMaybe<Scalars['String']['input']>;
   tx_contains_nocase?: InputMaybe<Scalars['String']['input']>;
@@ -613,6 +621,14 @@ export type Delegation_Space_Filter = {
   voting_delay_lte?: InputMaybe<Scalars['Int']['input']>;
   voting_delay_not?: InputMaybe<Scalars['Int']['input']>;
   voting_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_period?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_gt?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_gte?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_period_lt?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_lte?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_not?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
 };
 
 export type Delegation_User_Filter = {
@@ -792,14 +808,6 @@ export type Leaderboard_Space_Filter = {
   _indexer_not_contains?: InputMaybe<Scalars['String']['input']>;
   _indexer_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   _indexer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  chain_id?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_gt?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_gte?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  chain_id_lt?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_lte?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_not?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   created?: InputMaybe<Scalars['Int']['input']>;
   created_gt?: InputMaybe<Scalars['Int']['input']>;
   created_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -904,6 +912,14 @@ export type Leaderboard_Space_Filter = {
   token_not_contains?: InputMaybe<Scalars['String']['input']>;
   token_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   token_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  total_supply?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  total_supply_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
   tx?: InputMaybe<Scalars['String']['input']>;
   tx_contains?: InputMaybe<Scalars['String']['input']>;
   tx_contains_nocase?: InputMaybe<Scalars['String']['input']>;
@@ -936,6 +952,14 @@ export type Leaderboard_Space_Filter = {
   voting_delay_lte?: InputMaybe<Scalars['Int']['input']>;
   voting_delay_not?: InputMaybe<Scalars['Int']['input']>;
   voting_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_period?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_gt?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_gte?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_period_lt?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_lte?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_not?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
 };
 
 export type Leaderboard_User_Filter = {
@@ -1093,8 +1117,6 @@ export type Proposal = {
   author: User;
   /** Whether proposal has been cancelled */
   cancelled: Scalars['Boolean']['output'];
-  /** Chain ID where this proposal exists */
-  chain_id: Scalars['Int']['output'];
   /** Timestamp when proposal was created */
   created: Scalars['Int']['output'];
   /** Timestamp when proposal was last edited (optional) */
@@ -1119,6 +1141,8 @@ export type Proposal = {
   metadata: Maybe<ProposalMetadataItem>;
   /** ID of the proposal within the space */
   proposal_id: Scalars['String']['output'];
+  /** Proposal threshold snapshot at proposal creation */
+  proposal_threshold: Scalars['BigDecimalVP']['output'];
   /** Minimum voting power required for execution */
   quorum: Scalars['BigDecimalVP']['output'];
   /** Voting power for choice 1 */
@@ -1151,6 +1175,10 @@ export type Proposal = {
   tx: Scalars['String']['output'];
   /** Number of votes cast on this proposal */
   vote_count: Scalars['Int']['output'];
+  /** Voting delay snapshot at proposal creation (blocks on EVM, seconds on Starknet) */
+  voting_delay: Scalars['Int']['output'];
+  /** Voting period snapshot at proposal creation (blocks on EVM, seconds on Starknet) */
+  voting_period: Scalars['Int']['output'];
   /** Number of decimal places for voting power display */
   vp_decimals: Scalars['Int']['output'];
 };
@@ -1272,14 +1300,6 @@ export type Proposal_Space_Filter = {
   _indexer_not_contains?: InputMaybe<Scalars['String']['input']>;
   _indexer_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   _indexer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  chain_id?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_gt?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_gte?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  chain_id_lt?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_lte?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_not?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   created?: InputMaybe<Scalars['Int']['input']>;
   created_gt?: InputMaybe<Scalars['Int']['input']>;
   created_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -1384,6 +1404,14 @@ export type Proposal_Space_Filter = {
   token_not_contains?: InputMaybe<Scalars['String']['input']>;
   token_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   token_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  total_supply?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  total_supply_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
   tx?: InputMaybe<Scalars['String']['input']>;
   tx_contains?: InputMaybe<Scalars['String']['input']>;
   tx_contains_nocase?: InputMaybe<Scalars['String']['input']>;
@@ -1416,6 +1444,14 @@ export type Proposal_Space_Filter = {
   voting_delay_lte?: InputMaybe<Scalars['Int']['input']>;
   voting_delay_not?: InputMaybe<Scalars['Int']['input']>;
   voting_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_period?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_gt?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_gte?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_period_lt?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_lte?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_not?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
 };
 
 export type Proposal_User_Filter = {
@@ -1523,14 +1559,6 @@ export type Proposal_Filter = {
   cancelled_in?: InputMaybe<Array<InputMaybe<Scalars['Boolean']['input']>>>;
   cancelled_not?: InputMaybe<Scalars['Boolean']['input']>;
   cancelled_not_in?: InputMaybe<Array<InputMaybe<Scalars['Boolean']['input']>>>;
-  chain_id?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_gt?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_gte?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  chain_id_lt?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_lte?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_not?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   created?: InputMaybe<Scalars['Int']['input']>;
   created_gt?: InputMaybe<Scalars['Int']['input']>;
   created_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -1620,6 +1648,14 @@ export type Proposal_Filter = {
   proposal_id_not_contains?: InputMaybe<Scalars['String']['input']>;
   proposal_id_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   proposal_id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  proposal_threshold?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  proposal_threshold_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  proposal_threshold_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
   quorum?: InputMaybe<Scalars['BigDecimalVP']['input']>;
   quorum_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
   quorum_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
@@ -1733,6 +1769,22 @@ export type Proposal_Filter = {
   vote_count_lte?: InputMaybe<Scalars['Int']['input']>;
   vote_count_not?: InputMaybe<Scalars['Int']['input']>;
   vote_count_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_delay?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_gt?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_gte?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_delay_lt?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_lte?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_not?: InputMaybe<Scalars['Int']['input']>;
+  voting_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_period?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_gt?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_gte?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_period_lt?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_lte?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_not?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   vp_decimals?: InputMaybe<Scalars['Int']['input']>;
   vp_decimals_gt?: InputMaybe<Scalars['Int']['input']>;
   vp_decimals_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -1747,7 +1799,6 @@ export type Proposal_OrderBy =
   | '_indexer'
   | 'author'
   | 'cancelled'
-  | 'chain_id'
   | 'created'
   | 'edited'
   | 'end_block_number'
@@ -1760,6 +1811,7 @@ export type Proposal_OrderBy =
   | 'id'
   | 'metadata'
   | 'proposal_id'
+  | 'proposal_threshold'
   | 'quorum'
   | 'scores_1'
   | 'scores_1_parsed'
@@ -1776,6 +1828,8 @@ export type Proposal_OrderBy =
   | 'timelock_delay'
   | 'tx'
   | 'vote_count'
+  | 'voting_delay'
+  | 'voting_period'
   | 'vp_decimals';
 
 export type Query = {
@@ -2044,8 +2098,6 @@ export type QueryVotesArgs = {
 /** Space represents a DAO or governance organization on Snapshot X */
 export type Space = {
   _indexer: Scalars['String']['output'];
-  /** Chain ID where this space exists */
-  chain_id: Scalars['Int']['output'];
   /** Timestamp when the space was created */
   created: Scalars['Int']['output'];
   /** Number of decimal places for the token */
@@ -2074,6 +2126,8 @@ export type Space = {
   timelock_delay: Scalars['BigInt']['output'];
   /** Token contract address (optional) */
   token: Maybe<Scalars['String']['output']>;
+  /** Total supply of the token */
+  total_supply: Scalars['BigDecimalVP']['output'];
   /** Transaction hash of space creation */
   tx: Scalars['String']['output'];
   /** Total number of votes cast in this space */
@@ -2082,6 +2136,8 @@ export type Space = {
   voter_count: Scalars['Int']['output'];
   /** Delay before voting starts after proposal creation (blocks on EVM, seconds on Starknet) */
   voting_delay: Scalars['Int']['output'];
+  /** Voting duration for proposals (blocks on EVM, seconds on Starknet) */
+  voting_period: Scalars['Int']['output'];
 };
 
 export type Space_Filter = {
@@ -2093,14 +2149,6 @@ export type Space_Filter = {
   _indexer_not_contains?: InputMaybe<Scalars['String']['input']>;
   _indexer_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   _indexer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  chain_id?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_gt?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_gte?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  chain_id_lt?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_lte?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_not?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   created?: InputMaybe<Scalars['Int']['input']>;
   created_gt?: InputMaybe<Scalars['Int']['input']>;
   created_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -2205,6 +2253,14 @@ export type Space_Filter = {
   token_not_contains?: InputMaybe<Scalars['String']['input']>;
   token_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   token_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  total_supply?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  total_supply_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
   tx?: InputMaybe<Scalars['String']['input']>;
   tx_contains?: InputMaybe<Scalars['String']['input']>;
   tx_contains_nocase?: InputMaybe<Scalars['String']['input']>;
@@ -2237,11 +2293,18 @@ export type Space_Filter = {
   voting_delay_lte?: InputMaybe<Scalars['Int']['input']>;
   voting_delay_not?: InputMaybe<Scalars['Int']['input']>;
   voting_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_period?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_gt?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_gte?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_period_lt?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_lte?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_not?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
 };
 
 export type Space_OrderBy =
   | '_indexer'
-  | 'chain_id'
   | 'created'
   | 'decimals'
   | 'delegate_count'
@@ -2255,10 +2318,12 @@ export type Space_OrderBy =
   | 'symbol'
   | 'timelock_delay'
   | 'token'
+  | 'total_supply'
   | 'tx'
   | 'vote_count'
   | 'voter_count'
-  | 'voting_delay';
+  | 'voting_delay'
+  | 'voting_period';
 
 /** TreasuryTransaction represents an inflow or outflow from the DAO treasury */
 export type TreasuryTransaction = {
@@ -2604,14 +2669,6 @@ export type Vote_Space_Filter = {
   _indexer_not_contains?: InputMaybe<Scalars['String']['input']>;
   _indexer_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   _indexer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  chain_id?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_gt?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_gte?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  chain_id_lt?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_lte?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_not?: InputMaybe<Scalars['Int']['input']>;
-  chain_id_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   created?: InputMaybe<Scalars['Int']['input']>;
   created_gt?: InputMaybe<Scalars['Int']['input']>;
   created_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -2716,6 +2773,14 @@ export type Vote_Space_Filter = {
   token_not_contains?: InputMaybe<Scalars['String']['input']>;
   token_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
   token_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  total_supply?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_gt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_gte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
+  total_supply_lt?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_lte?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_not?: InputMaybe<Scalars['BigDecimalVP']['input']>;
+  total_supply_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigDecimalVP']['input']>>>;
   tx?: InputMaybe<Scalars['String']['input']>;
   tx_contains?: InputMaybe<Scalars['String']['input']>;
   tx_contains_nocase?: InputMaybe<Scalars['String']['input']>;
@@ -2748,6 +2813,14 @@ export type Vote_Space_Filter = {
   voting_delay_lte?: InputMaybe<Scalars['Int']['input']>;
   voting_delay_not?: InputMaybe<Scalars['Int']['input']>;
   voting_delay_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_period?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_gt?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_gte?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  voting_period_lt?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_lte?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_not?: InputMaybe<Scalars['Int']['input']>;
+  voting_period_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
 };
 
 export type Vote_User_Filter = {
@@ -3043,14 +3116,14 @@ export type _Metadata_OrderBy =
 
 export type VoteFieldsFragment = { id: string, vp: any, vp_parsed: number, proposal: string, choice: number, created: number, tx: string, voter: { id: string }, metadata: { reason: any } | null };
 
-export type ProposalFieldsFragment = { id: string, proposal_id: string, quorum: any, timelock_delay: any, execution_hash: string, start_time: number, start_block_number: number | null, end_time: number, end_block_number: number | null, snapshot: number, vp_decimals: number, scores_1: any, scores_2: any, scores_3: any, scores_total: any, scores_1_parsed: number, scores_2_parsed: number, scores_3_parsed: number, scores_total_parsed: number, execution_time: number | null, created: number, edited: number | null, tx: string, execution_tx: string | null, vote_count: number, execution_ready: boolean, executed: boolean, cancelled: boolean, _indexer: string, author: { id: string }, metadata: { id: string, title: any | null, body: any | null, discussion: any | null, execution: any | null, simulation: any | null, choices: Array<string>, labels: Array<string> } | null };
+export type ProposalFieldsFragment = { id: string, proposal_id: string, quorum: any, timelock_delay: any, execution_hash: string, start_time: number, start_block_number: number | null, end_time: number, end_block_number: number | null, snapshot: number, voting_delay: number, voting_period: number, proposal_threshold: any, vp_decimals: number, scores_1: any, scores_2: any, scores_3: any, scores_total: any, scores_1_parsed: number, scores_2_parsed: number, scores_3_parsed: number, scores_total_parsed: number, execution_time: number | null, created: number, edited: number | null, tx: string, execution_tx: string | null, vote_count: number, execution_ready: boolean, executed: boolean, cancelled: boolean, _indexer: string, author: { id: string }, metadata: { id: string, title: any | null, body: any | null, discussion: any | null, execution: any | null, simulation: any | null, choices: Array<string>, labels: Array<string> } | null };
 
 export type ProposalQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type ProposalQuery = { proposal: { id: string, proposal_id: string, quorum: any, timelock_delay: any, execution_hash: string, start_time: number, start_block_number: number | null, end_time: number, end_block_number: number | null, snapshot: number, vp_decimals: number, scores_1: any, scores_2: any, scores_3: any, scores_total: any, scores_1_parsed: number, scores_2_parsed: number, scores_3_parsed: number, scores_total_parsed: number, execution_time: number | null, created: number, edited: number | null, tx: string, execution_tx: string | null, vote_count: number, execution_ready: boolean, executed: boolean, cancelled: boolean, _indexer: string, author: { id: string }, metadata: { id: string, title: any | null, body: any | null, discussion: any | null, execution: any | null, simulation: any | null, choices: Array<string>, labels: Array<string> } | null } | null };
+export type ProposalQuery = { proposal: { id: string, proposal_id: string, quorum: any, timelock_delay: any, execution_hash: string, start_time: number, start_block_number: number | null, end_time: number, end_block_number: number | null, snapshot: number, voting_delay: number, voting_period: number, proposal_threshold: any, vp_decimals: number, scores_1: any, scores_2: any, scores_3: any, scores_total: any, scores_1_parsed: number, scores_2_parsed: number, scores_3_parsed: number, scores_total_parsed: number, execution_time: number | null, created: number, edited: number | null, tx: string, execution_tx: string | null, vote_count: number, execution_ready: boolean, executed: boolean, cancelled: boolean, _indexer: string, author: { id: string }, metadata: { id: string, title: any | null, body: any | null, discussion: any | null, execution: any | null, simulation: any | null, choices: Array<string>, labels: Array<string> } | null } | null };
 
 export type ProposalsQueryVariables = Exact<{
   first: Scalars['Int']['input'];
@@ -3061,7 +3134,7 @@ export type ProposalsQueryVariables = Exact<{
 }>;
 
 
-export type ProposalsQuery = { proposals: Array<{ id: string, proposal_id: string, quorum: any, timelock_delay: any, execution_hash: string, start_time: number, start_block_number: number | null, end_time: number, end_block_number: number | null, snapshot: number, vp_decimals: number, scores_1: any, scores_2: any, scores_3: any, scores_total: any, scores_1_parsed: number, scores_2_parsed: number, scores_3_parsed: number, scores_total_parsed: number, execution_time: number | null, created: number, edited: number | null, tx: string, execution_tx: string | null, vote_count: number, execution_ready: boolean, executed: boolean, cancelled: boolean, _indexer: string, author: { id: string }, metadata: { id: string, title: any | null, body: any | null, discussion: any | null, execution: any | null, simulation: any | null, choices: Array<string>, labels: Array<string> } | null }> };
+export type ProposalsQuery = { proposals: Array<{ id: string, proposal_id: string, quorum: any, timelock_delay: any, execution_hash: string, start_time: number, start_block_number: number | null, end_time: number, end_block_number: number | null, snapshot: number, voting_delay: number, voting_period: number, proposal_threshold: any, vp_decimals: number, scores_1: any, scores_2: any, scores_3: any, scores_total: any, scores_1_parsed: number, scores_2_parsed: number, scores_3_parsed: number, scores_total_parsed: number, execution_time: number | null, created: number, edited: number | null, tx: string, execution_tx: string | null, vote_count: number, execution_ready: boolean, executed: boolean, cancelled: boolean, _indexer: string, author: { id: string }, metadata: { id: string, title: any | null, body: any | null, discussion: any | null, execution: any | null, simulation: any | null, choices: Array<string>, labels: Array<string> } | null }> };
 
 export type VotesQueryVariables = Exact<{
   indexer: Scalars['String']['input'];
@@ -3160,14 +3233,14 @@ export type SpaceQueryVariables = Exact<{
 }>;
 
 
-export type SpaceQuery = { space: { id: string, name: string, symbol: string, decimals: number, token: string | null, proposal_count: number, vote_count: number, proposer_count: number, voter_count: number, delegate_count: number, quorum: any, proposal_threshold: any, voting_delay: number, timelock_delay: any, created: number } | null };
+export type SpaceQuery = { space: { id: string, name: string, symbol: string, decimals: number, token: string | null, total_supply: any, proposal_count: number, vote_count: number, proposer_count: number, voter_count: number, delegate_count: number, quorum: any, proposal_threshold: any, voting_delay: number, voting_period: number, timelock_delay: any, created: number } | null };
 
 export const VoteFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"voteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Vote"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"voter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reason"}}]}},{"kind":"Field","name":{"kind":"Name","value":"vp"}},{"kind":"Field","name":{"kind":"Name","value":"vp_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"}},{"kind":"Field","name":{"kind":"Name","value":"choice"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}}]}}]} as unknown as DocumentNode<VoteFieldsFragment, unknown>;
-export const ProposalFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"proposalFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"quorum"}},{"kind":"Field","name":{"kind":"Name","value":"timelock_delay"}},{"kind":"Field","name":{"kind":"Name","value":"execution_hash"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"discussion"}},{"kind":"Field","name":{"kind":"Name","value":"execution"}},{"kind":"Field","name":{"kind":"Name","value":"simulation"}},{"kind":"Field","name":{"kind":"Name","value":"choices"}},{"kind":"Field","name":{"kind":"Name","value":"labels"}}]}},{"kind":"Field","name":{"kind":"Name","value":"start_time"}},{"kind":"Field","name":{"kind":"Name","value":"start_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"end_time"}},{"kind":"Field","name":{"kind":"Name","value":"end_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"snapshot"}},{"kind":"Field","name":{"kind":"Name","value":"vp_decimals"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_time"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"edited"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}},{"kind":"Field","name":{"kind":"Name","value":"execution_tx"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"execution_ready"}},{"kind":"Field","name":{"kind":"Name","value":"executed"}},{"kind":"Field","name":{"kind":"Name","value":"cancelled"}},{"kind":"Field","name":{"kind":"Name","value":"_indexer"}}]}}]} as unknown as DocumentNode<ProposalFieldsFragment, unknown>;
+export const ProposalFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"proposalFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"quorum"}},{"kind":"Field","name":{"kind":"Name","value":"timelock_delay"}},{"kind":"Field","name":{"kind":"Name","value":"execution_hash"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"discussion"}},{"kind":"Field","name":{"kind":"Name","value":"execution"}},{"kind":"Field","name":{"kind":"Name","value":"simulation"}},{"kind":"Field","name":{"kind":"Name","value":"choices"}},{"kind":"Field","name":{"kind":"Name","value":"labels"}}]}},{"kind":"Field","name":{"kind":"Name","value":"start_time"}},{"kind":"Field","name":{"kind":"Name","value":"start_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"end_time"}},{"kind":"Field","name":{"kind":"Name","value":"end_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"snapshot"}},{"kind":"Field","name":{"kind":"Name","value":"voting_delay"}},{"kind":"Field","name":{"kind":"Name","value":"voting_period"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_threshold"}},{"kind":"Field","name":{"kind":"Name","value":"vp_decimals"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_time"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"edited"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}},{"kind":"Field","name":{"kind":"Name","value":"execution_tx"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"execution_ready"}},{"kind":"Field","name":{"kind":"Name","value":"executed"}},{"kind":"Field","name":{"kind":"Name","value":"cancelled"}},{"kind":"Field","name":{"kind":"Name","value":"_indexer"}}]}}]} as unknown as DocumentNode<ProposalFieldsFragment, unknown>;
 export const DelegateFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"delegateFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Delegate"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_count"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"updated"}},{"kind":"Field","name":{"kind":"Name","value":"display_name"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"statement"}},{"kind":"Field","name":{"kind":"Name","value":"avatar_url"}},{"kind":"Field","name":{"kind":"Name","value":"twitter"}},{"kind":"Field","name":{"kind":"Name","value":"discord"}},{"kind":"Field","name":{"kind":"Name","value":"github"}},{"kind":"Field","name":{"kind":"Name","value":"website"}}]}},{"kind":"Field","name":{"kind":"Name","value":"voting_power"}},{"kind":"Field","name":{"kind":"Name","value":"voting_power_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"delegator_count"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"updated"}}]}}]} as unknown as DocumentNode<DelegateFieldsFragment, unknown>;
 export const TreasuryTransactionFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"treasuryTransactionFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"TreasuryTransaction"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"token_symbol"}},{"kind":"Field","name":{"kind":"Name","value":"token_decimals"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"amount_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"from_address"}},{"kind":"Field","name":{"kind":"Name","value":"to_address"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}}]}}]} as unknown as DocumentNode<TreasuryTransactionFieldsFragment, unknown>;
-export const ProposalDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Proposal"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"proposal"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"proposalFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"proposalFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"quorum"}},{"kind":"Field","name":{"kind":"Name","value":"timelock_delay"}},{"kind":"Field","name":{"kind":"Name","value":"execution_hash"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"discussion"}},{"kind":"Field","name":{"kind":"Name","value":"execution"}},{"kind":"Field","name":{"kind":"Name","value":"simulation"}},{"kind":"Field","name":{"kind":"Name","value":"choices"}},{"kind":"Field","name":{"kind":"Name","value":"labels"}}]}},{"kind":"Field","name":{"kind":"Name","value":"start_time"}},{"kind":"Field","name":{"kind":"Name","value":"start_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"end_time"}},{"kind":"Field","name":{"kind":"Name","value":"end_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"snapshot"}},{"kind":"Field","name":{"kind":"Name","value":"vp_decimals"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_time"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"edited"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}},{"kind":"Field","name":{"kind":"Name","value":"execution_tx"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"execution_ready"}},{"kind":"Field","name":{"kind":"Name","value":"executed"}},{"kind":"Field","name":{"kind":"Name","value":"cancelled"}},{"kind":"Field","name":{"kind":"Name","value":"_indexer"}}]}}]} as unknown as DocumentNode<ProposalQuery, ProposalQueryVariables>;
-export const ProposalsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Proposals"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal_filter"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal_orderBy"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderDirection"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"OrderDirection"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"proposals"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderDirection"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderDirection"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"proposalFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"proposalFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"quorum"}},{"kind":"Field","name":{"kind":"Name","value":"timelock_delay"}},{"kind":"Field","name":{"kind":"Name","value":"execution_hash"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"discussion"}},{"kind":"Field","name":{"kind":"Name","value":"execution"}},{"kind":"Field","name":{"kind":"Name","value":"simulation"}},{"kind":"Field","name":{"kind":"Name","value":"choices"}},{"kind":"Field","name":{"kind":"Name","value":"labels"}}]}},{"kind":"Field","name":{"kind":"Name","value":"start_time"}},{"kind":"Field","name":{"kind":"Name","value":"start_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"end_time"}},{"kind":"Field","name":{"kind":"Name","value":"end_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"snapshot"}},{"kind":"Field","name":{"kind":"Name","value":"vp_decimals"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_time"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"edited"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}},{"kind":"Field","name":{"kind":"Name","value":"execution_tx"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"execution_ready"}},{"kind":"Field","name":{"kind":"Name","value":"executed"}},{"kind":"Field","name":{"kind":"Name","value":"cancelled"}},{"kind":"Field","name":{"kind":"Name","value":"_indexer"}}]}}]} as unknown as DocumentNode<ProposalsQuery, ProposalsQueryVariables>;
+export const ProposalDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Proposal"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"proposal"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"proposalFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"proposalFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"quorum"}},{"kind":"Field","name":{"kind":"Name","value":"timelock_delay"}},{"kind":"Field","name":{"kind":"Name","value":"execution_hash"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"discussion"}},{"kind":"Field","name":{"kind":"Name","value":"execution"}},{"kind":"Field","name":{"kind":"Name","value":"simulation"}},{"kind":"Field","name":{"kind":"Name","value":"choices"}},{"kind":"Field","name":{"kind":"Name","value":"labels"}}]}},{"kind":"Field","name":{"kind":"Name","value":"start_time"}},{"kind":"Field","name":{"kind":"Name","value":"start_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"end_time"}},{"kind":"Field","name":{"kind":"Name","value":"end_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"snapshot"}},{"kind":"Field","name":{"kind":"Name","value":"voting_delay"}},{"kind":"Field","name":{"kind":"Name","value":"voting_period"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_threshold"}},{"kind":"Field","name":{"kind":"Name","value":"vp_decimals"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_time"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"edited"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}},{"kind":"Field","name":{"kind":"Name","value":"execution_tx"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"execution_ready"}},{"kind":"Field","name":{"kind":"Name","value":"executed"}},{"kind":"Field","name":{"kind":"Name","value":"cancelled"}},{"kind":"Field","name":{"kind":"Name","value":"_indexer"}}]}}]} as unknown as DocumentNode<ProposalQuery, ProposalQueryVariables>;
+export const ProposalsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Proposals"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal_filter"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal_orderBy"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderDirection"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"OrderDirection"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"proposals"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderDirection"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderDirection"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"proposalFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"proposalFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Proposal"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"quorum"}},{"kind":"Field","name":{"kind":"Name","value":"timelock_delay"}},{"kind":"Field","name":{"kind":"Name","value":"execution_hash"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"discussion"}},{"kind":"Field","name":{"kind":"Name","value":"execution"}},{"kind":"Field","name":{"kind":"Name","value":"simulation"}},{"kind":"Field","name":{"kind":"Name","value":"choices"}},{"kind":"Field","name":{"kind":"Name","value":"labels"}}]}},{"kind":"Field","name":{"kind":"Name","value":"start_time"}},{"kind":"Field","name":{"kind":"Name","value":"start_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"end_time"}},{"kind":"Field","name":{"kind":"Name","value":"end_block_number"}},{"kind":"Field","name":{"kind":"Name","value":"snapshot"}},{"kind":"Field","name":{"kind":"Name","value":"voting_delay"}},{"kind":"Field","name":{"kind":"Name","value":"voting_period"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_threshold"}},{"kind":"Field","name":{"kind":"Name","value":"vp_decimals"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total"}},{"kind":"Field","name":{"kind":"Name","value":"scores_1_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_2_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_3_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"scores_total_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"execution_time"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"edited"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}},{"kind":"Field","name":{"kind":"Name","value":"execution_tx"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"execution_ready"}},{"kind":"Field","name":{"kind":"Name","value":"executed"}},{"kind":"Field","name":{"kind":"Name","value":"cancelled"}},{"kind":"Field","name":{"kind":"Name","value":"_indexer"}}]}}]} as unknown as DocumentNode<ProposalsQuery, ProposalsQueryVariables>;
 export const VotesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Votes"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Vote_orderBy"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderDirection"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"OrderDirection"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Vote_filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"votes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"indexer"},"value":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderDirection"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderDirection"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"voteFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"voteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Vote"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"voter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reason"}}]}},{"kind":"Field","name":{"kind":"Name","value":"vp"}},{"kind":"Field","name":{"kind":"Name","value":"vp_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"}},{"kind":"Field","name":{"kind":"Name","value":"choice"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}}]}}]} as unknown as DocumentNode<VotesQuery, VotesQueryVariables>;
 export const UserVotesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserVotes"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"voter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"votes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"indexer"},"value":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"voter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"voter"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"voteFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"voteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Vote"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"voter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reason"}}]}},{"kind":"Field","name":{"kind":"Name","value":"vp"}},{"kind":"Field","name":{"kind":"Name","value":"vp_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"}},{"kind":"Field","name":{"kind":"Name","value":"choice"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}}]}}]} as unknown as DocumentNode<UserVotesQuery, UserVotesQueryVariables>;
 export const UserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"User"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"indexer"},"value":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_count"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"updated"}},{"kind":"Field","name":{"kind":"Name","value":"display_name"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"statement"}},{"kind":"Field","name":{"kind":"Name","value":"avatar_url"}},{"kind":"Field","name":{"kind":"Name","value":"twitter"}},{"kind":"Field","name":{"kind":"Name","value":"discord"}},{"kind":"Field","name":{"kind":"Name","value":"github"}},{"kind":"Field","name":{"kind":"Name","value":"website"}}]}}]}}]} as unknown as DocumentNode<UserQuery, UserQueryVariables>;
@@ -3177,4 +3250,4 @@ export const DelegatesDocument = {"kind":"Document","definitions":[{"kind":"Oper
 export const DelegateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Delegate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delegate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"indexer"},"value":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"delegateFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"delegateFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Delegate"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_count"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"updated"}},{"kind":"Field","name":{"kind":"Name","value":"display_name"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"statement"}},{"kind":"Field","name":{"kind":"Name","value":"avatar_url"}},{"kind":"Field","name":{"kind":"Name","value":"twitter"}},{"kind":"Field","name":{"kind":"Name","value":"discord"}},{"kind":"Field","name":{"kind":"Name","value":"github"}},{"kind":"Field","name":{"kind":"Name","value":"website"}}]}},{"kind":"Field","name":{"kind":"Name","value":"voting_power"}},{"kind":"Field","name":{"kind":"Name","value":"voting_power_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"delegator_count"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"updated"}}]}}]} as unknown as DocumentNode<DelegateQuery, DelegateQueryVariables>;
 export const UserDelegationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserDelegation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delegation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"indexer"},"value":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"delegator"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"delegate"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}}]}}]}}]} as unknown as DocumentNode<UserDelegationQuery, UserDelegationQueryVariables>;
 export const TreasuryTransactionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"TreasuryTransactions"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"TreasuryTransaction_orderBy"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderDirection"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"OrderDirection"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"treasurytransactions"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderDirection"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderDirection"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"treasuryTransactionFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"treasuryTransactionFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"TreasuryTransaction"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"token_symbol"}},{"kind":"Field","name":{"kind":"Name","value":"token_decimals"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"amount_parsed"}},{"kind":"Field","name":{"kind":"Name","value":"from_address"}},{"kind":"Field","name":{"kind":"Name","value":"to_address"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"tx"}}]}}]} as unknown as DocumentNode<TreasuryTransactionsQuery, TreasuryTransactionsQueryVariables>;
-export const SpaceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Space"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"space"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"indexer"},"value":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"symbol"}},{"kind":"Field","name":{"kind":"Name","value":"decimals"}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_count"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"proposer_count"}},{"kind":"Field","name":{"kind":"Name","value":"voter_count"}},{"kind":"Field","name":{"kind":"Name","value":"delegate_count"}},{"kind":"Field","name":{"kind":"Name","value":"quorum"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_threshold"}},{"kind":"Field","name":{"kind":"Name","value":"voting_delay"}},{"kind":"Field","name":{"kind":"Name","value":"timelock_delay"}},{"kind":"Field","name":{"kind":"Name","value":"created"}}]}}]}}]} as unknown as DocumentNode<SpaceQuery, SpaceQueryVariables>;
+export const SpaceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Space"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"space"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"indexer"},"value":{"kind":"Variable","name":{"kind":"Name","value":"indexer"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"symbol"}},{"kind":"Field","name":{"kind":"Name","value":"decimals"}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"total_supply"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_count"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}},{"kind":"Field","name":{"kind":"Name","value":"proposer_count"}},{"kind":"Field","name":{"kind":"Name","value":"voter_count"}},{"kind":"Field","name":{"kind":"Name","value":"delegate_count"}},{"kind":"Field","name":{"kind":"Name","value":"quorum"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_threshold"}},{"kind":"Field","name":{"kind":"Name","value":"voting_delay"}},{"kind":"Field","name":{"kind":"Name","value":"voting_period"}},{"kind":"Field","name":{"kind":"Name","value":"timelock_delay"}},{"kind":"Field","name":{"kind":"Name","value":"created"}}]}}]}}]} as unknown as DocumentNode<SpaceQuery, SpaceQueryVariables>;

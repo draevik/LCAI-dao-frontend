@@ -29,7 +29,7 @@ export const lcaiTestnet: Chain = {
   blockExplorers: {
     default: {
       name: "LCAI Testnet Explorer",
-      url: "https://testnet-explorer.lightscan.app",
+      url: "https://Testnet.lightscan.app",
     },
   },
 };
@@ -60,6 +60,10 @@ const config = {
       },
     ],
     [lcaiTestnet.id]: [
+      {
+        name: "Lightchain Treasury",
+        address: "0x482EfC1eA15289915e11689240E8A0f80C39E668",
+      },
       {
         name: "Lightchain Governor",
         address: "0xb18ef7bc408EE7136DdD9901Bc51695eE661Cd56",
@@ -118,6 +122,7 @@ const config = {
 
   treasury: {
     [mainnet.id]: "0x07A716a551E5f4CA7D6C71Da9dF1cb1429Dba826",
+    [lcaiTestnet.id]: "0x482EfC1eA15289915e11689240E8A0f80C39E668",
   } as Record<number, `0x${string}`>,
 
   lcaiEthPair: {
