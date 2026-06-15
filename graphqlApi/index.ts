@@ -37,9 +37,9 @@ import {
 } from "./queries";
 import { clone } from "@/lib/utils";
 import { formatUnits } from "viem";
-import config, { lcaiTestnet } from "@/config";
+import config from "@/config";
 
-const indexer = config.indexerName[lcaiTestnet.id];
+const indexer = config.indexerName[config.chains[0].id];
 
 const getProposalState = (proposal: ApiProposal, current: number) => {
   const quorum = BigInt(proposal.quorum);
@@ -66,7 +66,7 @@ const getProposalState = (proposal: ApiProposal, current: number) => {
 };
 
 function formatExecution(
-  execution: string
+  execution: string,
 ): (RawTransaction | DecodedExecution)[] {
   if (execution === "") return [];
 
@@ -91,7 +91,7 @@ function formatExecution(
 }
 
 function formatSimulation(
-  simulation: string | null | undefined
+  simulation: string | null | undefined,
 ): SimulationAction[] {
   if (!simulation) return [];
 
@@ -176,7 +176,7 @@ export function createApi(uri: string) {
       proposal: Proposal,
       { limit, skip = 0 }: PaginationOpts,
       filter: "any" | "for" | "against" | "abstain" = "any",
-      sortBy: "vp-desc" | "vp-asc" | "created-desc" | "created-asc" = "vp-desc"
+      sortBy: "vp-desc" | "vp-asc" | "created-desc" | "created-asc" = "vp-desc",
     ): Promise<Vote[]> => {
       const filters: Record<string, any> = {};
       if (filter === "for") {
@@ -189,7 +189,7 @@ export function createApi(uri: string) {
 
       const [orderBy, orderDirection] = sortBy.split("-") as [
         "vp" | "created",
-        "desc" | "asc"
+        "desc" | "asc",
       ];
 
       const { data } = await apollo.query({
@@ -212,7 +212,7 @@ export function createApi(uri: string) {
     },
     loadUserVotes: async (
       voter: string,
-      { limit, skip = 0 }: PaginationOpts
+      { limit, skip = 0 }: PaginationOpts,
     ): Promise<{ [key: string]: Vote }> => {
       const { data } = await apollo.query({
         query: USER_VOTES_QUERY,
@@ -226,7 +226,7 @@ export function createApi(uri: string) {
       });
 
       return Object.fromEntries(
-        data?.votes?.map((vote) => [vote.proposal, vote]) || []
+        data?.votes?.map((vote) => [vote.proposal, vote]) || [],
       );
     },
     loadProposals: async (
@@ -234,7 +234,7 @@ export function createApi(uri: string) {
       current: number,
       filters?: ProposalsFilter,
       searchQuery = "",
-      sortBy: ProposalSortOption = "created-desc"
+      sortBy: ProposalSortOption = "created-desc",
     ): Promise<Proposal[]> => {
       const _filters: ProposalsFilter = clone(filters || {});
 
@@ -263,7 +263,7 @@ export function createApi(uri: string) {
       // Parse sort option into orderBy + orderDirection
       const [orderBy, orderDirection] = sortBy.split("-") as [
         Proposal_OrderBy,
-        OrderDirection
+        OrderDirection,
       ];
 
       const cancelledFilter =
@@ -297,7 +297,7 @@ export function createApi(uri: string) {
     },
     loadProposal: async (
       proposalId: string,
-      current: number
+      current: number,
     ): Promise<Proposal | null> => {
       const [{ data }] = await Promise.all([
         apollo.query({
@@ -341,11 +341,11 @@ export function createApi(uri: string) {
         | "delegator_count-desc"
         | "delegator_count-asc"
         | "created-desc"
-        | "created-asc" = "voting_power-desc"
+        | "created-asc" = "voting_power-desc",
     ): Promise<Delegate[]> => {
       const [orderBy, orderDirection] = sortBy.split("-") as [
         "voting_power" | "delegator_count" | "created",
-        "desc" | "asc"
+        "desc" | "asc",
       ];
 
       const { data } = await apollo.query({
@@ -374,7 +374,7 @@ export function createApi(uri: string) {
           updated: delegate.updated,
           user: delegate.user
             ? mapGraphQLUser(
-                delegate.user as Parameters<typeof mapGraphQLUser>[0]
+                delegate.user as Parameters<typeof mapGraphQLUser>[0],
               )
             : null,
         })) || []
@@ -382,7 +382,7 @@ export function createApi(uri: string) {
     },
     loadDelegate: async (
       spaceId: string,
-      delegateAddress: string
+      delegateAddress: string,
     ): Promise<Delegate | null> => {
       const delegateId = `${spaceId}/${delegateAddress}`.toLowerCase();
       const { data } = await apollo.query({
@@ -409,7 +409,7 @@ export function createApi(uri: string) {
     },
     loadUserDelegation: async (
       spaceId: string,
-      userAddress: string
+      userAddress: string,
     ): Promise<Delegation | null> => {
       const delegationId = `${spaceId}/${userAddress}`.toLowerCase();
       const { data } = await apollo.query({
@@ -431,11 +431,11 @@ export function createApi(uri: string) {
     },
     loadTreasuryTransactions: async (
       { limit, skip = 0 }: PaginationOpts,
-      sortBy: "created-desc" | "created-asc" = "created-desc"
+      sortBy: "created-desc" | "created-asc" = "created-desc",
     ): Promise<TreasuryTransaction[]> => {
       const [orderBy, orderDirection] = sortBy.split("-") as [
         TreasuryTransaction_OrderBy,
-        OrderDirection
+        OrderDirection,
       ];
 
       const { data } = await apollo.query({

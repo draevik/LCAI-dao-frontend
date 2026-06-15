@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CopyButton from "@/components/CopyButton";
 import { truncateAddress } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTowerBroadcast } from "@fortawesome/free-solid-svg-icons";
 import useCurrentChain from "@/hooks/useCurrentChain";
 
 interface TreasuryStatsProps {
@@ -61,7 +63,7 @@ export function TreasuryStats({ address }: TreasuryStatsProps) {
             Status
           </p>
           <Badge variant={paused ? "destructive" : "active"} className="text-xs md:text-sm">
-            {!paused && <FontAwesomeIcon icon={faSignalStream} className="size-3.5" />}
+            {!paused && <FontAwesomeIcon icon={faTowerBroadcast} className="size-3.5" />}
             {paused ? "Paused" : "Active"}
           </Badge>
         </div> */}

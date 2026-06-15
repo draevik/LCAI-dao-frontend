@@ -5,7 +5,7 @@ import * as SelectPrimitive from "@radix-ui/react-select"
 
 import { cn } from "@/lib/utils"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCheck, faChevronDown, faChevronUp } from "@fortawesome/pro-regular-svg-icons"
+import { faCheck, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons"
 
 function Select({
   ...props

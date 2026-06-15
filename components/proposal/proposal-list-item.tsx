@@ -9,7 +9,7 @@ import ProposalStatusBadge from "@/components/proposal/proposal-status-badge";
 import { ProposalState, ProposalStateLabel } from "@/lib/constents";
 import type { Proposal } from "@/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSparkle } from "@fortawesome/pro-regular-svg-icons";
+import { faStarOfLife } from "@fortawesome/free-solid-svg-icons";
 
 interface ProposalListItemProps {
   proposal: Proposal;
@@ -59,7 +59,7 @@ export function ProposalListItem({
           </span>
         </div>
         <span className="hidden sm:block">
-          <FontAwesomeIcon icon={faSparkle} className="size-3.5" />
+          <FontAwesomeIcon icon={faStarOfLife} className="size-3.5" />
         </span>
         <div className="flex items-center gap-1">
           <span className="text-content-primary sm:text-base text-sm">by</span>
@@ -72,7 +72,7 @@ export function ProposalListItem({
           </Badge>
         </div>
         <span className="hidden sm:block">
-          <FontAwesomeIcon icon={faSparkle} className="size-3.5" />
+          <FontAwesomeIcon icon={faStarOfLife} className="size-3.5" />
         </span>
         <div className="flex items-center gap-1">
           <Users className="h-4 w-4 sm:text-base text-sm" />
@@ -85,7 +85,7 @@ export function ProposalListItem({
           proposal.state === ProposalState.Active) && (
           <>
             <span className="hidden sm:block">
-              <FontAwesomeIcon icon={faSparkle} className="size-3.5" />
+              <FontAwesomeIcon icon={faStarOfLife} className="size-3.5" />
             </span>
             <div className="flex items-center gap-1">
               <Clock className="h-4 w-4 sm:text-base text-sm" />

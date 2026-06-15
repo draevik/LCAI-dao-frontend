@@ -1,17 +1,14 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import {
-  useConnection,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from "wagmi";
+import { useConnection, useWaitForTransactionReceipt } from "wagmi";
 import useContracts from "./useContracts";
 import useCurrentChain from "./useCurrentChain";
-import config, { lcaiTestnet } from "@/config";
+import config from "@/config";
 import { formatUnits, zeroAddress } from "viem";
 import voteTokenAbi from "@/contracts/abi/voteTokenAbi";
 import useWeb3Clients from "./useWeb3Clients";
+import { mainnet } from "@/config/chains";
 
 export type DelegationState = {
   currentDelegate: string | null;
@@ -27,7 +24,7 @@ const useDelegation = () => {
   const { publicClient, walletClient } = useWeb3Clients();
   const { voteTokenContract } = useContracts();
   const [pendingTxHash, setPendingTxHash] = useState<`0x${string}` | undefined>(
-    undefined
+    undefined,
   );
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
@@ -55,7 +52,7 @@ const useDelegation = () => {
       setPendingTxHash(hash);
       return hash;
     },
-    [tokenAddress, address, publicClient]
+    [tokenAddress, address, publicClient],
   );
 
   const delegateToSelf = useCallback(async (): Promise<
@@ -82,9 +79,9 @@ const useDelegation = () => {
       const [delegateAddr, votingPower, tokenBalance] = await Promise.all([
         voteTokenContract.read.delegates([account]),
         voteTokenContract.read.getVotes([account]),
-        chain.id === lcaiTestnet.id
-          ? publicClient.getBalance({ address: account })
-          : voteTokenContract.read.balanceOf([account]),
+        chain.id === mainnet.id
+          ? voteTokenContract.read.balanceOf([account])
+          : publicClient.getBalance({ address: account }),
       ]);
 
       return {
@@ -95,7 +92,7 @@ const useDelegation = () => {
         tokenBalanceFormatted: formatUnits(tokenBalance, decimals),
       };
     },
-    [voteTokenContract, decimals]
+    [voteTokenContract, decimals],
   );
 
   return {

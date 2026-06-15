@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import $dayjs from "@/lib/dayjs";
 import type { Proposal } from "@/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar } from "@fortawesome/pro-regular-svg-icons";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 
 interface ProposalTimelineProps {
   proposal: Proposal;

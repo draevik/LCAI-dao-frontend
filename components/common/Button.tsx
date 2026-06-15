@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import type { ButtonHTMLAttributes } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconDefinition } from "@fortawesome/pro-regular-svg-icons";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 export type ButtonVariant = "primary" | "outline" | "gradient";
 export type ButtonSize = "sm" | "md" | "lg";

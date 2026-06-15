@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useConnection } from "wagmi";
 import { TransactionExecutionError } from "viem";
 import { Button } from "../common/Button";
-import { faCircleMinus, faClone } from "@fortawesome/pro-regular-svg-icons";
+import { faCircleMinus, faClone } from "@fortawesome/free-solid-svg-icons";
 import ProposalDetailsStatusBadge from "./ProposalDetailsStatusBadge";
 
 // Helper to get target address from both old and new execution formats

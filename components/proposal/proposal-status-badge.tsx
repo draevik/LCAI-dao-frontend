@@ -4,11 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleCheck,
   faCircleXmark,
-  faHourglassClock,
+  faHourglassStart,
   faHourglassHalf,
-  faSignalStream,
+  faTowerBroadcast,
   faSquareCheck,
-} from "@fortawesome/pro-regular-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -44,7 +44,7 @@ export default function ProposalStatusBadge({ status, className }: Props) {
                 "inline-block mr-2 md:text-lg sm:text-base text-sm text-content-success-light",
                 className
               )}
-              icon={faSignalStream}
+              icon={faTowerBroadcast}
             />
           </TooltipTrigger>
           <TooltipContent>
@@ -129,7 +129,7 @@ export default function ProposalStatusBadge({ status, className }: Props) {
                 "inline-block mr-2 md:text-lg sm:text-base text-sm text-content-medium",
                 className
               )}
-              icon={faHourglassClock}
+              icon={faHourglassStart}
             />
           </TooltipTrigger>
           <TooltipContent>

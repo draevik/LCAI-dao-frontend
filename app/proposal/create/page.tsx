@@ -74,10 +74,10 @@ import config from "@/config";
 import $dayjs from "@/lib/dayjs";
 import { Button } from "@/components/common/Button";
 import {
-  faCodeSimple,
-  faLoader,
+  faCode,
+  faSpinner,
   faPaperPlane,
-} from "@fortawesome/pro-regular-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { Button as ButtonUi } from "@/components/ui/button";
 import { compactNumber } from "@/lib/utils";
 import useCurrentChain from "@/hooks/useCurrentChain";
@@ -489,7 +489,7 @@ export default function CreateProposal() {
                     Send Token
                   </Button> */}
                       <Button
-                        leftIcon={faCodeSimple}
+                        leftIcon={faCode}
                         variant="outline"
                         type="button"
                         onClick={() => openDialog("contract")}
@@ -559,7 +559,7 @@ export default function CreateProposal() {
                         </EmptyHeader>
                         <EmptyContent>
                           <Button
-                            leftIcon={faCodeSimple}
+                            leftIcon={faCode}
                             variant="outline"
                             type="button"
                             onClick={() => openDialog("contract")}
@@ -621,7 +621,7 @@ export default function CreateProposal() {
                   <Button
                     variant="primary"
                     leftIcon={
-                      createProposalMutation.isPending ? faLoader : faPaperPlane
+                      createProposalMutation.isPending ? faSpinner : faPaperPlane
                     }
                     type="submit"
                     size="lg"

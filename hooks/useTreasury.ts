@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import useWeb3Clients from "./useWeb3Clients";
-import config, { mainnet } from "@/config";
-import treasuryAbi from "@/contracts/abi/treasuryAbi";
+import config from "@/config";
+import { mainnet } from "@/config/chains";
 import { formatUnits, getAddress } from "viem";
 import { useMemo } from "react";
 import useDexPrice from "./useDexPrice";

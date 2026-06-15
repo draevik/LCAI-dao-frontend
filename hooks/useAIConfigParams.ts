@@ -1,4 +1,4 @@
-import config, { lcaiTestnet } from "@/config";
+import config from "@/config";
 import useWeb3Clients from "./useWeb3Clients";
 import { useQuery } from "@tanstack/react-query";
 import aiConfigAbi from "@/contracts/abi/aiConfigAbi";
@@ -32,7 +32,7 @@ const PARAM_FUNCTIONS = [
   "getWorkerFeeBps",
 ] as const;
 
-const chain = lcaiTestnet;
+const chain = config.chains[0];
 
 export function useAIConfigParams() {
   const { publicClient } = useWeb3Clients({ chain });
@@ -48,8 +48,8 @@ export function useAIConfigParams() {
               address: aiConfigAddress,
               abi: aiConfigAbi,
               functionName,
-            })
-        )
+            }),
+        ),
       );
 
       return {
