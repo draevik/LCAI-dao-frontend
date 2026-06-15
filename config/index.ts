@@ -4,7 +4,7 @@ import { Chain } from "viem";
 import { mainnet } from "viem/chains";
 
 const config = {
-  chains: [lcai] as [Chain, ...Chain[]],
+  chains: [lcaiTestnet] as [Chain, ...Chain[]],
 
   indexerName: {
     [mainnet.id]: "mainnet",
