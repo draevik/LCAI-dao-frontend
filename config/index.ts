@@ -38,7 +38,7 @@ const config = {
       },
       {
         name: "Lightchain Governor",
-        address: "0x262E9f9232933E8565253918db703baD58DE93aB",
+        address: "0xDef8DCb2DcDD78102FeBDEe91F0fa3bb61c70840",
       },
       // {
       //   name: "Lightchain AI Config",
