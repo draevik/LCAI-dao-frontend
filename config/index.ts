@@ -4,7 +4,7 @@ import { Chain } from "viem";
 import { mainnet } from "viem/chains";
 
 const config = {
-  chains: [lcaiTestnet] as [Chain, ...Chain[]],
+  chains: [lcai] as [Chain, ...Chain[]],
 
   indexerName: {
     [mainnet.id]: "mainnet",
@@ -40,10 +40,10 @@ const config = {
         name: "Lightchain Governor",
         address: "0x262E9f9232933E8565253918db703baD58DE93aB",
       },
-      {
-        name: "Lightchain AI Config",
-        address: "0x24D11533C354092ed6E18b964257819cE78Ce77D",
-      },
+      // {
+      //   name: "Lightchain AI Config",
+      //   address: "0x24D11533C354092ed6E18b964257819cE78Ce77D",
+      // },
     ],
     [lcaiTestnet.id]: [
       {
@@ -54,23 +54,23 @@ const config = {
         name: "Lightchain Governor",
         address: "0xb18ef7bc408EE7136DdD9901Bc51695eE661Cd56",
       },
-      {
-        name: "Lightchain AI Config",
-        address: "0xeCF4Ca5Ba6D97ae586993e170764a1E92231b67e",
-      },
+      // {
+      //   name: "Lightchain AI Config",
+      //   address: "0xeCF4Ca5Ba6D97ae586993e170764a1E92231b67e",
+      // },
     ],
   } as Record<number, { name: string; address: `0x${string}` }[]>,
 
   timeLock: {
     [mainnet.id]: `0xbE1c37F8C4DA77dD06F4A8AC5098Ec70273093d7`,
-    [lcai.id]: `0x79e571420c5473Ca9b0FCd599B1b0062D7793c97`,
-    [lcaiTestnet.id]: `0x096A0231cFbA8fc3e29E4D0CdfD03ac14c612979`,
+    [lcai.id]: `0x5f396aB73bB5BfD1c49760197f1FE5d71b22E39A`,
+    [lcaiTestnet.id]: `0x6BFa8dcaE5DE285a2E8E893681638dBcd39B8d55`,
   } as Record<number, `0x${string}`>,
 
   governor: {
     [mainnet.id]: `0x6dfa413B5900a1a7947BC75E68AbBA093cB2492d`,
-    [lcai.id]: `0x262E9f9232933E8565253918db703baD58DE93aB`,
-    [lcaiTestnet.id]: `0xb18ef7bc408EE7136DdD9901Bc51695eE661Cd56`,
+    [lcai.id]: `0xDef8DCb2DcDD78102FeBDEe91F0fa3bb61c70840`,
+    [lcaiTestnet.id]: `0xfd8491594D806CdEf676012E714EAAb7e806dD24`,
   } as Record<number, `0x${string}`>,
 
   aiConfig: {
