@@ -1,20 +1,24 @@
 import { useWalletClient } from "wagmi";
 import useCurrentChain from "./useCurrentChain";
 import { useMemo } from "react";
-import { createPublicClient, http } from "viem";
+import { Chain, createPublicClient, http } from "viem";
 
-const useWeb3Clients = () => {
-  const chain = useCurrentChain();
+type Props = {
+  chain?: Chain;
+};
+
+const useWeb3Clients = ({ chain }: Props = { chain: undefined }) => {
+  const currentChain = useCurrentChain();
   const { data: walletClient } = useWalletClient();
 
   const publicClient = useMemo(
     () =>
       createPublicClient({
-        chain: chain,
+        chain: chain || currentChain,
         transport: http(),
         batch: { multicall: true },
       }),
-    [chain]
+    [currentChain]
   );
 
   return { publicClient, walletClient };

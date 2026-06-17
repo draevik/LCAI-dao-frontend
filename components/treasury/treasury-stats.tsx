@@ -1,20 +1,19 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import CopyButton from "@/components/CopyButton";
 import { truncateAddress } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignalStream } from "@fortawesome/pro-regular-svg-icons";
+import { faTowerBroadcast } from "@fortawesome/free-solid-svg-icons";
+import useCurrentChain from "@/hooks/useCurrentChain";
 
 interface TreasuryStatsProps {
   address: string;
-  admin: string;
-  paused: boolean;
 }
 
-export function TreasuryStats({ address, admin, paused }: TreasuryStatsProps) {
+export function TreasuryStats({ address }: TreasuryStatsProps) {
+  const chain = useCurrentChain();
   return (
     <Card className="py-0 gap-0">
       <CardHeader className="border-b border-border-soft px-6 pt-4 [.border-b]:pb-4 gap-0">
@@ -34,7 +33,7 @@ export function TreasuryStats({ address, admin, paused }: TreasuryStatsProps) {
               className="size-6 shrink-0 text-content-muted hover:text-content-primary [&_svg:not([class*='size-'])]:size-3"
             />
             <a
-              href={`https://etherscan.io/address/${address}`}
+              href={`${chain.blockExplorers?.default.url}/address/${address}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-content-muted hover:text-content-primary"
@@ -44,7 +43,7 @@ export function TreasuryStats({ address, admin, paused }: TreasuryStatsProps) {
           </div>
         </div>
 
-        <div>
+        {/* <div>
           <p className="text-xs md:text-sm text-content-default leading-[1.42] mb-2">
             Admin
           </p>
@@ -64,19 +63,19 @@ export function TreasuryStats({ address, admin, paused }: TreasuryStatsProps) {
             Status
           </p>
           <Badge variant={paused ? "destructive" : "active"} className="text-xs md:text-sm">
-            {!paused && <FontAwesomeIcon icon={faSignalStream} className="size-3.5" />}
+            {!paused && <FontAwesomeIcon icon={faTowerBroadcast} className="size-3.5" />}
             {paused ? "Paused" : "Active"}
           </Badge>
-        </div>
+        </div> */}
 
         <div>
           <a
-            href={`https://etherscan.io/address/${address}`}
+            href={`${chain.blockExplorers?.default.url}/address/${address}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-primary hover:underline flex items-center gap-1"
           >
-            View on Etherscan
+            View on Lightchan
             <ExternalLink className="w-3 h-3" />
           </a>
         </div>

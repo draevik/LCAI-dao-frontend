@@ -74,16 +74,18 @@ import config from "@/config";
 import $dayjs from "@/lib/dayjs";
 import { Button } from "@/components/common/Button";
 import {
-  faCodeSimple,
-  faLoader,
+  faCode,
+  faSpinner,
   faPaperPlane,
-} from "@fortawesome/pro-regular-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { Button as ButtonUi } from "@/components/ui/button";
 import { compactNumber } from "@/lib/utils";
 import useCurrentChain from "@/hooks/useCurrentChain";
 import governorAbi from "@/contracts/abi/governorAbi";
 import { formatEther, formatUnits } from "viem";
 import { useTokenBalance } from "@/hooks/useTokenBalance";
+import { useGovernanceParams } from "@/hooks/useGovernanceParams";
+import { mainnet } from "viem/chains";
 
 const choices = [
   {
@@ -125,6 +127,7 @@ type ProposalFormValues = z.infer<typeof proposalFormSchema>;
 export default function CreateProposal() {
   const router = useRouter();
   const { createProposal, simulateActions } = useGovernance();
+  const { data: governanceParams } = useGovernanceParams();
   const [actions, setActions] = useState<ContractAction[]>([]);
   const { open } = useAppKit();
   const { isConnected } = useConnection();
@@ -143,7 +146,7 @@ export default function CreateProposal() {
 
   const proposalThreshold = spaceStats
     ? Number(
-        formatUnits(BigInt(spaceStats.proposalThreshold), voteToken.decimals)
+        formatUnits(BigInt(spaceStats.proposalThreshold), voteToken.decimals),
       )
     : 0;
   const quorumNeeded = spaceStats
@@ -155,13 +158,10 @@ export default function CreateProposal() {
 
   const voteTokenBalance = useTokenBalance({
     address: address!,
-    token: voteToken.address as `0x${string}` | undefined,
-  });
-
-  const proposalMin = useReadContract({
-    address: config.governor[chain.id],
-    abi: governorAbi,
-    functionName: "proposalThreshold",
+    token:
+      chain.id === mainnet.id
+        ? (voteToken.address as `0x${string}` | undefined)
+        : undefined,
   });
 
   // Initialize React Hook Form with Zod validation
@@ -175,10 +175,10 @@ export default function CreateProposal() {
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [descriptionView, setDescriptionView] = useState<"edit" | "preview">(
-    "edit"
+    "edit",
   );
   const [editingAction, setEditingAction] = useState<ContractAction | null>(
-    null
+    null,
   );
   const [dialogType, setDialogType] = useState<"send" | "contract">("contract");
   const [simulationStatus, setSimulationStatus] = useState<
@@ -220,7 +220,7 @@ export default function CreateProposal() {
     if (editingAction) {
       // Update existing action
       setActions((prev) =>
-        prev.map((t) => (t.id === editingAction.id ? action : t))
+        prev.map((t) => (t.id === editingAction.id ? action : t)),
       );
     } else {
       // Add new action
@@ -254,7 +254,8 @@ export default function CreateProposal() {
       return;
     }
 
-    if (actions.length) {
+    // TODO: add a way to simulate actions on other chains (like devnet)
+    if (actions.length && chain.id === mainnet.id) {
       if (simulationStatus === "idle") {
         await simulateActionsMutation.mutateAsync(actions);
       }
@@ -267,13 +268,13 @@ export default function CreateProposal() {
 
     if (
       voteTokenBalance.data &&
-      proposalMin.data &&
-      voteTokenBalance.data.value < proposalMin.data
+      governanceParams?.proposalThreshold &&
+      voteTokenBalance.data.formatted < governanceParams.proposalThreshold
     ) {
       toast.error(
         `You don't have enough voting power to create a proposal. You need at least ${compactNumber(
-          formatEther(proposalMin.data)
-        )} ${voteToken?.symbol} to create a proposal.`
+          governanceParams.proposalThreshold,
+        )} ${voteToken?.symbol} to create a proposal.`,
       );
       return;
     }
@@ -488,7 +489,7 @@ export default function CreateProposal() {
                     Send Token
                   </Button> */}
                       <Button
-                        leftIcon={faCodeSimple}
+                        leftIcon={faCode}
                         variant="outline"
                         type="button"
                         onClick={() => openDialog("contract")}
@@ -558,7 +559,7 @@ export default function CreateProposal() {
                         </EmptyHeader>
                         <EmptyContent>
                           <Button
-                            leftIcon={faCodeSimple}
+                            leftIcon={faCode}
                             variant="outline"
                             type="button"
                             onClick={() => openDialog("contract")}
@@ -574,30 +575,32 @@ export default function CreateProposal() {
                     <span className="text-sm text-content-secondary">
                       {actions.length} action{actions.length === 1 ? "" : "s"}
                     </span>
-                    <ButtonUi
-                      variant={
-                        simulationStatus === "idle"
-                          ? "outline"
-                          : simulationStatus === "success"
-                          ? "success"
-                          : "error"
-                      }
-                      size="sm"
-                      className="h-8"
-                      type="button"
-                      disabled={
-                        simulateActionsMutation.isPending ||
-                        actions.length === 0
-                      }
-                      onClick={() => simulateActionsMutation.mutate(actions)}
-                    >
-                      {simulateActionsMutation.isPending ? (
-                        <Loader2Icon className="size-4 animate-spin" />
-                      ) : (
-                        <ShieldCheckIcon className="size-4" />
-                      )}
-                      Simulate Execution
-                    </ButtonUi>
+                    {chain.id === mainnet.id && (
+                      <ButtonUi
+                        variant={
+                          simulationStatus === "idle"
+                            ? "outline"
+                            : simulationStatus === "success"
+                              ? "success"
+                              : "error"
+                        }
+                        size="sm"
+                        className="h-8"
+                        type="button"
+                        disabled={
+                          simulateActionsMutation.isPending ||
+                          actions.length === 0
+                        }
+                        onClick={() => simulateActionsMutation.mutate(actions)}
+                      >
+                        {simulateActionsMutation.isPending ? (
+                          <Loader2Icon className="size-4 animate-spin" />
+                        ) : (
+                          <ShieldCheckIcon className="size-4" />
+                        )}
+                        Simulate Execution
+                      </ButtonUi>
+                    )}
                   </div>
 
                   {/* Simulation Results */}
@@ -618,7 +621,7 @@ export default function CreateProposal() {
                   <Button
                     variant="primary"
                     leftIcon={
-                      createProposalMutation.isPending ? faLoader : faPaperPlane
+                      createProposalMutation.isPending ? faSpinner : faPaperPlane
                     }
                     type="submit"
                     size="lg"

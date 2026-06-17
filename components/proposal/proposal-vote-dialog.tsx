@@ -26,6 +26,9 @@ import { toast } from "sonner";
 import { formatEther, TransactionExecutionError } from "viem";
 import { useConnection } from "wagmi";
 import useContracts from "@/hooks/useContracts";
+import { mainnet } from "@/config/chains";
+import useCurrentChain from "@/hooks/useCurrentChain";
+import useWeb3Clients from "@/hooks/useWeb3Clients";
 
 interface ProposalVoteDialogProps {
   open: boolean;
@@ -38,6 +41,8 @@ export function ProposalVoteDialog({
   proposal,
   onOpenChange,
 }: ProposalVoteDialogProps) {
+  const chain = useCurrentChain();
+  const { publicClient } = useWeb3Clients();
   const { address } = useConnection();
   const { castVote } = useGovernance();
   const { voteTokenContract } = useContracts();
@@ -47,7 +52,10 @@ export function ProposalVoteDialog({
 
   const userVotingPower = useQuery({
     queryKey: ["votingPower", address],
-    queryFn: async () => voteTokenContract.read.balanceOf([address!]),
+    queryFn: async () =>
+      chain.id === mainnet.id
+        ? voteTokenContract.read.balanceOf([address!])
+        : publicClient.getBalance({ address: address! }),
     select: (votingPower) => +formatEther(votingPower),
     enabled: Boolean(address),
   });
@@ -57,7 +65,7 @@ export function ProposalVoteDialog({
       castVote(
         proposal.proposal_id,
         convertChoice(selectedChoice!),
-        voteReason
+        voteReason,
       ),
     onSuccess: () => {
       setSelectedChoice(null);
@@ -65,7 +73,7 @@ export function ProposalVoteDialog({
       onOpenChange(false);
       queryClient.invalidateQueries({ queryKey: ["proposal", proposal.id] });
       toast.success(
-        `Vote cast for choice: ${proposal?.metadata?.choices[selectedChoice!]}`
+        `Vote cast for choice: ${proposal?.metadata?.choices[selectedChoice!]}`,
       );
     },
     onError: (error: TransactionExecutionError) => {
@@ -102,7 +110,7 @@ export function ProposalVoteDialog({
                 {userVotingPower.isLoading ? (
                   <Loader2Icon className="size-4 animate-spin" />
                 ) : (
-                  userVotingPower?.data?.toLocaleString() ?? 0
+                  (userVotingPower?.data?.toLocaleString() ?? 0)
                 )}
               </p>
             </div>

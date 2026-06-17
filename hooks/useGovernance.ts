@@ -87,7 +87,9 @@ export function useGovernance() {
     });
 
     if (!res.ok) {
-      const body = await res.json().catch(() => ({ error: "Simulation failed" }));
+      const body = await res
+        .json()
+        .catch(() => ({ error: "Simulation failed" }));
       throw new Error(body.error || "Failed to simulate actions");
     }
 
@@ -118,12 +120,10 @@ export function useGovernance() {
       })
     );
 
-    const { request } = await governorContract.simulate.propose([
-      targets,
-      values,
-      calldatas,
-      description,
-    ]);
+    const { request } = await governorContract.simulate.propose(
+      [targets, values, calldatas, description],
+      { account: address }
+    );
 
     const hash = await walletClient.writeContract(request);
 

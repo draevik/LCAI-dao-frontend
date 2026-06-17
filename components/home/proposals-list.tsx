@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { useQuery } from "@tanstack/react-query";
 import { useConnection } from "wagmi";
 import { Button } from "@/components/common/Button";
-import { faPlus } from "@fortawesome/pro-regular-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import ProposalFilter from "@/components/proposal/ProposalFilter";
 import type { ProposalFilters } from "@/components/proposal/ProposalFilter";
 import { ProposalListItem } from "@/components/proposal/proposal-list-item";
@@ -89,12 +89,12 @@ export function ProposalsList({ spaceId }: ProposalsListProps) {
       // Client-side sub-filter: API only supports active/pending/closed,
       // so we refine closed results by exact ProposalState
       const stateMap: Record<string, number[]> = {
-        succeeded: [4],  // ProposalState.Succeeded
-        queued: [5],     // ProposalState.Queued
-        defeated: [3],   // ProposalState.Defeated
-        canceled: [2],   // ProposalState.Canceled
-        expired: [6],    // ProposalState.Expired
-        executed: [7],   // ProposalState.Executed
+        succeeded: [4], // ProposalState.Succeeded
+        queued: [5], // ProposalState.Queued
+        defeated: [3], // ProposalState.Defeated
+        canceled: [2], // ProposalState.Canceled
+        expired: [6], // ProposalState.Expired
+        executed: [7], // ProposalState.Executed
       };
       if (
         filters.status !== "all" &&
@@ -121,7 +121,13 @@ export function ProposalsList({ spaceId }: ProposalsListProps) {
 
       return true;
     });
-  }, [proposals, filters.status, filters.createdBy, filters.hasExecution, address]);
+  }, [
+    proposals,
+    filters.status,
+    filters.createdBy,
+    filters.hasExecution,
+    address,
+  ]);
 
   return (
     <div>
@@ -133,10 +139,7 @@ export function ProposalsList({ spaceId }: ProposalsListProps) {
         ) : filteredProposals.length ? (
           <div className="divide-y divide-border-default">
             {filteredProposals.map((proposal) => (
-              <ProposalListItem
-                key={proposal.id}
-                proposal={proposal}
-              />
+              <ProposalListItem key={proposal.id} proposal={proposal} />
             ))}
           </div>
         ) : (

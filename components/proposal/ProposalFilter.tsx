@@ -14,15 +14,15 @@ import {
   faCircleCheck,
   faCircleXmark,
   faClockRotateLeft,
-  faGrid2Plus,
-  faHourglassClock,
+  faBorderAll,
+  faHourglassStart,
   faHourglassHalf,
   faMagnifyingGlass,
   faPlus,
-  faSignalStream,
+  faTowerBroadcast,
   faSliders,
   faSquareCheck,
-} from "@fortawesome/pro-regular-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import type { ProposalSortOption } from "@/types";
 
 export interface ProposalFilters {
@@ -80,14 +80,14 @@ const ProposalFilter = ({ filters, onFilterChange }: ProposalFilterProps) => {
               <SelectItem value="all" className={selectItemClass}>
                 <FontAwesomeIcon
                   className="inline-block size-4"
-                  icon={faGrid2Plus}
+                  icon={faBorderAll}
                 />
                 All
               </SelectItem>
               <SelectItem value="active" className={selectItemClass}>
                 <FontAwesomeIcon
                   className="inline-block size-4 text-content-success-strong"
-                  icon={faSignalStream}
+                  icon={faTowerBroadcast}
                 />
                 Active
               </SelectItem>
@@ -108,7 +108,7 @@ const ProposalFilter = ({ filters, onFilterChange }: ProposalFilterProps) => {
               <SelectItem value="queued" className={selectItemClass}>
                 <FontAwesomeIcon
                   className="inline-block size-4"
-                  icon={faHourglassClock}
+                  icon={faHourglassStart}
                 />
                 Queued
               </SelectItem>

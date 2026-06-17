@@ -11,6 +11,7 @@ import { compactNumber } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Settings } from "lucide-react";
 import { formatUnits } from "viem";
+import LoadingBlock from "../loading-block";
 
 const DAY = 60 * 60 * 24;
 const BLOCK_TIME_SECONDS = 12;
@@ -21,7 +22,7 @@ const Governance = () => {
   const spaceId = config.governor[chain.id];
   const voteToken = config.voteToken[chain.id];
 
-  const { data: spaceStats } = useQuery({
+  const { data: spaceStats, isLoading } = useQuery({
     queryKey: ["spaceStats", spaceId],
     queryFn: () => api.loadSpaceStats(spaceId),
     enabled: !!spaceId,
@@ -32,7 +33,7 @@ const Governance = () => {
     : 0;
   const proposalThresholdParsed = spaceStats
     ? Number(
-        formatUnits(BigInt(spaceStats.proposalThreshold), voteToken.decimals)
+        formatUnits(BigInt(spaceStats.proposalThreshold), voteToken.decimals),
       )
     : 0;
   const votingDelayBlocks = spaceStats?.votingDelay ?? 0;
@@ -47,13 +48,13 @@ const Governance = () => {
         {
           label: "Voting Delay",
           value: `${compactNumber(votingDelayBlocks)} blocks (~${compactNumber(
-            (votingDelayBlocks * BLOCK_TIME_SECONDS) / DAY
+            (votingDelayBlocks * BLOCK_TIME_SECONDS) / DAY,
           )} days)`,
         },
         {
           label: "Voting Period",
           value: `${compactNumber(votingPeriodBlocks)} blocks (~${compactNumber(
-            (votingPeriodBlocks * BLOCK_TIME_SECONDS) / DAY
+            (votingPeriodBlocks * BLOCK_TIME_SECONDS) / DAY,
           )} days)`,
         },
         {
@@ -83,7 +84,11 @@ const Governance = () => {
         </p>
       </div>
 
-      <CommonTable sections={governanceTableData} columns={4} />
+      {isLoading ? (
+        <LoadingBlock className="max-w-full py-16" />
+      ) : (
+        <CommonTable sections={governanceTableData} columns={4} />
+      )}
     </div>
   );
 };

@@ -45,11 +45,7 @@ export function TreasuryDashboard() {
       {/* Sidebar */}
       <div className="lg:col-span-1">
         <div className="sticky top-6">
-          <TreasuryStats
-            address={treasury.address}
-            admin={treasury.admin}
-            paused={treasury.paused}
-          />
+          <TreasuryStats address={treasury.address} />
         </div>
       </div>
     </div>

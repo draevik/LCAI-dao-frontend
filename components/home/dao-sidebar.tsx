@@ -12,6 +12,7 @@ import useCurrentChain from "@/hooks/useCurrentChain";
 import config from "@/config";
 import useTreasury from "@/hooks/useTreasury";
 import useDexPrice from "@/hooks/useDexPrice";
+import { mainnet } from "viem/chains";
 
 interface DaoSidebarProps {
   spaceStats: SpaceStats | null;
@@ -156,26 +157,30 @@ export function DaoSidebar({
             <Separator />
 
             {/* Helper text for ballots */}
-            <div className="rounded-lg bg-primary/5 border border-primary/10 p-3">
-              <p className="text-xs text-muted-foreground">
-                <span className="font-medium text-foreground">
-                  Need voting power?
-                </span>{" "}
-                Wrap your {underlyingToken.symbol} tokens into{" "}
-                {voteToken.symbol} to vote on proposals and participate in
-                governance.
-              </p>
-            </div>
+            {chain.id === mainnet.id && (
+              <div className="rounded-lg bg-primary/5 border border-primary/10 p-3">
+                <p className="text-xs text-muted-foreground">
+                  <span className="font-medium text-foreground">
+                    Need voting power?
+                  </span>{" "}
+                  Wrap your {underlyingToken.symbol} tokens into{" "}
+                  {voteToken.symbol} to vote on proposals and participate in
+                  governance.
+                </p>
+              </div>
+            )}
 
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={onBallotsLockerClick}
-                >
-                  Wrap/Unwrap
-                </Button>
+                {chain.id === mainnet.id && (
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={onBallotsLockerClick}
+                  >
+                    Wrap/Unwrap
+                  </Button>
+                )}
                 <Button
                   variant="primary"
                   className="flex-1"

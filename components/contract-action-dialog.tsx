@@ -51,7 +51,7 @@ const abiOptions = [
   {
     value: "erc20",
     label: "ERC 20",
-    abi: erc20Abi as unknown as Abi,
+    abi: erc20Abi as Abi,
   },
   { value: "upload", label: "Upload an ABI" },
 ];

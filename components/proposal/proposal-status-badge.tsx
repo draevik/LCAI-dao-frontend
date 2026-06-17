@@ -2,12 +2,13 @@ import { ProposalState, ProposalStateLabel } from "@/lib/constents";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faCircleCheck,
   faCircleXmark,
-  faHourglassClock,
+  faHourglassStart,
   faHourglassHalf,
-  faSignalStream,
+  faTowerBroadcast,
   faSquareCheck,
-} from "@fortawesome/pro-regular-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -43,7 +44,7 @@ export default function ProposalStatusBadge({ status, className }: Props) {
                 "inline-block mr-2 md:text-lg sm:text-base text-sm text-content-success-light",
                 className
               )}
-              icon={faSignalStream}
+              icon={faTowerBroadcast}
             />
           </TooltipTrigger>
           <TooltipContent>
@@ -65,6 +66,23 @@ export default function ProposalStatusBadge({ status, className }: Props) {
           </TooltipTrigger>
           <TooltipContent>
             <p className="text-xs">Passed</p>
+          </TooltipContent>
+        </Tooltip>
+      );
+    case ProposalState.Executed:
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <FontAwesomeIcon
+              className={cn(
+                "inline-block mr-2 md:text-lg sm:text-base text-sm text-content-success-light",
+                className
+              )}
+              icon={faCircleCheck}
+            />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="text-xs">Executed</p>
           </TooltipContent>
         </Tooltip>
       );
@@ -111,7 +129,7 @@ export default function ProposalStatusBadge({ status, className }: Props) {
                 "inline-block mr-2 md:text-lg sm:text-base text-sm text-content-medium",
                 className
               )}
-              icon={faHourglassClock}
+              icon={faHourglassStart}
             />
           </TooltipTrigger>
           <TooltipContent>

@@ -1,6 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { type Abi } from "viem";
 import useCurrentChain from "./useCurrentChain";
+import { mainnet } from "viem/chains";
+import config from "@/config";
+import governorAbi from "@/contracts/abi/governorAbi";
+import aiConfigAbi from "@/contracts/abi/aiConfigAbi";
 
 const API_ENDPOINT =
   process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:3000";
@@ -12,7 +16,9 @@ async function fetchAbiFromApi(
   chainId: number,
   address: `0x${string}`
 ): Promise<Abi> {
-  const url = `${API_ENDPOINT}/api/abi/${chainId}/${encodeURIComponent(address)}`;
+  const url = `${API_ENDPOINT}/api/abi/${chainId}/${encodeURIComponent(
+    address
+  )}`;
   const res = await fetch(url);
 
   if (!res.ok) {
@@ -40,7 +46,9 @@ const useGetAbiContract = (address: `0x${string}` | undefined) => {
     queryKey: ["getAbiContract", chainId, address],
     queryFn: async (): Promise<Abi> => {
       if (!address) throw new Error("No contract address");
-      return fetchAbiFromApi(chainId, address);
+      if (address === config.aiConfig[chainId]) return aiConfigAbi;
+      if (address === config.governor[chainId]) return governorAbi;
+      return chainId === mainnet.id ? fetchAbiFromApi(chainId, address) : [];
     },
     enabled: !!address && chainId > 0,
     staleTime: 1000 * 60 * 30, // 30 minutes

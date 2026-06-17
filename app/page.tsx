@@ -96,14 +96,14 @@ export default function HomePage() {
             <Wallet className="h-4 w-4" />
             Treasury
           </TabsTrigger>
-          {/* <TabsTrigger value="governance" className={tabTriggerClassName}>
+          <TabsTrigger value="governance" className={tabTriggerClassName}>
             <Settings className="h-4 w-4" />
             Governance
           </TabsTrigger>
           <TabsTrigger value="ai-config" className={tabTriggerClassName}>
             <Settings className="h-4 w-4" />
             AI Config
-          </TabsTrigger> */}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="home">
@@ -171,13 +171,13 @@ export default function HomePage() {
           <TreasuryDashboard />
         </TabsContent>
 
-        {/* <TabsContent value="governance">
+        <TabsContent value="governance">
           <Governance />
         </TabsContent>
 
         <TabsContent value="ai-config">
           <AiConfig />
-        </TabsContent> */}
+        </TabsContent>
       </Tabs>
 
       <DelegateModal

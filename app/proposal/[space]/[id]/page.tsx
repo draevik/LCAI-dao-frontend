@@ -112,8 +112,9 @@ export default function ProposalDetail() {
 
             <ProposalVoteResults proposal={proposal} />
 
-            <ProposalSimulationReport proposal={proposal} />
-
+            {proposal.indexer === "mainnet" && (
+              <ProposalSimulationReport proposal={proposal} />
+            )}
             <ProposalTimeline proposal={proposal} />
           </div>
         </div>

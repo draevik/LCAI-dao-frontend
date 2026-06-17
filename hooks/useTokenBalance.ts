@@ -14,13 +14,13 @@ export const useTokenBalance = ({ address, token }: Props) => {
     queryFn: async () => {
       const value = token
         ? await publicClient.readContract({
-            address: token,
-            abi: erc20Abi,
-            functionName: "balanceOf",
-            args: [address!],
-          })
+          address: token,
+          abi: erc20Abi,
+          functionName: "balanceOf",
+          args: [address!],
+        })
         : await publicClient.getBalance({ address: address! });
-      return { value, formatted: formatEther(value) };
+      return { value, formatted: +formatEther(value) };
     },
     enabled: Boolean(address),
   });
