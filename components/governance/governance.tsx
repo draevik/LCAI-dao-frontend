@@ -14,13 +14,13 @@ import { formatUnits } from "viem";
 import LoadingBlock from "../loading-block";
 
 const DAY = 60 * 60 * 24;
-const BLOCK_TIME_SECONDS = 12;
 
 const Governance = () => {
   const api = useGraphqlApi();
   const chain = useCurrentChain();
   const spaceId = config.governor[chain.id];
   const voteToken = config.voteToken[chain.id];
+  const BLOCK_TIME_SECONDS = config.blockTimeSeconds[chain.id];
 
   const { data: spaceStats, isLoading } = useQuery({
     queryKey: ["spaceStats", spaceId],

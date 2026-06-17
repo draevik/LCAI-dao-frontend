@@ -685,7 +685,7 @@ export default function CreateProposal() {
                   </span>
                   <span className="ml-auto text-content-primary text-sm">
                     {$dayjs
-                      .duration((spaceStats?.votingDelay ?? 0) * 12, "seconds")
+                      .duration((spaceStats?.votingDelay ?? 0) * config.blockTimeSeconds[chain.id], "seconds")
                       .humanize()}
                   </span>
                 </div>
@@ -695,7 +695,7 @@ export default function CreateProposal() {
                   </span>
                   <span className="ml-auto text-content-primary text-sm">
                     {$dayjs
-                      .duration((spaceStats?.votingPeriod ?? 0) * 12, "seconds")
+                      .duration((spaceStats?.votingPeriod ?? 0) * config.blockTimeSeconds[chain.id], "seconds")
                       .humanize()}
                   </span>
                 </div>
