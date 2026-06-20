@@ -6,8 +6,16 @@ import { ChevronDown, ChevronUp, Layers } from "lucide-react";
 import { truncateAddress } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
 import { Button } from "../ui/button";
+import { mainnet } from "viem/chains";
+import { lcai } from "@/config/chains";
 
-function ActionRow({ execution }: { execution: DecodedExecution }) {
+function ActionRow({
+  indexer,
+  execution,
+}: {
+  indexer: string;
+  execution: DecodedExecution;
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const hasParams =
     execution.decodedCalldata &&
@@ -17,8 +25,13 @@ function ActionRow({ execution }: { execution: DecodedExecution }) {
   const functionDisplay = execution.decodedCalldata
     ? `${execution.decodedCalldata.signature}(..)`
     : execution.signature
-    ? `${execution.signature.slice(0, 10)}...`
-    : "transfer";
+      ? `${execution.signature.slice(0, 10)}...`
+      : "transfer";
+
+  const explorerUrl =
+    indexer === "mainnet"
+      ? mainnet.blockExplorers?.default.url
+      : lcai.blockExplorers?.default.url;
 
   return (
     <div className="border-b border-border-default last:border-b-0">
@@ -43,7 +56,7 @@ function ActionRow({ execution }: { execution: DecodedExecution }) {
             {truncateAddress(execution.target)}
           </span>
           <a
-            href={`https://etherscan.io/address/${execution.target}`}
+            href={`${explorerUrl}/address/${execution.target}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-content-secondary hover:text-content-primary"
@@ -168,7 +181,13 @@ function RawView({ executions }: { executions: DecodedExecution[] }) {
   );
 }
 
-function SummaryView({ executions }: { executions: DecodedExecution[] }) {
+function SummaryView({
+  indexer,
+  executions,
+}: {
+  indexer: string;
+  executions: DecodedExecution[];
+}) {
   return (
     <>
       {/* Table header */}
@@ -189,7 +208,7 @@ function SummaryView({ executions }: { executions: DecodedExecution[] }) {
 
       {/* Rows */}
       {executions?.map((execution, index) => (
-        <ActionRow key={index} execution={execution} />
+        <ActionRow key={index} indexer={indexer} execution={execution} />
       ))}
     </>
   );
@@ -236,7 +255,7 @@ export function ProposalActions({ proposal }: { proposal: Proposal }) {
       </div>
 
       {showSummary ? (
-        <SummaryView executions={executions} />
+        <SummaryView indexer={proposal.indexer} executions={executions} />
       ) : (
         <RawView executions={executions} />
       )}

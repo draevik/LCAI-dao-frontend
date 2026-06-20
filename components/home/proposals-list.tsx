@@ -79,7 +79,7 @@ export function ProposalsList({ spaceId }: ProposalsListProps) {
         Math.floor(Date.now() / 1000),
         apiFilter,
         filters.search,
-        filters.sortBy as ProposalSortOption
+        filters.sortBy as ProposalSortOption,
       ),
   });
 
@@ -156,10 +156,10 @@ export function ProposalsList({ spaceId }: ProposalsListProps) {
               alt="Folder icon"
             />
             <div className="text-center">
-              <h4 className="text-2xl font-semibold leading-[1.20] -tracking-[0.24px] text-content-primary mb-2">
+              <h4 className="text-2xl font-semibold leading-[1.20] tracking-[-0.24px] text-content-primary mb-2">
                 No proposals found
               </h4>
-              <p className="text-content-default -tracking-[0.16px]">
+              <p className="text-content-default tracking-[-0.16px]">
                 Create your first proposal
               </p>
             </div>

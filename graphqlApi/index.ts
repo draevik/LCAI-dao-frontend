@@ -196,7 +196,7 @@ export function createApi(uri: string) {
         query: VOTES_QUERY,
         fetchPolicy: "network-only",
         variables: {
-          indexer,
+          indexer: proposal.indexer,
           first: limit,
           skip,
           orderBy,

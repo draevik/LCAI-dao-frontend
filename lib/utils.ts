@@ -7,6 +7,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function isArchivedProposal(proposal: { indexer: string }) {
+  return proposal.indexer === "mainnet";
+}
+
 export function rmMarkdown(text: string) {
   // #
   // **

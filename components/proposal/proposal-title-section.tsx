@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { UsersIcon, ClockIcon } from "lucide-react";
-import { compactNumber } from "@/lib/utils";
+import { compactNumber, isArchivedProposal } from "@/lib/utils";
+import { ProposalArchivedBadge } from "@/components/proposal/proposal-archived-badge";
 import { toast } from "sonner";
 import { useCopyToClipboard } from "usehooks-ts";
 import $dayjs from "@/lib/dayjs";
@@ -54,7 +55,10 @@ export function ProposalTitleSection({ proposal }: ProposalTitleSectionProps) {
   });
   return (
     <div>
-      <ProposalDetailsStatusBadge status={proposal.state} />
+      <div className="flex items-center gap-2 flex-wrap">
+        {isArchivedProposal(proposal) && <ProposalArchivedBadge />}
+        <ProposalDetailsStatusBadge status={proposal.state} />
+      </div>
       <h1 className="page-title mt-2 mb-3">{proposal.metadata?.title}</h1>
       <div className="flex items-center justify-between gap-y-3 flex-wrap gap-x-10">
         <div className="flex items-center gap-x-4 gap-y-2 flex-wrap text-sm text-content-default">

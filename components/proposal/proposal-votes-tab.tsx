@@ -33,7 +33,7 @@ export function ProposalVotesTab({ proposal }: ProposalVotesTabProps) {
         proposal,
         { limit: 100, skip: 0 },
         activeFilter,
-        "vp-desc"
+        "vp-desc",
       ),
     enabled: Boolean(proposal),
   });
@@ -52,7 +52,7 @@ export function ProposalVotesTab({ proposal }: ProposalVotesTabProps) {
               "px-4 py-2 rounded-full text-sm font-medium transition-colors",
               activeFilter === tab.value
                 ? "bg-[image:var(--gradient-primary)] text-white"
-                : "bg-surface-soft text-content-primary hover:bg-surface-soft/80"
+                : "bg-surface-soft text-content-primary hover:bg-surface-soft/80",
             )}
           >
             {tab.label}
@@ -66,7 +66,7 @@ export function ProposalVotesTab({ proposal }: ProposalVotesTabProps) {
         </div>
         <div className="text-sm text-content-primary">
           {compactNumber(
-            votes?.reduce((acc, vote) => acc + Number(vote.vp_parsed), 0)
+            votes?.reduce((acc, vote) => acc + Number(vote.vp_parsed), 0),
           ) ?? 0}{" "}
           Votes
         </div>
