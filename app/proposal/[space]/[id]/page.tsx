@@ -60,19 +60,19 @@ export default function ProposalDetail() {
             <Tabs defaultValue="description" className="w-full justify-start">
               <TabsList className="bg-transparent border-b border-surface-soft rounded-none w-full flex gap-1">
                 <TabsTrigger
-                  className="max-w-fit border-0 rounded-t-2xl rounded-b-none px-6 py-4 text-lg font-semibold -tracking-[0.18px] text-content-primary leading-[1] bg-surface-soft data-[state=active]:bg-[image:var(--gradient-primary)] data-[state=active]:text-white"
+                  className="max-w-fit border-0 rounded-t-2xl rounded-b-none px-6 py-4 text-lg font-semibold tracking-[-0.18px] text-content-primary leading-none bg-surface-soft data-[state=active]:bg-(image:--gradient-primary) data-[state=active]:text-white"
                   value="description"
                 >
                   Description
                 </TabsTrigger>
                 <TabsTrigger
-                  className="max-w-fit border-0 rounded-t-2xl rounded-b-none px-6 py-4 text-lg font-semibold -tracking-[0.18px] text-content-primary leading-[1] bg-surface-soft data-[state=active]:bg-[image:var(--gradient-primary)] data-[state=active]:text-white"
+                  className="max-w-fit border-0 rounded-t-2xl rounded-b-none px-6 py-4 text-lg font-semibold tracking-[-0.18px] text-content-primary leading-none bg-surface-soft data-[state=active]:bg-(image:--gradient-primary) data-[state=active]:text-white"
                   value="votes"
                 >
                   Votes
                 </TabsTrigger>
                 <TabsTrigger
-                  className="max-w-fit border-0 rounded-t-2xl rounded-b-none px-6 py-4 text-lg font-semibold -tracking-[0.18px] text-content-primary leading-[1] bg-surface-soft data-[state=active]:bg-[image:var(--gradient-primary)] data-[state=active]:text-white"
+                  className="max-w-fit border-0 rounded-t-2xl rounded-b-none px-6 py-4 text-lg font-semibold tracking-[-0.18px] text-content-primary leading-none bg-surface-soft data-[state=active]:bg-(image:--gradient-primary) data-[state=active]:text-white"
                   value="actions"
                 >
                   Actions

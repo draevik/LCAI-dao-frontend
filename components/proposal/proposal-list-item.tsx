@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Users } from "lucide-react";
-import { compactNumber } from "@/lib/utils";
+import { compactNumber, isArchivedProposal } from "@/lib/utils";
+import { ProposalArchivedBadge } from "@/components/proposal/proposal-archived-badge";
 import $dayjs from "@/lib/dayjs";
 import ProposalStatusBadge from "@/components/proposal/proposal-status-badge";
 import { ProposalState, ProposalStateLabel } from "@/lib/constents";
@@ -23,6 +24,7 @@ export function ProposalListItem({
   isStatusBadge = true,
 }: ProposalListItemProps) {
   const votingPower = Number(proposal.scores_total_parsed ?? 0);
+  const isArchived = isArchivedProposal(proposal);
   const proposalStateLabel = ProposalStateLabel[proposal.state];
   const proposalBadgeVariant = (
     (proposalStateLabel as BadgeVariant) ?? "default"
@@ -34,21 +36,25 @@ export function ProposalListItem({
       className="sm:py-8 py-5 px-6 block transition-all duration-300 hover:bg-surface-soft hover:border-surface-soft/20"
     >
       <h3 className="text-content-primary flex gap-3 flex-col md:flex-row items-baseline justify-between font-semibold leading-[1.2] tracking-[-0.24px] sm:text-xl text-lg capitalize">
-        <span>
+        <span className="inline-flex items-center gap-2 flex-wrap">
           <ProposalStatusBadge status={proposal.state} />
           {proposal.metadata?.title}
+          {isArchived && !isStatusBadge && <ProposalArchivedBadge />}
         </span>
         {isStatusBadge && (
-          <Badge
-            variant={proposalBadgeVariant as BadgeVariant}
-            className="text-xs md:text-sm"
-          >
-            <ProposalStatusBadge
-              status={proposal.state}
-              className="mr-0 text-xs md:text-sm"
-            />
-            {proposalStateLabel}
-          </Badge>
+          <div className="flex items-center gap-2 shrink-0">
+            {isArchived && <ProposalArchivedBadge />}
+            <Badge
+              variant={proposalBadgeVariant as BadgeVariant}
+              className="text-xs md:text-sm"
+            >
+              <ProposalStatusBadge
+                status={proposal.state}
+                className="mr-0 text-xs md:text-sm"
+              />
+              {proposalStateLabel}
+            </Badge>
+          </div>
         )}
       </h3>
 
