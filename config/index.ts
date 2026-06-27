@@ -63,13 +63,13 @@ const config = {
 
   timeLock: {
     [mainnet.id]: `0xbE1c37F8C4DA77dD06F4A8AC5098Ec70273093d7`,
-    [lcai.id]: `0x5f396aB73bB5BfD1c49760197f1FE5d71b22E39A`,
+    [lcai.id]: `0xc783376c8237E8f1ed17d825CE7CBB4c22e3cAE5`,
     [lcaiTestnet.id]: `0x6BFa8dcaE5DE285a2E8E893681638dBcd39B8d55`,
   } as Record<number, `0x${string}`>,
 
   governor: {
     [mainnet.id]: `0x6dfa413B5900a1a7947BC75E68AbBA093cB2492d`,
-    [lcai.id]: `0xDef8DCb2DcDD78102FeBDEe91F0fa3bb61c70840`,
+    [lcai.id]: `0xD216A0c0050EdC3a9E0449EcFDf178A1652b4b68`,
     [lcaiTestnet.id]: `0xfd8491594D806CdEf676012E714EAAb7e806dD24`,
   } as Record<number, `0x${string}`>,
 
