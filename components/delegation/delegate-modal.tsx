@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { isAddress } from "viem";
+import { BaseError, isAddress } from "viem";
 import useDelegation from "@/hooks/useDelegation";
 import { compactNumber } from "@/lib/utils";
 import { toast } from "sonner";
@@ -89,7 +89,11 @@ export function DelegateModal({
       }
     } catch (error) {
       console.error("Delegation failed:", error);
-      toast.error("Delegation failed. Please try again.");
+      const reason =
+        error instanceof BaseError
+          ? error.shortMessage
+          : "Delegation failed. Please try again.";
+      toast.error(reason);
       setIsSubmitting(false);
     }
   };
@@ -233,11 +237,15 @@ export function DelegateModal({
           <Separator />
 
           <div className="flex justify-between text-sm">
-            <span className="text-content-secondary">Your voting power</span>
+            <span className="text-content-secondary">Voting power to delegate</span>
             <span className="font-medium text-content-primary">
               {compactNumber(parseFloat(votingPower))} LCAI
             </span>
           </div>
+          <p className="text-xs text-content-secondary">
+            Delegation assigns your full voting power. It cannot be split into a
+            partial amount, and your tokens never leave your wallet.
+          </p>
         </div>
 
         <div className="flex gap-3">

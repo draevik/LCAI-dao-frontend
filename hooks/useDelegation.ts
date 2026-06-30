@@ -45,6 +45,7 @@ const useDelegation = () => {
         abi: voteTokenAbi,
         functionName: "delegate",
         args: [delegatee],
+        account: address,
       });
 
       const hash = await walletClient.writeContract(request);
@@ -52,7 +53,7 @@ const useDelegation = () => {
       setPendingTxHash(hash);
       return hash;
     },
-    [tokenAddress, address, publicClient],
+    [tokenAddress, address, publicClient, walletClient],
   );
 
   const delegateToSelf = useCallback(async (): Promise<
