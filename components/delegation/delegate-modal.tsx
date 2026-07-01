@@ -108,6 +108,15 @@ export function DelegateModal({
 
   const isLoading = isSubmitting || isConfirming;
 
+  const isDelegatedElsewhere =
+    !!currentDelegate &&
+    !!address &&
+    currentDelegate.toLowerCase() !== address.toLowerCase();
+
+  const isReturningVotes = mode === "self" && isDelegatedElsewhere;
+  const actionLabel = isReturningVotes ? "Return votes" : "Delegate";
+  const loadingLabel = isReturningVotes ? "Returning votes..." : "Delegating...";
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -154,10 +163,16 @@ export function DelegateModal({
               </Avatar>
               <div className="flex-1 text-left">
                 <p className="font-medium text-content-primary">
-                  Delegate to yourself
+                  {isDelegatedElsewhere
+                    ? "Return votes to yourself"
+                    : "Delegate to yourself"}
                 </p>
                 <p className="text-sm text-content-secondary">
-                  {address ? truncateAddress(address) : "Connect wallet"}
+                  {isDelegatedElsewhere
+                    ? "Undelegate and restore your own voting power"
+                    : address
+                    ? truncateAddress(address)
+                    : "Connect wallet"}
                 </p>
               </div>
               <div
@@ -267,7 +282,7 @@ export function DelegateModal({
               (mode === "custom" && !isAddress(customAddress))
             }
           >
-            {isLoading ? "Delegating..." : "Delegate"}
+            {isLoading ? loadingLabel : actionLabel}
           </Button>
         </div>
       </DialogContent>
