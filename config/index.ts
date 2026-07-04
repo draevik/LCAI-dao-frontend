@@ -39,10 +39,10 @@ const config = {
       {
         name: "Lightchain Governor",
         address: "0xD216A0c0050EdC3a9E0449EcFDf178A1652b4b68",
+        },
       {
         name: "Lightchain TimelockController",
         address: "0xc783376c8237E8f1ed17d825CE7CBB4c22e3cAE5",
-      },
       },
       // {
       //   name: "Lightchain AI Config",
