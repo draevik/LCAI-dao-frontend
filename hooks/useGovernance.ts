@@ -14,11 +14,16 @@ import useWeb3Clients from "./useWeb3Clients";
 import { ContractAction, SimulationAction } from "@/types";
 import useCurrentChain from "./useCurrentChain";
 import config from "@/config";
+import timelockAbi from "@/contracts/abi/timelockAbi";
 
 const API_ENDPOINT =
   process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:3000";
 
 const SIMULATE_URL = `${API_ENDPOINT}/api/simulate`;
+
+// Friendly label shown in the pre-submit preview when a proposal has no
+// real actions and falls back to the safe no-op placeholder.
+const NO_OP_SIGNATURE_LABEL = "Signal proposal — no on-chain action";
 
 /**
  * Generate full function signature from ABI and method name.
@@ -40,8 +45,34 @@ function getFunctionSignature(
 export function useGovernance() {
   const chain = useCurrentChain();
   const { address } = useConnection();
-  const { governorContract } = useContracts();
+  const { governorContract, timeLockContract } = useContracts();
   const { publicClient, walletClient } = useWeb3Clients();
+
+  /**
+   * Builds a single safe no-op action for signal-only proposals:
+   * calls the Timelock's updateDelay with its own current getMinDelay()
+   * value, so nothing actually changes if/when it executes.
+   *
+   * Note: this reads the delay at submission time. If the delay changes
+   * via another proposal before this one executes, executing this
+   * proposal will reset it back to the value read here — not a true
+   * no-op in that edge case, just a low-risk placeholder action.
+   */
+  const buildNoOpAction = async () => {
+    const timelockAddress = config.timeLock[chain.id];
+    if (!timelockAddress) {
+      throw new Error("Timelock address not configured for this chain");
+    }
+
+    const currentDelay = await timeLockContract.read.getMinDelay();
+    const calldata = encodeFunctionData({
+      abi: timelockAbi,
+      functionName: "updateDelay",
+      args: [currentDelay],
+    });
+
+    return { target: timelockAddress, value: 0n, calldata };
+  };
 
   /**
    * Simulate actions via Tenderly (REST API).
@@ -55,25 +86,36 @@ export function useGovernance() {
       throw new Error("Timelock address not configured for this chain");
     }
 
-    const actions = contractActions.map((action) => ({
-      to: action.target,
-      calldata:
-        action.abi && action.method
-          ? encodeFunctionData({
-              abi: action.abi,
-              functionName: action.method,
-              args: Object.values(action.args || {}),
-            })
-          : "0x",
-      value: action.value || "0",
-    }));
+    let actions: { to: string; calldata: string; value: string }[];
+    let decodedExecutions: { signature: string | null }[];
 
-    const decodedExecutions = contractActions.map((action) => {
-      const signature = getFunctionSignature(action.abi, action.method);
-      return {
-        signature,
-      };
-    });
+    if (contractActions.length === 0) {
+      const noOp = await buildNoOpAction();
+      actions = [
+        { to: noOp.target, calldata: noOp.calldata, value: "0" },
+      ];
+      decodedExecutions = [{ signature: NO_OP_SIGNATURE_LABEL }];
+    } else {
+      actions = contractActions.map((action) => ({
+        to: action.target,
+        calldata:
+          action.abi && action.method
+            ? encodeFunctionData({
+                abi: action.abi,
+                functionName: action.method,
+                args: Object.values(action.args || {}),
+              })
+            : "0x",
+        value: action.value || "0",
+      }));
+
+      decodedExecutions = contractActions.map((action) => {
+        const signature = getFunctionSignature(action.abi, action.method);
+        return {
+          signature,
+        };
+      });
+    }
 
     const res = await fetch(SIMULATE_URL, {
       method: "POST",
@@ -108,17 +150,30 @@ export function useGovernance() {
   ) => {
     if (!address || !walletClient) throw new Error("Wallet not connected");
 
-    const targets = contractActions.map((action) => action.target);
-    const values = contractActions.map((action) =>
-      action.value ? parseEther(action.value) : 0n
-    );
-    const calldatas = contractActions.map((action) =>
-      encodeFunctionData({
-        abi: action.abi || [],
-        functionName: action.method,
-        args: Object.values(action.args || {}),
-      })
-    );
+    let targets: `0x${string}`[];
+    let values: bigint[];
+    let calldatas: `0x${string}`[];
+
+    if (contractActions.length === 0) {
+      // Governor.propose() reverts with GovernorInvalidProposalLength on
+      // empty arrays, so signal-only proposals need a placeholder action.
+      const noOp = await buildNoOpAction();
+      targets = [noOp.target as `0x${string}`];
+      values = [noOp.value];
+      calldatas = [noOp.calldata as `0x${string}`];
+    } else {
+      targets = contractActions.map((action) => action.target);
+      values = contractActions.map((action) =>
+        action.value ? parseEther(action.value) : 0n
+      );
+      calldatas = contractActions.map((action) =>
+        encodeFunctionData({
+          abi: action.abi || [],
+          functionName: action.method,
+          args: Object.values(action.args || {}),
+        })
+      );
+    }
 
     const { request } = await governorContract.simulate.propose(
       [targets, values, calldatas, description],
