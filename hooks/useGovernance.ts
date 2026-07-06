@@ -3,8 +3,8 @@
 import { useConnection } from "wagmi";
 import {
   decodeEventLog,
-  encodeFunctionData,
   encodePacked,
+  encodeFunctionData,
   keccak256,
   parseEther,
   SimulateContractReturnType,
@@ -14,7 +14,6 @@ import useWeb3Clients from "./useWeb3Clients";
 import { ContractAction, SimulationAction } from "@/types";
 import useCurrentChain from "./useCurrentChain";
 import config from "@/config";
-import timelockAbi from "@/contracts/abi/timelockAbi";
 
 const API_ENDPOINT =
   process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:3000";
@@ -45,33 +44,27 @@ function getFunctionSignature(
 export function useGovernance() {
   const chain = useCurrentChain();
   const { address } = useConnection();
-  const { governorContract, timeLockContract } = useContracts();
+  const { governorContract } = useContracts();
   const { publicClient, walletClient } = useWeb3Clients();
 
   /**
-   * Builds a single safe no-op action for signal-only proposals:
-   * calls the Timelock's updateDelay with its own current getMinDelay()
-   * value, so nothing actually changes if/when it executes.
+   * Builds a single, unconditionally safe no-op action for signal-only
+   * proposals: a plain zero-value transfer to the Timelock, with no
+   * calldata.
    *
-   * Note: this reads the delay at submission time. If the delay changes
-   * via another proposal before this one executes, executing this
-   * proposal will reset it back to the value read here — not a true
-   * no-op in that edge case, just a low-risk placeholder action.
+   * This is just a normal transfer — it triggers the Timelock's
+   * receive() function and does nothing else. No state is read or
+   * written, so there's no dependency on timing and no chance of ever
+   * conflicting with a separate, legitimate change to the delay that
+   * happens while this proposal is still pending.
    */
-  const buildNoOpAction = async () => {
+  const buildNoOpAction = () => {
     const timelockAddress = config.timeLock[chain.id];
     if (!timelockAddress) {
       throw new Error("Timelock address not configured for this chain");
     }
 
-    const currentDelay = await timeLockContract.read.getMinDelay();
-    const calldata = encodeFunctionData({
-      abi: timelockAbi,
-      functionName: "updateDelay",
-      args: [currentDelay],
-    });
-
-    return { target: timelockAddress, value: 0n, calldata };
+    return { target: timelockAddress, value: 0n, calldata: "0x" as const };
   };
 
   /**
@@ -90,7 +83,7 @@ export function useGovernance() {
     let decodedExecutions: { signature: string | null }[];
 
     if (contractActions.length === 0) {
-      const noOp = await buildNoOpAction();
+      const noOp = buildNoOpAction();
       actions = [
         { to: noOp.target, calldata: noOp.calldata, value: "0" },
       ];
@@ -157,10 +150,10 @@ export function useGovernance() {
     if (contractActions.length === 0) {
       // Governor.propose() reverts with GovernorInvalidProposalLength on
       // empty arrays, so signal-only proposals need a placeholder action.
-      const noOp = await buildNoOpAction();
+      const noOp = buildNoOpAction();
       targets = [noOp.target as `0x${string}`];
       values = [noOp.value];
-      calldatas = [noOp.calldata as `0x${string}`];
+      calldatas = [noOp.calldata];
     } else {
       targets = contractActions.map((action) => action.target);
       values = contractActions.map((action) =>
