@@ -13,6 +13,7 @@ import { ProposalOverviewTab } from "@/components/proposal/proposal-overview-tab
 import { ProposalVotesTab } from "@/components/proposal/proposal-votes-tab";
 import { ProposalVoteDialog } from "@/components/proposal/proposal-vote-dialog";
 import { ProposalActionButton } from "@/components/proposal/proposal-action-button";
+import { ProposalCancelButton } from "@/components/proposal/proposal-cancel-button";
 import { ProposalVoteResults } from "@/components/proposal/proposal-vote-results";
 import { ProposalTimeline } from "@/components/proposal/proposal-timeline";
 import { ProposalSimulationReport } from "@/components/proposal/proposal-simulation-report";
@@ -95,11 +96,12 @@ export default function ProposalDetail() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            <div className="grid">
+            <div className="grid gap-3">
               <ProposalActionButton
                 proposal={proposal}
                 onVoteAction={() => setIsVoteDialogOpen(true)}
               />
+              <ProposalCancelButton proposal={proposal} />
             </div>
 
             <ProposalDelegationReminder proposal={proposal} />
