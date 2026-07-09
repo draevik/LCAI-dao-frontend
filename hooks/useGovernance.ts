@@ -41,6 +41,24 @@ function getFunctionSignature(
   return `${methodName}(${types})`;
 }
 
+/**
+ * Races a promise against a timeout so wallet calls that never resolve
+ * (e.g. a dropped WalletConnect relay session) fail loudly instead of
+ * hanging the UI indefinitely.
+ */
+function withTimeout<T>(
+  promise: Promise<T>,
+  ms: number,
+  message: string
+): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error(message)), ms)
+    ),
+  ]);
+}
+
 export function useGovernance() {
   const chain = useCurrentChain();
   const { address } = useConnection();
@@ -216,9 +234,13 @@ export function useGovernance() {
       );
     }
 
-    const hash = await walletClient.writeContract(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      simulation.request as unknown as any
+    const hash = await withTimeout(
+      walletClient.writeContract(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        simulation.request as unknown as any
+      ),
+      60_000,
+      "Wallet did not respond in time. Please check your wallet app and try again."
     );
 
     const receipt = await publicClient.waitForTransactionReceipt({

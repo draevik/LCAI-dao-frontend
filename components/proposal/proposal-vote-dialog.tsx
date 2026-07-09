@@ -76,8 +76,14 @@ export function ProposalVoteDialog({
         `Vote cast for choice: ${proposal?.metadata?.choices[selectedChoice!]}`,
       );
     },
-    onError: (error: TransactionExecutionError) => {
-      console.error("Error casting vote:", error?.walk().message);
+    onError: (error: unknown) => {
+      const message =
+        error instanceof TransactionExecutionError
+          ? error.walk().message
+          : error instanceof Error
+            ? error.message
+            : "Unknown error";
+      console.error("Error casting vote:", message);
       toast.error("Failed to cast vote");
     },
   });
