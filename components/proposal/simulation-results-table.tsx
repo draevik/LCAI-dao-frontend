@@ -33,6 +33,7 @@ export function SimulationResultsTable({
   if (!simulations?.length) return null;
 
   const allPassed = simulations.every((s) => s.status === "passed");
+  const isNative = simulations.every((s) => s.tenderly_simulation_id === null);
   const simulatedAt = simulations[0]?.simulated_at;
 
   return (
@@ -64,7 +65,7 @@ export function SimulationResultsTable({
             <ChevronDown className="w-4 h-4 text-content-secondary" />
           )}
           <span className="text-base font-semibold text-content-primary">
-            Tenderly simulations
+            {isNative ? "Onchain simulations" : "Tenderly simulations"}
           </span>
           {allPassed ? (
             <CheckCircle2 className="w-5 h-5 text-green-500" />
@@ -73,15 +74,17 @@ export function SimulationResultsTable({
           )}
         </div>
 
-        <a
-          href="https://docs.tenderly.co"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm text-content-brand-light hover:underline"
-          onClick={(e) => e.stopPropagation()}
-        >
-          Learn more
-        </a>
+        {!isNative && (
+          
+            <a href="https://docs.tenderly.co"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-content-brand-light hover:underline"
+            onClick={(e) => e.stopPropagation()}
+          >
+            Learn more
+          </a>
+        )}
       </button>
 
       {/* Simulation table */}
@@ -145,8 +148,8 @@ export function SimulationResultsTable({
                         {sim.status === "passed" ? "Passed" : "Failed"}
                       </span>
                       {sim.tenderly_sandbox_url && (
-                        <a
-                          href={sim.tenderly_sandbox_url}
+                        
+                          <a href={sim.tenderly_sandbox_url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-content-secondary hover:text-content-primary transition-colors"
@@ -176,7 +179,7 @@ export function SimulationResultsTable({
               >
                 <p className="text-xs font-semibold text-red-700 mb-1">
                   Action {sim.action_index + 1} Error:
-                </p>
+                  </p>
                 <p className="text-xs text-red-600 font-mono break-all">
                   {sim.error_message}
                 </p>
