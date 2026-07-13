@@ -8,6 +8,7 @@ import {
   faHourglassHalf,
   faTowerBroadcast,
   faSquareCheck,
+  faLock,
 } from "@fortawesome/free-solid-svg-icons";
 import { cn } from "@/lib/utils";
 
@@ -66,6 +67,23 @@ export default function ProposalStatusBadge({ status, className }: Props) {
           </TooltipTrigger>
           <TooltipContent>
             <p className="text-xs">Passed</p>
+          </TooltipContent>
+        </Tooltip>
+      );
+    case ProposalState.Queued:
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <FontAwesomeIcon
+              className={cn(
+                "inline-block mr-2 md:text-lg sm:text-base text-sm text-content-medium",
+                className
+              )}
+              icon={faLock}
+            />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="text-xs">Queued</p>
           </TooltipContent>
         </Tooltip>
       );
