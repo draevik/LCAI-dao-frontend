@@ -155,6 +155,91 @@ export function useGovernance() {
     return results;
   };
 
+  /**
+   * Simulate actions via a direct RPC dry-run (eth_call), for chains
+   * where Tenderly isn't available yet (e.g. native LightchainAI, id 9200).
+   *
+   * Calls are made "from" the Timelock address, since that's the actual
+   * account that executes proposal actions on-chain — simulating from the
+   * connected wallet instead could pass/fail differently if a target
+   * contract has address-based permission checks.
+   *
+   * Trade-off vs. Tenderly: no call trace, no gas breakdown, no shareable
+   * sandbox link — just a real pass/fail per action, with the revert
+   * reason surfaced when the RPC provides one.
+   */
+  const simulateActionsNative = async (
+    contractActions: ContractAction[]
+  ): Promise<SimulationAction[]> => {
+    const timelockAddress = config.timeLock[chain.id];
+    if (!timelockAddress) {
+      throw new Error("Timelock address not configured for this chain");
+    }
+
+    const actionsToSimulate =
+      contractActions.length === 0
+        ? [
+            {
+              ...buildNoOpAction(),
+              signature: NO_OP_SIGNATURE_LABEL,
+            },
+          ]
+        : contractActions.map((action) => ({
+            target: action.target,
+            value: action.value ? parseEther(action.value) : 0n,
+            calldata: (action.abi && action.method
+              ? encodeFunctionData({
+                  abi: action.abi,
+                  functionName: action.method,
+                  args: Object.values(action.args || {}),
+                })
+              : "0x") as `0x${string}`,
+            signature: getFunctionSignature(action.abi, action.method),
+          }));
+
+    const simulatedAt = Math.floor(Date.now() / 1000);
+
+    const results = await Promise.all(
+      actionsToSimulate.map(async (action, index) => {
+        try {
+          await publicClient.call({
+            account: timelockAddress as `0x${string}`,
+            to: action.target as `0x${string}`,
+            data: action.calldata,
+            value: action.value,
+          });
+
+          return {
+            action_index: index,
+            target: action.target,
+            function_selector: action.signature,
+            status: "passed",
+            tenderly_simulation_id: null,
+            tenderly_sandbox_url: null,
+            error_message: null,
+            simulated_at: simulatedAt,
+          } satisfies SimulationAction;
+        } catch (err) {
+          const message =
+            err instanceof Error ? err.message : "Simulation call reverted";
+
+          return {
+            action_index: index,
+            target: action.target,
+            function_selector: action.signature,
+            status: "failed",
+            tenderly_simulation_id: null,
+            tenderly_sandbox_url: null,
+            error_message: message,
+            simulated_at: simulatedAt,
+          } satisfies SimulationAction;
+        }
+      })
+    );
+
+    return results;
+  };
+  
   const createProposal = async (
     contractActions: ContractAction[],
     description: string
@@ -304,6 +389,7 @@ export function useGovernance() {
   return {
     createProposal,
     simulateActions,
+    simulateActionsNative,
     castVote,
     cancel,
     queue,

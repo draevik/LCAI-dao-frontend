@@ -123,15 +123,22 @@ const proposalFormSchema = z.object({
 });
 
 type ProposalFormValues = z.infer<typeof proposalFormSchema>;
+// LightchainAI Mainnet — native chain, simulated via direct RPC dry-run
+// (eth_call) instead of Tenderly, since Tenderly doesn't support this
+// chain yet. See simulateActionsNative in hooks/useGovernance.ts.
+const NATIVE_CHAIN_ID = 9200;
 
 export default function CreateProposal() {
   const router = useRouter();
-  const { createProposal, simulateActions } = useGovernance();
+  const { createProposal, simulateActions, simulateActionsNative } = useGovernance(); 
   const { data: governanceParams } = useGovernanceParams();
   const [actions, setActions] = useState<ContractAction[]>([]);
   const { open } = useAppKit();
   const { isConnected } = useConnection();
   const chain = useCurrentChain();
+  // Simulation is available on mainnet (via Tenderly) and on the native
+  // chain (via direct RPC dry-run). Other chains don't have either path yet.
+  const canSimulate = chain.id === mainnet.id || chain.id === NATIVE_CHAIN_ID;
   const { address } = useConnection();
   const api = useGraphqlApi();
 
@@ -195,7 +202,10 @@ export default function CreateProposal() {
   };
 
   const simulateActionsMutation = useMutation({
-    mutationFn: simulateActions,
+    mutationFn: (contractActions: ContractAction[]) =>
+      chain.id === mainnet.id
+        ? simulateActions(contractActions)
+        : simulateActionsNative(contractActions),
     onSuccess: (results) => {
       setSimulationResults(results);
       const allPassed = results.every((r) => r.status === "passed");
@@ -255,7 +265,7 @@ export default function CreateProposal() {
     }
 
     // TODO: add a way to simulate actions on other chains (like devnet)
-    if (actions.length && chain.id === mainnet.id) {
+    if (actions.length && canSimulate) {
       if (simulationStatus === "idle") {
         await simulateActionsMutation.mutateAsync(actions);
       }
@@ -575,7 +585,7 @@ export default function CreateProposal() {
                     <span className="text-sm text-content-secondary">
                       {actions.length} action{actions.length === 1 ? "" : "s"}
                     </span>
-                    {chain.id === mainnet.id && (
+                    {canSimulate && (
                       <ButtonUi
                         variant={
                           simulationStatus === "idle"
